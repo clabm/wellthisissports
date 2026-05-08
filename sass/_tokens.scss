@@ -1,104 +1,245 @@
 // ─────────────────────────────────────────────────────────────
 // _tokens.scss
-// Sass variables mirroring CSS custom properties in style.css.
+// Approved design tokens — Sprint 1, locked by Director.
 // Import this file in every component partial.
 //
-// NOTE: Values are TBD — awaiting Director approval in Sprint 1 Track B.
-// Update when tokens are locked.
+// Structure:
+//   1. Google Fonts
+//   2. CSS custom properties — light mode (:root)
+//   3. CSS custom properties — dark mode ([data-theme="dark"] + prefers-color-scheme)
+//   4. Sass variables (compile-time, mirror :root values)
+//   5. Semantic aliases (for existing partials)
+//   6. Mixins
 // ─────────────────────────────────────────────────────────────
 
-// Accent colors — TBD Sprint 1
-$accent:        #E85D26;
-$accent-dark:   #c44d1e;
-$accent-2:      #1A73E8;
-$accent-2-dark: #1558b0;
+// ── 1. Google Fonts ───────────────────────────────────────────
+// Barlow Condensed 700 — matchup titles, hero headings, confidence meter
+// Barlow 600 — section headings, card titles
+// Inter 400 / 500 — body copy, UI labels, metadata
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&family=Barlow:wght@400;600&family=Inter:wght@400;500&display=swap');
 
-// Confidence meter
-$confidence-high: #2E7D32;
-$confidence-mid:  #F57C00;
-$confidence-low:  #C62828;
+// ── 2. CSS custom properties — light mode ────────────────────
 
-// Ink scale
-$ink:             #1A1A1A;
-$ink-mid:         #4A4A4A;
-$ink-muted:       #787878;
-$ink-faint:       #B8B8B8;
+:root {
 
-// Paper scale
-$paper:           #FFFFFF;
-$paper-2:         #F5F5F5;
-$paper-3:         #EBEBEB;
-$rule:            #E0E0E0;
+  // Colors — gold
+  --wtis-gold-400:    #F5A623;   // primary CTA, confidence meter, highlights
+  --wtis-gold-600:    #C47D0E;   // hover states, borders
+  --wtis-gold-50:     #FEF3DC;   // card backgrounds, fills
 
-// Typography — TBD Sprint 1
-$font-display:    'Oswald', 'Impact', Arial Narrow, sans-serif;
-$font-body:       'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-$font-ui:         'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  // Colors — blue
+  --wtis-blue-500:    #0057FF;   // links, secondary actions, sport tags
+  --wtis-blue-700:    #003DBF;   // hover, dark mode primary
+  --wtis-blue-50:     #E0EAFF;   // info backgrounds, tag fills
+
+  // Colors — red
+  --wtis-red-500:     #E8192C;   // urgent update badge, upset alert, loss
+  --wtis-red-50:      #FDE8EA;   // alert card backgrounds
+
+  // Colors — green
+  --wtis-green-500:   #00A651;   // correct prediction, win, ledger positive
+  --wtis-green-50:    #E0F5EB;   // win background, ledger fill
+
+  // Colors — neutral
+  --wtis-ink:         #111111;   // primary text, headings
+  --wtis-off-white:   #F7F7F5;   // page background default
+  --wtis-white:       #FFFFFF;   // card surfaces, content areas
+  --wtis-gray-500:    #6B6B6B;   // secondary text, metadata
+
+  // Typography
+  --wtis-font-display:  'Barlow Condensed', Arial Narrow, sans-serif;
+  --wtis-font-headline: 'Barlow', Arial, sans-serif;
+  --wtis-font-body:     'Inter', system-ui, -apple-system, sans-serif;
+  --wtis-font-ui:       'Inter', system-ui, -apple-system, sans-serif;
+
+  // Type scale
+  --wtis-text-xs:     10px;
+  --wtis-text-sm:     11px;
+  --wtis-text-base:   13px;   // UI text, labels
+  --wtis-text-md:     14px;
+  --wtis-text-lg:     16px;   // body copy
+  --wtis-text-xl:     20px;   // headline medium
+  --wtis-text-2xl:    24px;   // headline large
+  --wtis-text-3xl:    28px;   // display medium
+  --wtis-text-4xl:    36px;   // display large
+  --wtis-text-5xl:    48px;   // display hero / confidence score
+
+  // Spacing scale (base 4px)
+  --wtis-space-1:     4px;
+  --wtis-space-2:     8px;
+  --wtis-space-3:     12px;
+  --wtis-space-4:     16px;
+  --wtis-space-6:     24px;
+  --wtis-space-8:     32px;
+  --wtis-space-12:    48px;
+  --wtis-space-16:    64px;
+
+  // Border radius
+  --wtis-radius-sm:   3px;
+  --wtis-radius-md:   6px;
+  --wtis-radius-lg:   12px;
+  --wtis-radius-pill: 999px;
+
+  // Transitions
+  --wtis-transition:      0.15s ease;
+  --wtis-transition-slow: 0.25s ease;
+
+  // Z-index
+  --wtis-z-nav:    200;
+  --wtis-z-sticky: 100;
+
+}
+
+// ── 3. Dark mode CSS custom properties ───────────────────────
+//
+// Usage rules (from CLAUDE.md):
+//   - Gold: primary stays #F5A623, bg fills → #2A1F00
+//   - Blue: primary stays #0057FF, bg fills → #001433
+//   - Red:  primary stays #E8192C, bg fills → #2A0008
+//   - Green: primary stays #00A651, bg fills → #002B15
+//   - Ink → #F0F0EE  |  Off-white → #1A1A1A  |  White → #242424  |  Gray-500 → #9B9B9B
+
+@mixin wtis-dark-mode {
+  --wtis-gold-50:   #2A1F00;
+  --wtis-blue-50:   #001433;
+  --wtis-red-50:    #2A0008;
+  --wtis-green-50:  #002B15;
+  --wtis-ink:       #F0F0EE;
+  --wtis-off-white: #1A1A1A;
+  --wtis-white:     #242424;
+  --wtis-gray-500:  #9B9B9B;
+}
+
+[data-theme="dark"] {
+  @include wtis-dark-mode;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    @include wtis-dark-mode;
+  }
+}
+
+// ── 4. Sass variables — compile-time mirrors of :root ────────
+//
+// Use these in Sass expressions, calculations, and mixins.
+// Use CSS custom properties (var(--wtis-*)) for values that
+// must update in dark mode.
+
+// Gold
+$gold-400:    #F5A623;
+$gold-600:    #C47D0E;
+$gold-50:     #FEF3DC;
+
+// Blue
+$blue-500:    #0057FF;
+$blue-700:    #003DBF;
+$blue-50:     #E0EAFF;
+
+// Red
+$red-500:     #E8192C;
+$red-50:      #FDE8EA;
+
+// Green
+$green-500:   #00A651;
+$green-50:    #E0F5EB;
+
+// Neutral
+$wtis-ink:       #111111;
+$wtis-off-white: #F7F7F5;
+$wtis-white:     #FFFFFF;
+$wtis-gray-500:  #6B6B6B;
+
+// Typography
+$font-display:  'Barlow Condensed', Arial Narrow, sans-serif;
+$font-headline: 'Barlow', Arial, sans-serif;
+$font-body:     'Inter', system-ui, -apple-system, sans-serif;
+$font-ui:       'Inter', system-ui, -apple-system, sans-serif;
 
 // Type scale
-$text-xs:         10px;
-$text-sm:         11px;
-$text-base:       13px;
-$text-md:         14px;
-$text-lg:         16px;
-$text-xl:         18px;
-$text-2xl:        22px;
-$text-3xl:        28px;
-$text-4xl:        36px;
-$text-5xl:        48px;
+$text-xs:     10px;
+$text-sm:     11px;
+$text-base:   13px;
+$text-md:     14px;
+$text-lg:     16px;
+$text-xl:     20px;
+$text-2xl:    24px;
+$text-3xl:    28px;
+$text-4xl:    36px;
+$text-5xl:    48px;
 
-// Spacing scale (8px base)
-$space-1:         4px;
-$space-2:         8px;
-$space-3:         12px;
-$space-4:         16px;
-$space-5:         20px;
-$space-6:         24px;
-$space-8:         32px;
-$space-10:        40px;
-$space-12:        48px;
-$space-16:        64px;
+// Spacing scale (base 4px — keeps $space-5 / $space-10 for
+// existing partials; canonical CSS custom props above are the
+// authoritative set)
+$space-1:   4px;
+$space-2:   8px;
+$space-3:   12px;
+$space-4:   16px;
+$space-5:   20px;
+$space-6:   24px;
+$space-8:   32px;
+$space-10:  40px;
+$space-12:  48px;
+$space-16:  64px;
 
 // Border radius
-$radius-sm:       3px;
-$radius-md:       6px;
-$radius-lg:       12px;
-$radius-pill:     999px;
+$radius-sm:   3px;
+$radius-md:   6px;
+$radius-lg:   12px;
+$radius-pill: 999px;
 
 // Transitions
 $transition:      0.15s ease;
 $transition-slow: 0.25s ease;
 
-// Footer
-$footer-bg:     #1a1a1a;
+// Footer (dark by default in both modes)
+$footer-bg:     #1A1A1A;
 $footer-bottom: #111111;
-$footer-text:   #FAFAFA;
-$footer-muted:  rgba(#FAFAFA, 0.5);
+$footer-text:   #F7F7F5;
+$footer-muted:  rgba(#F7F7F5, 0.5);
 
-// Breakpoints (Bootstrap 5 / Understrap default)
-$bp-sm:           576px;
-$bp-md:           768px;
-$bp-lg:           992px;
-$bp-xl:           1200px;
-$bp-xxl:          1400px;
+// Breakpoints (Bootstrap 5 / Understrap)
+$bp-sm:   576px;
+$bp-md:   768px;
+$bp-lg:   992px;
+$bp-xl:   1200px;
+$bp-xxl:  1400px;
 
-// Mixins
+// ── 5. Semantic aliases ───────────────────────────────────────
+// Backward-compatible names used by existing component partials.
+
+$accent:          $gold-400;    // primary CTA / highlight
+$accent-dark:     $gold-600;    // hover state
+$ink:             $wtis-ink;
+$ink-mid:         $wtis-gray-500;
+$ink-muted:       #909090;
+$ink-faint:       #B8B8B8;
+$paper:           $wtis-off-white;
+$paper-2:         $wtis-white;
+$paper-3:         #EBEBEB;
+$rule:            #E0E0E0;
+$confidence-high: $green-500;
+$confidence-mid:  #F57C00;      // amber — intermediate confidence
+$confidence-low:  $red-500;
+
+// ── 6. Mixins ─────────────────────────────────────────────────
+
 @mixin ui-label {
   font-family: $font-ui;
-  font-size: $text-xs;
+  font-size: $text-base;     // 13px — approved UI size
   font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.04em;    // approved UI letter-spacing
   color: $ink-faint;
 }
 
 @mixin sport-label {
   font-family: $font-ui;
-  font-size: $text-xs;
-  font-weight: 600;
+  font-size: $text-base;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: $accent;
+  letter-spacing: 0.04em;
+  color: var(--wtis-gold-400);
 }
 
 @mixin rule-bottom {
@@ -109,19 +250,39 @@ $bp-xxl:          1400px;
   border-top: 1px solid $rule;
 }
 
+// Display mixin — Barlow Condensed Bold (approved display font)
 @mixin headline-display($size: $text-2xl) {
   font-family: $font-display;
   font-size: $size;
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
-  color: $ink;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  color: var(--wtis-ink);
 }
 
+// Headline mixin — Barlow SemiBold (approved headline font)
+@mixin headline($size: $text-2xl) {
+  font-family: $font-headline;
+  font-size: $size;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--wtis-ink);
+}
+
+// Body copy — Inter Regular (approved body font)
 @mixin body-copy($size: $text-lg) {
   font-family: $font-body;
   font-size: $size;
   font-weight: 400;
-  line-height: 1.7;
-  color: $ink-mid;
+  line-height: 1.6;
+  color: var(--wtis-gray-500);
+}
+
+// Confidence score — Barlow Condensed Bold 48px gold
+@mixin confidence-score {
+  font-family: $font-display;
+  font-size: $text-5xl;
+  font-weight: 700;
+  color: var(--wtis-gold-400);
+  line-height: 1;
 }
