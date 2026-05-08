@@ -292,6 +292,32 @@ Tracks per sport:
 
 ---
 
+## Sports Data API
+
+**Primary:** API-Football (api-sports.io)
+- World Cup 2026 coverage confirmed, schedule already live
+- Provides fixtures, teams, players, injuries, live scores, final results, stats
+- Auth: API key in header
+- Free tier: 100 requests/day, sufficient for pipeline development and testing
+- Paid tier: $19/month for 7,500 requests/day, evaluate upgrade before World Cup launch
+- Python integration: plain REST with requests library
+- World Cup params: `league=1, season=2026`
+
+**Fallback:** football-data.org
+- Free tier: 10 calls/minute, delayed scores, fixtures and schedules
+- Paid tier: €12/month for live scores
+- Use for fixtures and final scores if API-Football has issues
+- Auth: X-Auth-Token header
+
+**Not used at launch:**
+- The Odds API: no roster/injury data, add-on only if odds become a feature later
+- SportsRadar: enterprise pricing, not bootstrap-friendly
+- ESPN unofficial: fragile for automated pipeline, emergency fallback only
+
+**Cost tracking:** Start on API-Football free tier. Monitor request volume during development. Evaluate $19/month upgrade against actual usage before World Cup launch. Track all third-party API costs separately from Anthropic and OpenAI spend alerts.
+
+---
+
 ## The Pipeline
 
 ```

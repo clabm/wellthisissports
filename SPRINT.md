@@ -76,11 +76,11 @@ Once Cloudways app is created, update CLAUDE.md with:
 
 | Task | Detail | Status |
 |---|---|---|
-| Research World Cup 2026 data API options | ESPN API, The Odds API, SportsRadar, API-Football, others | Ready |
-| Evaluate each on: fixture data, team data, live results, free vs paid tier, rate limits | Produce comparison brief for Director decision | Ready |
-| Identify which APIs cover post-game results | Required for ledger update pipeline | Ready |
-| Deliver research brief to Architect | Structured comparison, recommendation included | Ready |
-| Director selects API | Unlocks Pipeline Stage 1 work in Sprint 2 | Pending research brief |
+| Research World Cup 2026 data API options | ESPN API, The Odds API, SportsRadar, API-Football, others | Done |
+| Evaluate each on: fixture data, team data, live results, free vs paid tier, rate limits | Produce comparison brief for Director decision | Done |
+| Identify which APIs cover post-game results | Required for ledger update pipeline | Done |
+| Deliver research brief to Architect | Structured comparison, recommendation included | Done |
+| Director selects API | API-Football primary, football-data.org fallback | Done |
 
 **Scout prompt to use:**
 > Research the best sports data APIs for World Cup 2026 coverage. I need: upcoming fixture data, team and player data, live match results, and post-game final scores. Evaluate ESPN API, The Odds API, SportsRadar, API-Football, and any others worth considering. Compare on data coverage, free vs paid tiers, rate limits, and ease of integration with a Python pipeline. Produce a structured comparison with a recommendation.
@@ -89,21 +89,22 @@ Once Cloudways app is created, update CLAUDE.md with:
 
 ## Sprint 1 Definition of Done
 
-- [ ] GitHub repo exists at `clabm/wellthisiissports`
-- [ ] Cloudways app provisioned, IDs in CLAUDE.md
-- [ ] Theme scaffold committed, lando start works, child theme activates
-- [ ] Design tokens approved by Director and locked in CLAUDE.md and `_tokens.scss`
-- [ ] Sports data API selected by Director
+- [x] GitHub repo exists at `clabm/wellthisissports`
+- [x] Cloudways app provisioned, IDs in CLAUDE.md
+- [x] Theme scaffold committed, lando start works, child theme activates
+- [x] Design tokens approved by Director and locked in CLAUDE.md and `_tokens.scss`
+- [x] Sports data API selected by Director
+- [ ] GitHub Secrets added to repo
 - [ ] SPRINT.md updated with Sprint 2 tasks
 
 ---
 
 ## Sprint 2 Preview (Do Not Start Yet)
 
-Once Sprint 1 is done:
+Once Sprint 1 is fully closed:
 
 - Cursor builds front-end from token brief, matchup grid homepage, prediction detail page, confidence meter component, ledger widget
-- Shop Hand builds Pipeline Stage 1, ingest.py, sports data API integration, matchup extraction, dedup
+- Shop Hand builds Pipeline Stage 1, ingest.py, API-Football integration, matchup extraction, dedup
 - Shop Hand builds Pipeline Stage 2, predict.py, Claude Haiku prediction prompt, confidence scoring, image brief
 - Shop Hand builds Pipeline Stage 3, publish.py, WordPress REST API integration, OpenAI hero image
 - Shop Hand stubs ledger update endpoint and post-game flow
@@ -114,9 +115,8 @@ Once Sprint 1 is done:
 
 | Blocker | Owner | Notes |
 |---|---|---|
-| GitHub Secrets not added | Director | Blocks pipeline and deploy workflow |
-| Sports data API not selected | Director, after Scout research | Blocks all pipeline work |
-| Design tokens not approved | Director | Blocks all Cursor front-end work |
+| GitHub Secrets not added to repo | Director | Blocks deploy workflow and pipeline |
+| Cursor front-end brief not drafted | Architect | Blocks Sprint 2 front-end track |
 
 ---
 
