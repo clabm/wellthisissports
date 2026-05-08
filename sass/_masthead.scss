@@ -1,45 +1,149 @@
 // ─────────────────────────────────────────────────────────────
 // _masthead.scss
-// Wordmark, primary nav, mobile nav toggle.
-// Sprint 2: Cursor builds from approved token brief.
+// Wordmark, primary nav, mobile drawer.
 // ─────────────────────────────────────────────────────────────
-@import 'tokens';
+@use 'tokens' as *;
 
 .wtis-masthead {
-  @include rule-bottom;
-  padding: $space-4 0;
+  position: sticky;
+  top: 0;
+  z-index: var(--wtis-z-nav);
+  background: var(--wtis-white);
+  border-bottom: 1px solid $rule;
+  box-shadow: 0 $space-1 $space-3 rgba($wtis-ink, 0.06);
 
   &__inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: $space-6;
+    padding: $space-4 0;
+    min-height: 56px;
+  }
+
+  &__nav-wrap {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
   }
 
   &__wordmark {
     font-family: $font-display;
     font-size: $text-2xl;
-    font-weight: 600;
-    color: $ink;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
     text-decoration: none;
-    letter-spacing: -0.01em;
+    color: var(--wtis-ink);
+    transition: color $transition;
 
-    &:hover { color: $accent; }
+    &:hover {
+      color: var(--wtis-gold-600);
+    }
+  }
+
+  &__wordmark-accent {
+    color: var(--wtis-gold-400);
+    font-style: normal;
   }
 
   &__nav {
     display: flex;
-    gap: $space-6;
+    align-items: center;
+    gap: $space-2;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    a {
+      font-family: $font-ui;
+      font-size: $text-base;
+      font-weight: 500;
+      text-decoration: none;
+      color: var(--wtis-ink);
+      padding: $space-2 $space-3;
+      border-radius: $radius-md;
+      transition: background $transition, color $transition;
+
+      &:hover,
+      &:focus-visible {
+        color: var(--wtis-blue-500);
+        background: var(--wtis-blue-50);
+      }
+    }
+  }
+
+  &__mobile-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 2px solid var(--wtis-gold-400);
+    border-radius: $radius-md;
+    background: var(--wtis-gold-50);
+    color: var(--wtis-ink);
+    cursor: pointer;
+    transition: background $transition, border-color $transition;
+
+    &:hover {
+      background: var(--wtis-gold-400);
+      border-color: var(--wtis-gold-600);
+      color: var(--wtis-white);
+    }
+
+    .wtis-masthead__burger-line {
+      display: block;
+      width: 20px;
+      height: 2px;
+      margin: 3px 0;
+      background: currentColor;
+      border-radius: 1px;
+    }
+  }
+}
+
+.wtis-mobile-nav {
+  display: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--wtis-off-white);
+  border-bottom: 1px solid $rule;
+
+  li {
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  &__mobile-toggle {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: $space-2;
-    font-size: $text-xl;
+  &.is-open {
+    display: block;
+  }
+
+  a {
+    display: block;
+    font-family: $font-ui;
+    font-size: $text-md;
+    font-weight: 500;
+    padding: $space-4 $space-2;
+    text-decoration: none;
+    color: var(--wtis-ink);
+    border-top: 1px solid $rule;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--wtis-blue-500);
+      background: var(--wtis-blue-50);
+    }
   }
 }

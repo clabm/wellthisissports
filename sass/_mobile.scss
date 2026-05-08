@@ -1,14 +1,15 @@
 // ─────────────────────────────────────────────────────────────
 // _mobile.scss
-// Responsive breakpoints — last file loaded, overrides all components.
-// Sprint 2: Cursor fills in full responsive breakpoints.
+// Responsive overrides (mobile-first base in component files).
 // ─────────────────────────────────────────────────────────────
-@import 'tokens';
-
-// ── Tablet ────────────────────────────────────────────────────
+@use 'tokens' as *;
 
 @media (max-width: $bp-lg) {
   .wtis-matchup-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .wtis-archive-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -16,12 +17,14 @@
     grid-template-columns: 1fr 1fr;
   }
 
-  .wtis-factors {
+  .wtis-takeaways__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wtis-team-breakdown {
     grid-template-columns: 1fr;
   }
 }
-
-// ── Mobile ────────────────────────────────────────────────────
 
 @media (max-width: $bp-md) {
   .wtis-matchup-grid {
@@ -33,9 +36,8 @@
     gap: $space-8;
   }
 
-  .wtis-story__teams {
+  .wtis-story__headline {
     flex-direction: column;
-    gap: $space-2;
     align-items: flex-start;
   }
 
@@ -44,15 +46,39 @@
     font-size: $text-3xl;
   }
 
-  .wtis-masthead__nav {
+  .wtis-masthead__nav-wrap {
     display: none;
   }
 
   .wtis-masthead__mobile-toggle {
-    display: block;
+    display: inline-flex;
   }
 
-  .wtis-ledger-strip {
-    gap: $space-4;
+  .wtis-ledger-widget__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .wtis-archive-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .wtis-archive-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wtis-confidence-meter__value {
+    font-size: $text-4xl;
+  }
+}
+
+@media (max-width: $bp-sm) {
+  .wtis-ledger-widget__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wtis-sport-section__header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

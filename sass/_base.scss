@@ -1,0 +1,46 @@
+// ─────────────────────────────────────────────────────────────
+// _base.scss — global rules on top of Understrap
+// ─────────────────────────────────────────────────────────────
+@use 'tokens' as *;
+
+html,
+body {
+  background-color: var(--wtis-off-white);
+  color: var(--wtis-ink);
+}
+
+body {
+  font-family: $font-body;
+  font-size: $text-md;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--wtis-blue-500);
+  transition: color $transition;
+
+  &:hover {
+    color: var(--wtis-blue-700);
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.container,
+.container-fluid {
+  max-width: 1240px;
+}
+
+#wrapper-navbar {
+  display: none;
+}
+
+#wrapper-footer {
+  display: none;
+}

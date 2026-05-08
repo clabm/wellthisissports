@@ -3,7 +3,7 @@
 // Ad unit position stubs.
 // Sprint 2: configure ad units when AdSense account active.
 // ─────────────────────────────────────────────────────────────
-@import 'tokens';
+@use 'tokens' as *;
 
 .wtis-ad {
   background: $paper-2;

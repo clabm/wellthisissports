@@ -1,35 +1,46 @@
 // ─────────────────────────────────────────────────────────────
 // _footer.scss
-// Site footer: brand, nav, social, newsletter form, bottom bar.
-// Sprint 2: Cursor builds from approved token brief.
+// Footer: brand, nav, social, newsletter, copyright bar.
 // ─────────────────────────────────────────────────────────────
-@import 'tokens';
+@use 'tokens' as *;
 
 .wtis-footer-main {
   background: $footer-bg;
   color: $footer-text;
   padding: $space-12 0 $space-8;
+  margin-top: $space-16;
 }
 
 .wtis-footer-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 2fr;
   gap: $space-10;
+  align-items: start;
 }
 
 .wtis-footer-wordmark {
   font-family: $font-display;
-  font-size: $text-xl;
-  font-weight: 600;
+  font-size: $text-2xl;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
   color: $footer-text;
   text-decoration: none;
   display: inline-block;
   margin-bottom: $space-3;
+  transition: color $transition;
+
+  &:hover {
+    color: var(--wtis-gold-400);
+  }
 }
 
 .wtis-footer-tagline {
+  font-family: $font-body;
   font-size: $text-sm;
+  line-height: 1.5;
   color: $footer-muted;
+  max-width: 280px;
 }
 
 .wtis-footer-label {
@@ -39,7 +50,7 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: $footer-muted;
-  margin-bottom: $space-4;
+  margin: 0 0 $space-4;
 }
 
 .wtis-footer-links {
@@ -54,10 +65,13 @@
     color: $footer-text;
     text-decoration: none;
     font-size: $text-md;
-    opacity: 0.8;
-    transition: opacity $transition;
+    opacity: 0.85;
+    transition: opacity $transition, color $transition;
 
-    &:hover { opacity: 1; }
+    &:hover {
+      opacity: 1;
+      color: var(--wtis-gold-400);
+    }
   }
 }
 
@@ -67,11 +81,15 @@
   margin-bottom: $space-6;
 
   &__link {
+    display: flex;
     color: $footer-text;
-    opacity: 0.7;
-    transition: opacity $transition;
+    opacity: 0.75;
+    transition: opacity $transition, color $transition;
 
-    &:hover { opacity: 1; }
+    &:hover {
+      opacity: 1;
+      color: var(--wtis-gold-400);
+    }
   }
 }
 
@@ -81,63 +99,93 @@
     font-size: $text-sm;
     font-weight: 600;
     color: $footer-text;
-    margin-bottom: $space-1;
+    margin: 0 0 $space-1;
   }
 
   &__desc {
+    font-family: $font-body;
     font-size: $text-sm;
     color: $footer-muted;
-    margin-bottom: $space-3;
+    margin: 0 0 $space-3;
+    line-height: 1.5;
   }
 
   &__input {
     width: 100%;
-    padding: $space-2 $space-3;
-    border-radius: $radius-sm;
+    max-width: 320px;
+    padding: $space-3 $space-3;
+    border-radius: $radius-md;
     border: 1px solid rgba($footer-text, 0.2);
-    background: rgba($footer-text, 0.05);
+    background: rgba($footer-text, 0.06);
     color: $footer-text;
     font-family: $font-ui;
     font-size: $text-md;
     margin-bottom: $space-2;
+    box-sizing: border-box;
 
-    &::placeholder { color: $footer-muted; }
-    &:focus { outline: 1px solid $accent; }
+    &::placeholder {
+      color: $footer-muted;
+    }
+
+    &:focus {
+      outline: 2px solid var(--wtis-gold-400);
+      outline-offset: 2px;
+    }
   }
 
   &__btn {
-    padding: $space-2 $space-4;
-    background: $accent;
-    color: #fff;
+    padding: $space-3 $space-5;
+    background: var(--wtis-gold-400);
+    color: var(--wtis-ink);
     border: none;
-    border-radius: $radius-sm;
+    border-radius: $radius-md;
     font-family: $font-ui;
     font-size: $text-md;
     font-weight: 600;
     cursor: pointer;
-    transition: background $transition;
+    transition: background $transition, color $transition;
 
-    &:hover { background: $accent-dark; }
+    &:hover {
+      background: var(--wtis-gold-600);
+      color: var(--wtis-white);
+    }
   }
 }
 
-// ── Bottom bar ───────────────────────────────────────────────
+.wtis-nl-error {
+  font-family: $font-ui;
+  font-size: $text-sm;
+  color: var(--wtis-red-500);
+  margin: $space-2 0 0;
+}
+
+.wtis-nl-success {
+  font-family: $font-ui;
+  font-size: $text-sm;
+  color: var(--wtis-green-500);
+  margin: $space-2 0 0;
+}
 
 .wtis-footer-bottom {
   background: $footer-bottom;
   padding: $space-4 0;
 
   p {
+    font-family: $font-ui;
     font-size: $text-sm;
-    color: rgba($footer-text, 0.4);
+    color: rgba($footer-text, 0.45);
     margin: 0;
     text-align: center;
+    line-height: 1.6;
   }
 
   a {
-    color: rgba($footer-text, 0.5);
+    color: rgba($footer-text, 0.65);
     text-decoration: none;
+    transition: color $transition;
 
-    &:hover { color: $footer-text; }
+    &:hover {
+      color: $footer-text;
+    }
   }
 }

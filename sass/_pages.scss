@@ -2,7 +2,7 @@
 // _pages.scss
 // Generic page template styles.
 // ─────────────────────────────────────────────────────────────
-@import 'tokens';
+@use 'tokens' as *;
 
 .wtis-page-content {
   max-width: 760px;
@@ -23,5 +23,156 @@
   h2 { @include headline-display($text-2xl); margin: $space-8 0 $space-4; }
   h3 { @include headline-display($text-xl);  margin: $space-6 0 $space-3; }
   p  { margin-bottom: $space-5; }
-  a  { color: $accent; &:hover { color: $accent-dark; } }
+  a  { color: var(--wtis-blue-500); &:hover { color: var(--wtis-blue-700); } }
+}
+
+// ── Archive (sport / league) ─────────────────────────────────
+
+.wtis-archive-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: $space-6;
+  margin-bottom: $space-8;
+  padding: $space-6 0;
+  border-bottom: 4px solid var(--wtis-gold-400);
+}
+
+.wtis-archive-header__title {
+  @include headline-display($text-4xl);
+  margin: 0;
+  color: var(--wtis-ink);
+}
+
+.wtis-ledger-block {
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+  padding: $space-4 $space-5;
+  background: var(--wtis-gold-50);
+  border-radius: $radius-lg;
+  border: 1px solid rgba($gold-600, 0.35);
+  min-width: 200px;
+}
+
+.wtis-ledger-block__label {
+  @include ui-label;
+  color: var(--wtis-gold-600);
+}
+
+.wtis-ledger-block__stat {
+  font-family: $font-display;
+  font-size: $text-2xl;
+  font-weight: 700;
+  color: var(--wtis-ink);
+}
+
+.wtis-ledger-block__stat-w {
+  color: var(--wtis-green-500);
+}
+
+.wtis-ledger-block__stat-l {
+  color: var(--wtis-red-500);
+}
+
+.wtis-ledger-block__accuracy {
+  font-family: $font-display;
+  font-size: $text-xl;
+  font-weight: 700;
+  margin-top: $space-2;
+
+  &--high {
+    color: var(--wtis-green-500);
+  }
+
+  &--mid {
+    color: var(--wtis-gold-400);
+  }
+
+  &--low {
+    color: var(--wtis-red-500);
+  }
+}
+
+.wtis-archive-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $space-6;
+  padding-bottom: $space-12;
+
+  .navigation.pagination {
+    grid-column: 1 / -1;
+    margin-top: $space-8;
+  }
+}
+
+.wtis-archive-card {
+  background: var(--wtis-white);
+  border: 1px solid $rule;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  transition: border-color $transition, box-shadow $transition;
+
+  &:hover {
+    border-color: var(--wtis-blue-500);
+    box-shadow: 0 $space-3 $space-6 rgba($wtis-ink, 0.06);
+  }
+
+  &__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  &__img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+    background: var(--wtis-blue-50);
+  }
+
+  &__body {
+    padding: $space-4;
+  }
+
+  &__sport {
+    font-family: $font-ui;
+    font-size: $text-xs;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--wtis-blue-500);
+    margin-bottom: $space-2;
+  }
+
+  &__teams {
+    font-family: $font-display;
+    font-size: $text-xl;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--wtis-ink);
+    margin-bottom: $space-3;
+  }
+
+  &__pick {
+    font-family: $font-ui;
+    font-size: $text-sm;
+    font-weight: 500;
+    color: var(--wtis-gray-500);
+  }
+
+  &__pick-winner {
+    color: var(--wtis-gold-600);
+    font-weight: 700;
+  }
+
+  &__confidence {
+    font-family: $font-display;
+    font-size: $text-2xl;
+    font-weight: 700;
+    color: var(--wtis-gold-400);
+    margin-top: $space-2;
+  }
 }

@@ -1,0 +1,47 @@
+name: WTIS Pipeline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+
+    env:
+      APIFOOTBALL_API_KEY: ${{ secrets.APIFOOTBALL_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      WTIS_WP_BASE_URL: ${{ secrets.WTIS_WP_BASE_URL }}
+      WTIS_PIPELINE_API_KEY: ${{ secrets.WTIS_PIPELINE_API_KEY }}
+      WTIS_WP_USERNAME: ${{ secrets.WTIS_WP_USERNAME }}
+      WTIS_WP_APP_PASSWORD: ${{ secrets.WTIS_WP_APP_PASSWORD }}
+      PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_CARD_CHANNEL: ${{ secrets.SLACK_CARD_CHANNEL }}
+      SLACK_CARD_CHANNEL_ID: ${{ secrets.SLACK_CARD_CHANNEL_ID }}
+      BUFFER_ACCESS_TOKEN: ${{ secrets.BUFFER_ACCESS_TOKEN }}
+      BUFFER_CHANNEL_ID: ${{ secrets.BUFFER_CHANNEL_ID }}
+      MAILCHIMP_API_KEY: ${{ secrets.MAILCHIMP_API_KEY }}
+      MAILCHIMP_AUDIENCE_ID: ${{ secrets.MAILCHIMP_AUDIENCE_ID }}
+      MAILCHIMP_DC: ${{ secrets.MAILCHIMP_DC }}
+      BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
+      BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          cd pipeline
+          pip install -r requirements.txt
+
+      - name: Run pipeline
+        run: |
+          cd pipeline
+          python run.py

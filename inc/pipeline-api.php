@@ -189,6 +189,11 @@ function wtis_pipeline_matchup_args() {
             'sanitize_callback' => 'sanitize_text_field',
             'default'           => '',
         ],
+        'what_nobody_saying' => [
+            'type'              => 'string',
+            'sanitize_callback' => 'wp_kses_post',
+            'default'           => '',
+        ],
 
         // Article lifecycle
         'article_stage' => [
@@ -458,6 +463,7 @@ function wtis_save_matchup_meta( int $post_id, array $params ): void {
         'prediction_correct' => 'wtis_prediction_correct',
         'factors_for'        => 'wtis_factors_for',
         'factors_against'    => 'wtis_factors_against',
+        'what_nobody_saying' => 'wtis_what_nobody_saying',
         'article_stage'      => 'wtis_article_stage',
         'image_brief_scene'  => 'wtis_image_brief_scene',
     ];
@@ -485,6 +491,10 @@ function wtis_sideload_featured_image( int $post_id, string $url, string $title 
 
 function wtis_update_ledger( string $sport, bool $correct ): void {
     $ledger = get_option( 'wtis_ledger', [] );
+
+    // Normalize to WP slug format so ledger keys match category archive slugs.
+    // e.g. "World Cup" → "world-cup", "NFL" → "nfl"
+    $sport = sanitize_title( $sport );
 
     if ( ! isset( $ledger[ $sport ] ) ) {
         $ledger[ $sport ] = [

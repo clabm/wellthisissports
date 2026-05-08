@@ -1,51 +1,14 @@
 // ─────────────────────────────────────────────────────────────
-// style.scss — main Sass entry point
-// Understrap child theme. Import order matters:
-// tokens first, then components, then overrides.
+// style.scss — main Sass entry point (Understrap child)
+// Load order: base, components, mobile overrides last.
 // ─────────────────────────────────────────────────────────────
 
-// 1. Tokens (must be first — all partials depend on this)
-@import 'tokens';
-
-// 2. Base / global resets on top of Understrap
-html, body {
-  background-color: $paper;
-  color: $ink;
-}
-
-body {
-  font-family: $font-ui;
-  font-size: $text-md;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  color: $ink;
-  transition: color $transition;
-  &:hover { color: $ink-mid; }
-}
-
-img { max-width: 100%; height: auto; display: block; }
-
-.container,
-.container-fluid {
-  max-width: 1240px;
-}
-
-// ── Understrap overrides ──────────────────────────────────────
-#wrapper-navbar { display: none; }
-#wrapper-footer { display: none; }
-
-// 3. Components
-@import 'masthead';
-@import 'homepage';
-@import 'matchup';
-@import 'takeaways';
-@import 'pages';
-@import 'footer';
-@import 'ads';
-
-// 4. Mobile (last — overrides components at breakpoints)
-@import 'mobile';
+@use 'base';
+@use 'masthead' as *;
+@use 'homepage' as *;
+@use 'matchup' as *;
+@use 'takeaways' as *;
+@use 'pages' as *;
+@use 'footer' as *;
+@use 'ads' as *;
+@use 'mobile' as *;

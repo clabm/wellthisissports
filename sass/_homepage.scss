@@ -1,36 +1,123 @@
 // ─────────────────────────────────────────────────────────────
 // _homepage.scss
-// Matchup grid, ledger strip, sport sections.
-// Sprint 2: Cursor builds from approved token brief.
+// Ledger widget, matchup grid, sport sections, cards.
 // ─────────────────────────────────────────────────────────────
-@import 'tokens';
+@use 'tokens' as *;
 
-// ── Accuracy Ledger strip ────────────────────────────────────
+// ── Ledger widget (homepage strip) ───────────────────────────
 
-.wtis-ledger-strip {
-  display: flex;
-  gap: $space-6;
-  padding: $space-3 0;
-  @include rule-bottom;
+.wtis-ledger-widget {
   margin-bottom: $space-8;
-  overflow-x: auto;
+  padding: $space-6;
+  background: var(--wtis-gold-50);
+  border-radius: $radius-lg;
+  border: 1px solid rgba($gold-600, 0.35);
 
-  &__item {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    white-space: nowrap;
+  &__title {
+    @include headline($text-lg);
+    margin: 0 0 $space-4;
+    color: var(--wtis-ink);
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: $space-4;
   }
 
   &__sport {
     @include ui-label;
+    color: var(--wtis-gold-600);
+    margin-bottom: $space-1;
   }
 
-  &__stat {
+  &__record {
+    font-family: $font-display;
+    font-size: $text-2xl;
+    font-weight: 700;
+    color: var(--wtis-ink);
+    line-height: 1.1;
+  }
+
+  &__record-w {
+    color: var(--wtis-green-500);
+  }
+
+  &__record-l {
+    color: var(--wtis-red-500);
+  }
+
+  &__accuracy {
     font-family: $font-display;
     font-size: $text-xl;
-    font-weight: 600;
-    color: $ink;
+    font-weight: 700;
+    margin-top: $space-2;
+
+    &--high {
+      color: var(--wtis-green-500);
+    }
+
+    &--mid {
+      color: var(--wtis-gold-400);
+    }
+
+    &--low {
+      color: var(--wtis-red-500);
+    }
+  }
+
+  &__streak {
+    font-family: $font-ui;
+    font-size: $text-sm;
+    color: var(--wtis-gray-500);
+    margin-top: $space-1;
+  }
+}
+
+// ── Sport section (color blocks) ─────────────────────────────
+
+.wtis-sport-section {
+  margin-bottom: $space-12;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  background: var(--wtis-white);
+  border: 1px solid $rule;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: $space-3;
+    padding: $space-4 $space-6;
+    background: var(--wtis-blue-500);
+    color: var(--wtis-white);
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-size: $text-3xl;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  &__meta {
+    font-family: $font-ui;
+    font-size: $text-sm;
+    font-weight: 500;
+    opacity: 0.9;
+  }
+
+  &__body {
+    padding: $space-6;
+    background: var(--wtis-off-white);
+  }
+
+  &--alt .wtis-sport-section__header {
+    background: var(--wtis-gold-400);
+    color: var(--wtis-ink);
   }
 }
 
@@ -40,34 +127,55 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: $space-6;
-  padding: $space-8 0;
 }
 
 // ── Matchup card ─────────────────────────────────────────────
 
 .wtis-matchup-card {
+  position: relative;
+  background: var(--wtis-white);
   border: 1px solid $rule;
-  border-radius: $radius-md;
+  border-radius: $radius-lg;
   overflow: hidden;
-  transition: box-shadow $transition;
+  transition: box-shadow $transition-slow, border-color $transition;
 
   &:hover {
-    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    border-color: rgba($gold-400, 0.65);
+    box-shadow: 0 $space-3 $space-8 rgba($wtis-ink, 0.08);
   }
 
   &--featured {
-    border-color: $accent;
+    border-color: var(--wtis-gold-400);
+    box-shadow: 0 0 0 2px var(--wtis-gold-50);
   }
 
   &__link {
     display: block;
     text-decoration: none;
     color: inherit;
+    height: 100%;
+  }
+
+  &__badge {
+    position: absolute;
+    top: $space-3;
+    left: $space-3;
+    z-index: 1;
+    font-family: $font-ui;
+    font-size: $text-xs;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: $space-1 $space-2;
+    border-radius: $radius-sm;
+    background: var(--wtis-gold-400);
+    color: var(--wtis-ink);
   }
 
   &__img-wrap {
-    aspect-ratio: 16/9;
+    aspect-ratio: 16 / 9;
     overflow: hidden;
+    background: var(--wtis-blue-50);
   }
 
   &__img {
@@ -77,7 +185,7 @@
     transition: transform $transition-slow;
 
     .wtis-matchup-card:hover & {
-      transform: scale(1.02);
+      transform: scale(1.03);
     }
   }
 
@@ -87,76 +195,135 @@
 
   &__meta {
     display: flex;
-    gap: $space-3;
-    margin-bottom: $space-2;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $space-2 $space-3;
+    margin-bottom: $space-3;
   }
 
   &__sport {
-    @include sport-label;
+    display: inline-block;
+    font-family: $font-ui;
+    font-size: $text-xs;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: $space-1 $space-2;
+    border-radius: $radius-pill;
+    background: var(--wtis-blue-50);
+    color: var(--wtis-blue-500);
   }
 
   &__date {
     @include ui-label;
-    color: $ink-muted;
+    color: var(--wtis-gray-500);
   }
 
   &__teams {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: $space-2;
     margin-bottom: $space-3;
   }
 
   &__team {
     font-family: $font-display;
-    font-size: $text-lg;
-    font-weight: 600;
-    color: $ink;
+    font-size: $text-xl;
+    font-weight: 700;
+    color: var(--wtis-ink);
+    line-height: 1.1;
   }
 
   &__vs {
+    font-family: $font-ui;
     font-size: $text-sm;
-    color: $ink-muted;
+    font-weight: 600;
+    color: var(--wtis-gray-500);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
   }
 
   &__pick {
     display: flex;
-    align-items: center;
-    gap: $space-2;
+    flex-direction: column;
+    gap: $space-1;
     margin-bottom: $space-3;
+    padding: $space-3;
+    background: var(--wtis-gold-50);
+    border-radius: $radius-md;
+    border-left: 4px solid var(--wtis-gold-400);
   }
 
   &__pick-label {
     @include ui-label;
-    color: $accent;
+    color: var(--wtis-gold-600);
   }
 
   &__pick-team {
+    font-family: $font-display;
+    font-size: $text-lg;
+    font-weight: 700;
+    color: var(--wtis-ink);
+  }
+
+  &__confidence-preview {
+    display: flex;
+    align-items: baseline;
+    gap: $space-2;
+    margin-top: $space-2;
+  }
+
+  &__confidence-num {
+    @include confidence-score;
+    font-size: $text-4xl;
+  }
+
+  &__confidence-suffix {
     font-family: $font-ui;
-    font-size: $text-base;
-    font-weight: 600;
-    color: $ink;
+    font-size: $text-sm;
+    font-weight: 500;
+    color: var(--wtis-gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
 
   &__result {
+    font-family: $font-ui;
     font-size: $text-sm;
     font-weight: 600;
-    padding: $space-1 $space-2;
-    border-radius: $radius-sm;
+    padding: $space-2 $space-3;
+    border-radius: $radius-md;
     margin-top: $space-2;
 
-    &--correct   { background: lighten($confidence-high, 55%); color: $confidence-high; }
-    &--incorrect { background: lighten($confidence-low, 50%);  color: $confidence-low; }
+    &--correct {
+      background: var(--wtis-green-50);
+      color: var(--wtis-green-500);
+    }
+
+    &--incorrect {
+      background: var(--wtis-red-50);
+      color: var(--wtis-red-500);
+    }
   }
 }
 
-// ── No matchups placeholder ───────────────────────────────────
+// ── Card confidence meter (compact) ──────────────────────────
+
+.wtis-matchup-card .wtis-confidence-meter {
+  margin-top: 0;
+
+  .wtis-confidence-meter__bar {
+    margin-top: $space-2;
+  }
+}
 
 .wtis-no-matchups {
-  grid-column: 1/-1;
+  grid-column: 1 / -1;
   text-align: center;
-  color: $ink-muted;
+  @include body-copy($text-lg);
   padding: $space-16;
+  background: var(--wtis-white);
+  border-radius: $radius-lg;
+  border: 1px dashed $rule;
 }

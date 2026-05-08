@@ -126,6 +126,7 @@ repo-root/                          ← child theme root (wellthisiissports-chil
 ├── inc/
 │   ├── pipeline-api.php            ← all custom REST endpoints
 │   ├── custom-fields.php           ← editorial meta box
+│   ├── masthead.php                ← site header / nav include
 │   └── footer-content.php         ← footer include
 ├── templates/
 │   ├── front-page.php              ← matchup grid homepage

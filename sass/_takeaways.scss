@@ -1,8 +1,106 @@
 // ─────────────────────────────────────────────────────────────
 // _takeaways.scss
-// Key factors / takeaways component (shared partial).
-// Sprint 2: Cursor builds from approved token brief.
+// Factors for / against, optional "what nobody is saying".
 // ─────────────────────────────────────────────────────────────
-@import 'tokens';
+@use 'tokens' as *;
 
-// Stub — full implementation in Sprint 2
+.wtis-takeaways {
+  margin-bottom: $space-10;
+}
+
+.wtis-takeaways__heading {
+  @include headline-display($text-2xl);
+  margin: 0 0 $space-4;
+  padding-bottom: $space-3;
+  border-bottom: 1px solid $rule;
+}
+
+.wtis-takeaways__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-6;
+}
+
+.wtis-takeaways__col {
+  padding: $space-5;
+  border-radius: $radius-lg;
+
+  &--for {
+    background: var(--wtis-green-50);
+    border-top: 4px solid var(--wtis-green-500);
+  }
+
+  &--against {
+    background: var(--wtis-red-50);
+    border-top: 4px solid var(--wtis-red-500);
+  }
+}
+
+.wtis-takeaways__col-title {
+  font-family: $font-ui;
+  font-size: $text-xs;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0 0 $space-3;
+  color: var(--wtis-ink);
+}
+
+.wtis-takeaways__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    position: relative;
+    padding: $space-3 0 $space-3 $space-5;
+    font-family: $font-body;
+    font-size: $text-md;
+    line-height: 1.5;
+    color: var(--wtis-ink);
+    border-bottom: 1px solid $rule;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &::before {
+      position: absolute;
+      left: 0;
+      top: $space-3;
+      font-weight: 700;
+    }
+  }
+}
+
+.wtis-takeaways__col--for .wtis-takeaways__list li::before {
+  content: '+';
+  color: var(--wtis-green-500);
+}
+
+.wtis-takeaways__col--against .wtis-takeaways__list li::before {
+  content: '!';
+  color: var(--wtis-red-500);
+}
+
+// ── What nobody is saying ────────────────────────────────────
+
+.wtis-nobody-saying {
+  margin-top: $space-8;
+  padding: $space-6;
+  border-radius: $radius-lg;
+  background: var(--wtis-blue-50);
+  border-left: 4px solid var(--wtis-blue-500);
+
+  &__label {
+    @include ui-label;
+    color: var(--wtis-blue-500);
+    margin-bottom: $space-2;
+  }
+
+  &__body {
+    @include body-copy($text-lg);
+    margin: 0;
+    color: var(--wtis-ink);
+  }
+}

@@ -73,7 +73,7 @@ function wtis_enqueue_assets() {
     // Google Fonts — TBD Sprint 1, placeholder until tokens approved
     wp_enqueue_style(
         'wtis-fonts',
-        'https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap',
+        'https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&family=Barlow:wght@400;600&family=Inter:wght@400;500&display=swap',
         [],
         null
     );
@@ -168,9 +168,10 @@ function wtis_register_post_meta() {
         'show_in_rest' => true, 'single' => true, 'type' => 'boolean',
     ] );
 
-    // Factors
-    register_post_meta( 'post', 'wtis_factors_for',     $string_args );
-    register_post_meta( 'post', 'wtis_factors_against', $string_args );
+    // Factors and narrative
+    register_post_meta( 'post', 'wtis_factors_for',         $string_args );
+    register_post_meta( 'post', 'wtis_factors_against',     $string_args );
+    register_post_meta( 'post', 'wtis_what_nobody_saying',  $text_args );
 
     // Article lifecycle
     register_post_meta( 'post', 'wtis_article_stage',     $string_args );
