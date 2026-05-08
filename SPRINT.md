@@ -1,5 +1,5 @@
 # SPRINT.md — Well This Is Sports
-## Sprint 1 — Foundation
+## Sprint 2 — Build
 
 > Live working surface. Updated every session. Current as of May 2026.
 
@@ -7,107 +7,116 @@
 
 ## Sprint Goal
 
-Get the foundation in place for a World Cup 2026 soft launch on June 11. Two parallel tracks this sprint: WordPress theme scaffold and design token definition. Pipeline work begins Sprint 2 once the sports data API is selected and Cloudways/GitHub are provisioned.
+Build the core product. Two parallel tracks: Cursor builds the front-end from approved design tokens, Shop Hand builds the pipeline against API-Football and WordPress. Target: working prediction pipeline publishing World Cup matchups before June 11 launch.
 
 ---
 
-## Director Todos — Blocking Sprint Progress
+## Sprint 1 — Closed
 
-These must be completed before Sprint 2 can begin. Nothing below is blocked on these for Sprint 1 except where noted.
+All Sprint 1 tasks complete. Summary:
 
-| Todo | Blocks | Status |
-|---|---|---|
-| Create Cloudways app for wellthisiissports.com | Shop Hand deploy config, CLAUDE.md server details | Done, App ID 6404529 |
-| Create GitHub repo: `clabm/wellthisissports` | Shop Hand scaffold commit | Done |
-| Add GitHub Secrets to new repo | Pipeline work, deploy workflow | Not started |
+| Track | Outcome |
+|---|---|
+| Track A: WordPress scaffold | Done, lando verified, child theme active |
+| Track B: Design tokens | Done, approved and locked in CLAUDE.md and `_tokens.scss` |
+| Track C: Sports API research | Done, API-Football selected as primary, football-data.org as fallback |
+| GitHub repo | `clabm/wellthisissports`, SSH configured |
+| Cloudways app | App ID 6404529, Server ID 1609033, App user djxudszeqq |
+| Core GitHub Secrets | 10 secrets in, social secrets deferred to pre-launch |
 
-Once Cloudways app is created, update CLAUDE.md with:
-- Cloudways server ID — 1609033
-- Cloudways app ID — 6404529
-- App user — djxudszeqq
-- Theme path — /home/master/applications/djxudszeqq/public_html/wp-content/themes/wellthisissports-child
-
----
-
-## Sprint 1 Tasks
-
-### Track A: WordPress Theme Scaffold
-**Owner:** The Shop Hand  
-**Trigger:** GitHub repo exists  
-**Status:** Blocked on GitHub repo creation
-
-| Task | Detail | Status |
-|---|---|---|
-| Fork WTIN repo structure into new repo | Repo root = child theme root, rename all files and slugs | Blocked |
-| Rename all prefixes `wtin_` to `wtis_` | functions.php, pipeline-api.php, custom-fields.php, style.css | Blocked |
-| Strip perspective meta fields | Remove left/right/neutral fields, replace with prediction fields per CLAUDE.md | Blocked |
-| Stub new REST endpoint | `/wp-json/wtis/v1/matchups`, basic CRUD, no pipeline logic yet | Blocked |
-| Replace toggle.js with prediction.js stub | Empty IIFE, placeholder for confidence meter component | Blocked |
-| Update Sass structure | Rename `_story.scss` to `_matchup.scss`, add `_matchup.scss` stub, update style.scss imports | Blocked |
-| Update .lando.yml | New site name and local URLs: wellthisiissports.lndo.site | Blocked |
-| Update .env.lando.example | Rename WTIN vars to WTIS throughout | Blocked |
-| Add deploy.yml workflow | Copy from WTIN, update deploy-path to wellthisiissports-child | Blocked |
-| Verify lando start works | Clean local install, child theme activates, no errors | Blocked |
-| Update CLAUDE.md with server details | Once Director adds Cloudways app ID | Blocked on Director todo |
+**Social accounts deferred:** Facebook, Buffer, Mailchimp, Bluesky, Slack channel — set up at pre-launch, not blocking build.
 
 ---
 
-### Track B: Design Token Definition
-**Owner:** The Architect + Director  
-**Trigger:** None, can start immediately  
+## Sprint 2 Tasks
+
+### Track A: Front-End
+**Owner:** The Cursor
+**Trigger:** Ready to start, tokens locked, scaffold in place
 **Status:** Ready
 
 | Task | Detail | Status |
 |---|---|---|
-| Architect proposes color palette | Bold, colorful, not generic sports red/blue, works in light and dark mode | Done |
-| Architect proposes typography stack | Display font, body font, UI font, referencing The Ringer/Vox/The18 direction | Done |
-| Architect proposes spacing and scale | Base unit, type scale, breakpoints | Done |
-| Director reviews and approves token set | One focused session, decisions locked | Done |
-| Lock tokens into CLAUDE.md | Design tokens table updated with approved values | Done |
-| Create `_tokens.scss` with approved values | CSS custom properties and Sass variables | Pending Shop Hand |
-| Brief Cursor for theme build | Reference sites plus token brief, scoped to Sprint 2 front-end tasks | Pending tokens in repo |
+| Update functions.php | Replace Oswald Google Font reference with Barlow Condensed + Barlow + Inter | Ready |
+| Build `_masthead.scss` | Site wordmark, nav, sports identity header | Ready |
+| Build `_homepage.scss` | Matchup grid layout, sport section blocks, ledger widget placement | Ready |
+| Build `_matchup.scss` | Prediction detail page, confidence meter component, team breakdown layout | Ready |
+| Build `_takeaways.scss` | Key factors component, factors for/against display | Ready |
+| Build `_footer.scss` | Footer styles, social links, newsletter signup | Ready |
+| Build `_mobile.scss` | Responsive breakpoints for all components | Ready |
+| Update front-page.php | Matchup grid homepage, ledger widget, sport sections | Ready |
+| Update single.php | Prediction detail page, confidence meter, team breakdown, key factors | Ready |
+| Update archive.php | Sport and league archive pages | Ready |
+| Build prediction.js | Confidence meter animation, prediction reveal component, IIFE pattern | Ready |
+| Compile and verify | `lando sass`, confirm no errors, review in browser | Ready |
+
+**Cursor brief:**
+- Visual references: The Ringer, Vox, The18
+- Token file: `sass/_tokens.scss`
+- Direction: Bold, colorful, sports energy, white default, dark mode via OS setting
+- Hero UI element: Confidence meter (gold, large Barlow Condensed number)
+- Ledger: prominent on homepage and archive, green for correct, red for incorrect
+- Card-forward layout with color-blocked sections
+- No jQuery, vanilla JS only, IIFE pattern
+- Never edit `css/style.min.css` directly
 
 ---
 
-### Track C: Sports Data API Research
-**Owner:** The Scout  
-**Trigger:** None, can start immediately  
+### Track B: Pipeline
+**Owner:** The Shop Hand
+**Trigger:** Ready to start
 **Status:** Ready
 
 | Task | Detail | Status |
 |---|---|---|
-| Research World Cup 2026 data API options | ESPN API, The Odds API, SportsRadar, API-Football, others | Done |
-| Evaluate each on: fixture data, team data, live results, free vs paid tier, rate limits | Produce comparison brief for Director decision | Done |
-| Identify which APIs cover post-game results | Required for ledger update pipeline | Done |
-| Deliver research brief to Architect | Structured comparison, recommendation included | Done |
-| Director selects API | API-Football primary, football-data.org fallback | Done |
+| Set up pipeline/ directory structure | Mirrors WTIN: ingest.py, predict.py, publish.py, card.py, run.py | Ready |
+| Create .env.lando with all current secrets | Local dev pipeline config | Ready |
+| Build ingest.py | API-Football integration, World Cup fixture fetch, matchup extraction, dedup, candidates.json | Ready |
+| Test ingest.py locally | Confirm World Cup fixtures returned, candidates.json populated | Ready |
+| Build predict.py | Claude Haiku prediction prompt, winner + confidence score, key factors, image brief, framed.json | Ready |
+| Test predict.py locally | Confirm prediction output matches schema, quality check | Ready |
+| Build publish.py | WordPress REST API, matchup post creation, OpenAI hero image, ledger logging | Ready |
+| Test publish.py locally | Confirm matchup posts appear in local WP, meta fields populated | Ready |
+| Build card.py stub | Score gate, card type selection, Slack + Buffer hooks stubbed for post-launch | Ready |
+| Build run.py | Orchestrates all stages in sequence, error handling, logging | Ready |
+| Build pipeline.yml | GitHub Actions workflow, schedule TBD, all secrets mapped in env: block | Ready |
+| End-to-end local test | Run full pipeline locally against lando WP, verify matchup published correctly | Ready |
 
-**Scout prompt to use:**
-> Research the best sports data APIs for World Cup 2026 coverage. I need: upcoming fixture data, team and player data, live match results, and post-game final scores. Evaluate ESPN API, The Odds API, SportsRadar, API-Football, and any others worth considering. Compare on data coverage, free vs paid tiers, rate limits, and ease of integration with a Python pipeline. Produce a structured comparison with a recommendation.
+**Pipeline rules inherited from WTIN:**
+- Never set Content-Type at session level, use json= kwarg per request
+- Always request date_gmt not date from WP REST API
+- Always append UTM URL explicitly, never rely on LLM to embed it
+- OpenAI gpt-image-1 returns base64, decode and save before doing anything else
+- Every secret must be in pipeline.yml env: block explicitly
+- Test with a local script before any live pipeline run
 
 ---
 
-## Sprint 1 Definition of Done
+### Track C: WordPress Setup on Server
+**Owner:** Director
+**Trigger:** Ready to start
+**Status:** Ready
 
-- [x] GitHub repo exists at `clabm/wellthisissports`
-- [x] Cloudways app provisioned, IDs in CLAUDE.md
-- [x] Theme scaffold committed, lando start works, child theme activates
-- [x] Design tokens approved by Director and locked in CLAUDE.md and `_tokens.scss`
-- [x] Sports data API selected by Director
-- [ ] GitHub Secrets added to repo
-- [ ] SPRINT.md updated with Sprint 2 tasks
+| Task | Detail | Status |
+|---|---|---|
+| Point wellthisiissports.com domain to Cloudways app | Cloudways, App, Domain Management | Ready |
+| Verify WordPress is installed and accessible | Visit temporary Cloudways URL | Ready |
+| Install Understrap parent theme on server | Via WP admin or WP-CLI | Ready |
+| Deploy child theme via GitHub Actions | Push to main, verify deploy.yml fires | Ready |
+| Activate wellthisissports-child theme | WP admin, Appearance, Themes | Ready |
+| Set WTIS pipeline API key in WP options | WP admin or WP-CLI | Ready |
+| Verify REST API endpoint responds | GET /wp-json/wtis/v1/status | Ready |
 
 ---
 
-## Sprint 2 Preview (Do Not Start Yet)
+## Sprint 2 Definition of Done
 
-Once Sprint 1 is fully closed:
-
-- Cursor builds front-end from token brief, matchup grid homepage, prediction detail page, confidence meter component, ledger widget
-- Shop Hand builds Pipeline Stage 1, ingest.py, API-Football integration, matchup extraction, dedup
-- Shop Hand builds Pipeline Stage 2, predict.py, Claude Haiku prediction prompt, confidence scoring, image brief
-- Shop Hand builds Pipeline Stage 3, publish.py, WordPress REST API integration, OpenAI hero image
-- Shop Hand stubs ledger update endpoint and post-game flow
+- [ ] Front-end built, reviewed in browser, approved by Director
+- [ ] Pipeline runs end-to-end locally, matchup published to local WP
+- [ ] WordPress live on server, theme deployed and active
+- [ ] Pipeline runs against production WP, first real matchup published
+- [ ] deploy.yml verified, push to main deploys theme correctly
+- [ ] SPRINT.md updated with Sprint 3 tasks
 
 ---
 
@@ -115,8 +124,26 @@ Once Sprint 1 is fully closed:
 
 | Blocker | Owner | Notes |
 |---|---|---|
-| GitHub Secrets not added to repo | Director | Blocks deploy workflow and pipeline |
-| Cursor front-end brief not drafted | Architect | Blocks Sprint 2 front-end track |
+| Social secrets | Director | Deferred to pre-launch, not blocking build |
+| Pipeline schedule | Shop Hand + Director | Decide cadence once pipeline is tested |
+| API-Football paid tier decision | Director | Evaluate before World Cup launch based on request volume |
+
+---
+
+## Pre-Launch Checklist (Sprint 3 Preview)
+
+- [ ] Create Facebook Page for WTIS
+- [ ] Connect to Buffer, get channel ID
+- [ ] Create Mailchimp audience for WTIS
+- [ ] Create Bluesky account for WTIS
+- [ ] Create Slack channel for WTIS, get channel ID
+- [ ] Add all social secrets to GitHub
+- [ ] Enable social distribution in pipeline
+- [ ] Set up Checkly monitoring
+- [ ] Evaluate API-Football paid tier upgrade
+- [ ] World Cup group stage preview article published
+- [ ] Ledger widget live on homepage
+- [ ] Soft launch June 11, World Cup Day 1
 
 ---
 
@@ -125,8 +152,9 @@ Once Sprint 1 is fully closed:
 | Date | Session Summary | Next Session |
 |---|---|---|
 | May 2026 | Project scoped, WTIS overview, CLAUDE.md, AGENT.md, SPRINT.md produced | Director completes Cloudways and GitHub todos, Architect proposes design tokens, Scout researches APIs |
+| May 2026 | Sprint 1 closed. Tokens approved, API selected, scaffold verified, core secrets in | Sprint 2 kickoff, Cursor on front-end, Shop Hand on pipeline, Director on server setup |
 
 ---
 
-*Well This Is Sports — SPRINT.md — Sprint 1*
+*Well This Is Sports — SPRINT.md — Sprint 2*
 *Updated every session by The Architect. Owned by The Shop Hand during execution.*
