@@ -1,0 +1,180 @@
+name: wellthiissports
+recipe: wordpress
+config:
+  php: '8.2'
+  via: nginx
+  webroot: wordpress
+  database: mariadb:10.6
+  xdebug: false
+
+# ── Services ────────────────────────────────────────────────
+services:
+
+  appserver:
+    overrides:
+      environment:
+        LANDO_INFO: 'true'
+        WP_ENV: 'development'
+      volumes:
+        # Mount repo root (child theme files) into the WP theme directory.
+        - .:/app/wordpress/wp-content/themes/wellthiissports-child
+        - /Users/calebmayfield/.ssh/wellthiissports_deploy:/root/.ssh/wellthiissports_deploy:ro
+        - /Users/calebmayfield/.ssh/known_hosts:/root/.ssh/known_hosts:ro
+
+  database:
+    type: mariadb:10.6
+    portforward: 3308  # avoid conflict with WTIN (3307) and local MySQL (3306)
+    creds:
+      user: wordpress
+      password: wordpress
+      database: wordpress
+
+  # phpMyAdmin — available at http://pma.wellthisiissports.lndo.site
+  pma:
+    type: phpmyadmin
+    hosts:
+      - database
+
+  # MailHog — traps all outgoing email during dev
+  # Access at http://mail.wellthisiissports.lndo.site
+  mailhog:
+    type: mailhog
+    portforward: true
+    hogfrom:
+      - appserver
+
+# ── Proxy ───────────────────────────────────────────────────
+proxy:
+  appserver_nginx:
+    - wellthisiissports.lndo.site
+  pma:
+    - pma.wellthisiissports.lndo.site
+  mailhog:
+    - mail.wellthisiissports.lndo.site
+
+# ── Tooling ─────────────────────────────────────────────────
+tooling:
+
+  wp:
+    service: appserver
+    description: WP-CLI — e.g. lando wp post list
+    cmd: wp --path=/app/wordpress
+
+  composer:
+    service: appserver
+    description: Composer — e.g. lando composer install
+
+  # Dart Sass — compiles child theme Sass (files live at repo root = /app)
+  sass:
+    service: appserver
+    description: Compile child theme Sass → CSS
+    cmd:
+      - appserver: |
+          cd /app &&
+          sass sass/style.scss css/style.min.css --style=compressed --no-source-map
+
+  # Watch mode for active development
+  sass-watch:
+    service: appserver
+    description: Watch and compile Sass on change
+    cmd:
+      - appserver: |
+          cd /app &&
+          sass --watch sass/style.scss:css/style.min.css --no-source-map
+
+  # Full build — Sass compile + cache flush
+  build-theme:
+    service: appserver
+    description: Compile Sass and flush WP cache
+    cmd:
+      - appserver: |
+          cd /app &&
+          sass sass/style.scss css/style.min.css --style=compressed --no-source-map &&
+          wp cache flush --path=/app/wordpress --allow-root &&
+          echo "Theme built and cache flushed."
+
+  # Database shortcuts
+  db-export:
+    service: database
+    description: Export database — lando db-export > dump.sql
+    cmd: mysqldump -u wordpress -pwordpress wordpress
+
+  db-import:
+    service: database
+    description: Import database — lando db-import < dump.sql
+    cmd: mysql -u wordpress -pwordpress wordpress
+
+  # Sync production DB down to local (requires .env.lando)
+  db-pull:
+    service: appserver
+    user: root
+    description: Pull production DB to local (requires CLOUDWAYS_SSH + CLOUDWAYS_WP_PATH in .env.lando)
+    cmd:
+      - appserver: |
+          . /app/.env.lando 2>/dev/null || true
+          if [ -z "$CLOUDWAYS_SSH" ] || [ -z "$CLOUDWAYS_WP_PATH" ]; then
+            echo "Set CLOUDWAYS_SSH and CLOUDWAYS_WP_PATH in .env.lando first"
+            exit 1
+          fi
+          echo "Pulling DB from $CLOUDWAYS_SSH..."
+          cp /root/.ssh/wellthiissports_deploy /tmp/deploy_key
+          chmod 600 /tmp/deploy_key
+          ssh -i /tmp/deploy_key \
+            -o StrictHostKeyChecking=no \
+            "$CLOUDWAYS_SSH" \
+            "cd $CLOUDWAYS_WP_PATH && wp db export /tmp/wtis_dump.sql --allow-root --quiet && cat /tmp/wtis_dump.sql" \
+            > /tmp/prod.sql
+          rm -f /tmp/deploy_key
+          if [ ! -s /tmp/prod.sql ]; then
+            echo "ERROR: dump is empty — SSH or WP-CLI failed on the server"
+            exit 1
+          fi
+          echo "Dump received ($(wc -c < /tmp/prod.sql) bytes). Importing..."
+          wp db import /tmp/prod.sql --path=/app/wordpress --allow-root
+          wp search-replace "$CLOUDWAYS_PROD_URL" "https://wellthisiissports.lndo.site" \
+            --path=/app/wordpress --allow-root --report
+          echo "Done. DB synced and URLs replaced."
+
+# ── Build steps ─────────────────────────────────────────────
+events:
+  post-start:
+    - appserver: |
+        # Download WordPress core if not present
+        if [ ! -f /app/wordpress/wp-load.php ]; then
+          echo "Downloading WordPress core..."
+          wp core download --path=/app/wordpress --allow-root --skip-content 2>/dev/null || true
+        fi
+        # Create wp-config.php if not present
+        if [ ! -f /app/wordpress/wp-config.php ]; then
+          wp config create \
+            --path=/app/wordpress \
+            --dbname=wordpress \
+            --dbuser=wordpress \
+            --dbpass=wordpress \
+            --dbhost=database \
+            --allow-root \
+            --force
+        fi
+        # Install WordPress if not already installed
+        if ! wp core is-installed --path=/app/wordpress --allow-root 2>/dev/null; then
+          echo "Installing WordPress..."
+          wp core install \
+            --path=/app/wordpress \
+            --url="https://wellthisiissports.lndo.site" \
+            --title="Well This Is Sports" \
+            --admin_user="admin" \
+            --admin_password="admin" \
+            --admin_email="admin@wellthisiissports.lndo.site" \
+            --allow-root \
+            --skip-email
+          echo "WordPress installed."
+        else
+          echo "WordPress already installed."
+        fi
+        # Install Understrap parent theme if not present
+        if [ ! -d /app/wordpress/wp-content/themes/understrap ]; then
+          wp theme install understrap --path=/app/wordpress --allow-root
+          echo "Understrap installed."
+        fi
+        # Activate child theme
+        wp theme activate wellthiissports-child --path=/app/wordpress --allow-root 2>/dev/null || true

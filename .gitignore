@@ -1,0 +1,74 @@
+# Well This Is Sports — .gitignore
+
+# ── Local secrets ────────────────────────────────────────────
+.env.lando
+.env
+pipeline-api-key.txt
+.env.*
+!.env.lando.example
+
+# ── WordPress core (installed by Lando into wordpress/) ──────
+wordpress/
+
+# ── WP core files at repo root ────────────────────────────────
+wp-admin/
+wp-includes/
+wp-*.php
+xmlrpc.php
+license.txt
+readme.html
+wp-config.php
+wp-config-sample.php
+
+# ── wp-content at repo root ───────────────────────────────────
+wp-content/
+
+# ── WordPress uploads ─────────────────────────────────────────
+wordpress/wp-content/uploads/
+
+# ── Understrap parent theme (installed separately) ───────────
+wordpress/wp-content/themes/understrap/
+
+# ── Compiled CSS (committed — compiled locally, deployed) ─────
+# css/style.min.css
+
+# ── Sass cache ───────────────────────────────────────────────
+.sass-cache/
+*.css.map
+
+# ── Node (not used — Dart Sass is host-installed) ────────────
+node_modules/
+package-lock.json
+yarn.lock
+
+# ── macOS ────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+# ── Lando ────────────────────────────────────────────────────
+.lando/
+
+# ── Editor ───────────────────────────────────────────────────
+.vscode/settings.json
+.idea/
+*.sublime-workspace
+
+# ── Logs ─────────────────────────────────────────────────────
+*.log
+deploy.log
+
+# ── Pipeline ─────────────────────────────────────────────────
+pipeline/.env
+pipeline/.venv/
+pipeline/__pycache__/
+pipeline/*.pyc
+pipeline/candidates.json
+pipeline/framed.json
+pipeline/used_images.json
+pipeline/temp_images/
+pipeline/recent_posts.json

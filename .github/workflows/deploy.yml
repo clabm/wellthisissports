@@ -1,0 +1,49 @@
+name: Deploy — Well This Is Sports
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to Cloudways
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6.0.2
+
+      - name: Trigger Cloudways git pull
+        uses: roelmagdaleno/cloudways-api-git-pull-action@v1.3.0
+        with:
+          email: ${{ secrets.CLOUDWAYS_EMAIL }}
+          api-key: ${{ secrets.CLOUDWAYS_API_KEY }}
+          server-id: ${{ secrets.CLOUDWAYS_SERVER_ID }}
+          app-id: ${{ secrets.CLOUDWAYS_APP_ID }}
+          branch-name: main
+          deploy-path: public_html/wp-content/themes/wellthiissports-child
+
+      - name: Sync git_repo → theme directory via SSH
+        uses: appleboy/ssh-action@v1.2.5
+        with:
+          host: ${{ secrets.CLOUDWAYS_HOST }}
+          username: ${{ secrets.CLOUDWAYS_USER }}
+          key: ${{ secrets.CLOUDWAYS_SSH_PRIVATE_KEY }}
+          envs: THEME_PATH
+          script: |
+            sleep 20
+            rsync -rl --no-perms --no-times --ignore-times \
+              --exclude='.git' --exclude='wordpress/' \
+              /home/master/applications/djxudszeqq/git_repo/ \
+              "$THEME_PATH"/
+            echo "Sync complete."
+            WP_ROOT=/home/master/applications/djxudszeqq/public_html
+            cd "$WP_ROOT" && wp cli update --allow-root --quiet || true
+            cd "$WP_ROOT" && wp eval 'opcache_reset();' --allow-root && echo "Opcache cleared." || echo "Opcache reset not available."
+            cd "$WP_ROOT" && wp cache flush --allow-root && echo "Object cache flushed." || echo "Object cache flush not available."
+            BREEZE_CACHE="$WP_ROOT/wp-content/cache"
+            rm -rf "$BREEZE_CACHE/breeze/" && echo "Breeze page cache cleared." || true
+            rm -rf "$BREEZE_CACHE/breeze-minification/" && echo "Breeze minification cache cleared." || true
+            echo "Cache purge complete."
+        env:
+          THEME_PATH: ${{ secrets.THEME_PATH }}

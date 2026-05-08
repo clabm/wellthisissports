@@ -1,0 +1,58 @@
+// ─────────────────────────────────────────────────────────────
+// _mobile.scss
+// Responsive breakpoints — last file loaded, overrides all components.
+// Sprint 2: Cursor fills in full responsive breakpoints.
+// ─────────────────────────────────────────────────────────────
+@import 'tokens';
+
+// ── Tablet ────────────────────────────────────────────────────
+
+@media (max-width: $bp-lg) {
+  .wtis-matchup-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .wtis-footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .wtis-factors {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ── Mobile ────────────────────────────────────────────────────
+
+@media (max-width: $bp-md) {
+  .wtis-matchup-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wtis-footer-grid {
+    grid-template-columns: 1fr;
+    gap: $space-8;
+  }
+
+  .wtis-story__teams {
+    flex-direction: column;
+    gap: $space-2;
+    align-items: flex-start;
+  }
+
+  .wtis-story__team-home,
+  .wtis-story__team-away {
+    font-size: $text-3xl;
+  }
+
+  .wtis-masthead__nav {
+    display: none;
+  }
+
+  .wtis-masthead__mobile-toggle {
+    display: block;
+  }
+
+  .wtis-ledger-strip {
+    gap: $space-4;
+  }
+}

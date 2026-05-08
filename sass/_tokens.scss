@@ -1,0 +1,127 @@
+// ─────────────────────────────────────────────────────────────
+// _tokens.scss
+// Sass variables mirroring CSS custom properties in style.css.
+// Import this file in every component partial.
+//
+// NOTE: Values are TBD — awaiting Director approval in Sprint 1 Track B.
+// Update when tokens are locked.
+// ─────────────────────────────────────────────────────────────
+
+// Accent colors — TBD Sprint 1
+$accent:        #E85D26;
+$accent-dark:   #c44d1e;
+$accent-2:      #1A73E8;
+$accent-2-dark: #1558b0;
+
+// Confidence meter
+$confidence-high: #2E7D32;
+$confidence-mid:  #F57C00;
+$confidence-low:  #C62828;
+
+// Ink scale
+$ink:             #1A1A1A;
+$ink-mid:         #4A4A4A;
+$ink-muted:       #787878;
+$ink-faint:       #B8B8B8;
+
+// Paper scale
+$paper:           #FFFFFF;
+$paper-2:         #F5F5F5;
+$paper-3:         #EBEBEB;
+$rule:            #E0E0E0;
+
+// Typography — TBD Sprint 1
+$font-display:    'Oswald', 'Impact', Arial Narrow, sans-serif;
+$font-body:       'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+$font-ui:         'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+// Type scale
+$text-xs:         10px;
+$text-sm:         11px;
+$text-base:       13px;
+$text-md:         14px;
+$text-lg:         16px;
+$text-xl:         18px;
+$text-2xl:        22px;
+$text-3xl:        28px;
+$text-4xl:        36px;
+$text-5xl:        48px;
+
+// Spacing scale (8px base)
+$space-1:         4px;
+$space-2:         8px;
+$space-3:         12px;
+$space-4:         16px;
+$space-5:         20px;
+$space-6:         24px;
+$space-8:         32px;
+$space-10:        40px;
+$space-12:        48px;
+$space-16:        64px;
+
+// Border radius
+$radius-sm:       3px;
+$radius-md:       6px;
+$radius-lg:       12px;
+$radius-pill:     999px;
+
+// Transitions
+$transition:      0.15s ease;
+$transition-slow: 0.25s ease;
+
+// Footer
+$footer-bg:     #1a1a1a;
+$footer-bottom: #111111;
+$footer-text:   #FAFAFA;
+$footer-muted:  rgba(#FAFAFA, 0.5);
+
+// Breakpoints (Bootstrap 5 / Understrap default)
+$bp-sm:           576px;
+$bp-md:           768px;
+$bp-lg:           992px;
+$bp-xl:           1200px;
+$bp-xxl:          1400px;
+
+// Mixins
+@mixin ui-label {
+  font-family: $font-ui;
+  font-size: $text-xs;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: $ink-faint;
+}
+
+@mixin sport-label {
+  font-family: $font-ui;
+  font-size: $text-xs;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: $accent;
+}
+
+@mixin rule-bottom {
+  border-bottom: 1px solid $rule;
+}
+
+@mixin rule-top {
+  border-top: 1px solid $rule;
+}
+
+@mixin headline-display($size: $text-2xl) {
+  font-family: $font-display;
+  font-size: $size;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: $ink;
+}
+
+@mixin body-copy($size: $text-lg) {
+  font-family: $font-body;
+  font-size: $size;
+  font-weight: 400;
+  line-height: 1.7;
+  color: $ink-mid;
+}

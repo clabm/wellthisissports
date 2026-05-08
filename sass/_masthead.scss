@@ -1,0 +1,45 @@
+// ─────────────────────────────────────────────────────────────
+// _masthead.scss
+// Wordmark, primary nav, mobile nav toggle.
+// Sprint 2: Cursor builds from approved token brief.
+// ─────────────────────────────────────────────────────────────
+@import 'tokens';
+
+.wtis-masthead {
+  @include rule-bottom;
+  padding: $space-4 0;
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__wordmark {
+    font-family: $font-display;
+    font-size: $text-2xl;
+    font-weight: 600;
+    color: $ink;
+    text-decoration: none;
+    letter-spacing: -0.01em;
+
+    &:hover { color: $accent; }
+  }
+
+  &__nav {
+    display: flex;
+    gap: $space-6;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__mobile-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: $space-2;
+    font-size: $text-xl;
+  }
+}

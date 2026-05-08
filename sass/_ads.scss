@@ -1,0 +1,27 @@
+// ─────────────────────────────────────────────────────────────
+// _ads.scss
+// Ad unit position stubs.
+// Sprint 2: configure ad units when AdSense account active.
+// ─────────────────────────────────────────────────────────────
+@import 'tokens';
+
+.wtis-ad {
+  background: $paper-2;
+  border: 1px dashed $rule;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $ink-faint;
+  font-size: $text-sm;
+  font-family: $font-ui;
+
+  &--leaderboard {
+    width: 100%;
+    height: var(--wtis-ad-leaderboard-h);
+  }
+
+  &--rectangle {
+    width: var(--wtis-ad-rectangle-w);
+    height: var(--wtis-ad-rectangle-h);
+  }
+}

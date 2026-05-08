@@ -1,0 +1,27 @@
+// ─────────────────────────────────────────────────────────────
+// _pages.scss
+// Generic page template styles.
+// ─────────────────────────────────────────────────────────────
+@import 'tokens';
+
+.wtis-page-content {
+  max-width: 760px;
+  margin: $space-10 auto;
+  padding: 0 0 $space-16;
+}
+
+.wtis-page-title {
+  @include headline-display($text-4xl);
+  margin-bottom: $space-8;
+  padding-bottom: $space-4;
+  @include rule-bottom;
+}
+
+.wtis-page-body {
+  @include body-copy;
+
+  h2 { @include headline-display($text-2xl); margin: $space-8 0 $space-4; }
+  h3 { @include headline-display($text-xl);  margin: $space-6 0 $space-3; }
+  p  { margin-bottom: $space-5; }
+  a  { color: $accent; &:hover { color: $accent-dark; } }
+}
