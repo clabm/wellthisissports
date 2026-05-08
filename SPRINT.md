@@ -34,21 +34,21 @@ Once Cloudways app is created, update CLAUDE.md with:
 ### Track A: WordPress Theme Scaffold
 **Owner:** The Shop Hand  
 **Trigger:** GitHub repo exists  
-**Status:** Complete — committed c7e4d4f — May 8, 2026
+**Status:** Blocked on GitHub repo creation
 
 | Task | Detail | Status |
 |---|---|---|
-| Fork WTIN repo structure into new repo | Repo root = child theme root, rename all files and slugs | Done |
-| Rename all prefixes `wtin_` to `wtis_` | functions.php, pipeline-api.php, custom-fields.php, style.css | Done |
-| Strip perspective meta fields | Remove left/right/neutral fields, replace with prediction fields per CLAUDE.md | Done |
-| Stub new REST endpoint | `/wp-json/wtis/v1/matchups` — POST/PATCH/image/status/result + status + ledger | Done |
-| Replace toggle.js with prediction.js stub | IIFE with mobile nav, newsletter, share — confidence meter ready for Sprint 2 | Done |
-| Update Sass structure | `_story.scss` → `_matchup.scss`, full prediction scaffold, updated style.scss imports | Done |
-| Update .lando.yml | wellthiissports project, wellthisiissports.lndo.site proxy, port 3308 | Done |
-| Update .env.lando.example | Renamed WTIN vars to WTIS throughout | Done |
-| Add deploy.yml workflow | Copied from WTIN, deploy-path: wellthiissports-child, WTIS Cloudways app paths | Done |
-| Verify lando start works | Pending — Director runs `lando start` locally to confirm theme activates | Pending Director |
-| Update CLAUDE.md with server details | Server details already present in CLAUDE.md | Done |
+| Fork WTIN repo structure into new repo | Repo root = child theme root, rename all files and slugs | Blocked |
+| Rename all prefixes `wtin_` to `wtis_` | functions.php, pipeline-api.php, custom-fields.php, style.css | Blocked |
+| Strip perspective meta fields | Remove left/right/neutral fields, replace with prediction fields per CLAUDE.md | Blocked |
+| Stub new REST endpoint | `/wp-json/wtis/v1/matchups`, basic CRUD, no pipeline logic yet | Blocked |
+| Replace toggle.js with prediction.js stub | Empty IIFE, placeholder for confidence meter component | Blocked |
+| Update Sass structure | Rename `_story.scss` to `_matchup.scss`, add `_matchup.scss` stub, update style.scss imports | Blocked |
+| Update .lando.yml | New site name and local URLs: wellthisiissports.lndo.site | Blocked |
+| Update .env.lando.example | Rename WTIN vars to WTIS throughout | Blocked |
+| Add deploy.yml workflow | Copy from WTIN, update deploy-path to wellthisiissports-child | Blocked |
+| Verify lando start works | Clean local install, child theme activates, no errors | Blocked |
+| Update CLAUDE.md with server details | Once Director adds Cloudways app ID | Blocked on Director todo |
 
 ---
 
@@ -59,13 +59,13 @@ Once Cloudways app is created, update CLAUDE.md with:
 
 | Task | Detail | Status |
 |---|---|---|
-| Architect proposes color palette | Bold, colorful, not generic sports red/blue, works in light and dark mode | Ready |
-| Architect proposes typography stack | Display font, body font, UI font, referencing The Ringer/Vox/The18 direction | Ready |
-| Architect proposes spacing and scale | Base unit, type scale, breakpoints | Ready |
-| Director reviews and approves token set | One focused session, decisions locked | Pending Architect proposal |
-| Lock tokens into CLAUDE.md | Design tokens table updated with approved values | Pending approval |
-| Create `_tokens.scss` with approved values | CSS custom properties and Sass variables | Pending approval |
-| Brief Cursor for theme build | Reference sites plus token brief, scoped to Sprint 2 front-end tasks | Pending tokens |
+| Architect proposes color palette | Bold, colorful, not generic sports red/blue, works in light and dark mode | Done |
+| Architect proposes typography stack | Display font, body font, UI font, referencing The Ringer/Vox/The18 direction | Done |
+| Architect proposes spacing and scale | Base unit, type scale, breakpoints | Done |
+| Director reviews and approves token set | One focused session, decisions locked | Done |
+| Lock tokens into CLAUDE.md | Design tokens table updated with approved values | Done |
+| Create `_tokens.scss` with approved values | CSS custom properties and Sass variables | Pending Shop Hand |
+| Brief Cursor for theme build | Reference sites plus token brief, scoped to Sprint 2 front-end tasks | Pending tokens in repo |
 
 ---
 
@@ -125,7 +125,6 @@ Once Sprint 1 is done:
 | Date | Session Summary | Next Session |
 |---|---|---|
 | May 2026 | Project scoped, WTIS overview, CLAUDE.md, AGENT.md, SPRINT.md produced | Director completes Cloudways and GitHub todos, Architect proposes design tokens, Scout researches APIs |
-| May 8, 2026 | Track A: WordPress theme scaffold complete — 29 files committed (c7e4d4f). All 10 tasks done. Pending: Director runs `lando start` to verify theme activates. | Director approves tokens (Track B), Scout delivers API research (Track C), Director adds GitHub Secrets |
 
 ---
 

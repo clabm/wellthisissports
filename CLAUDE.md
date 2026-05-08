@@ -182,15 +182,43 @@ Dart Sass (not node-sass). Two paths:
 - Accuracy ledger prominently placed on homepage and archive pages
 - Distinct from WTIN's civic editorial aesthetic
 
-**Design tokens:** Defined in Sprint 1, locked here and in `_tokens.scss` once approved by The Director.
+**Design tokens:** Approved by The Director, Sprint 1. Locked below and in `_tokens.scss`.
 
-| Token | Value |
-|---|---|
-| Primary accent | TBD Sprint 1 |
-| Secondary accent | TBD Sprint 1 |
-| Display font | TBD Sprint 1 |
-| Body font | TBD Sprint 1 |
-| UI font | TBD Sprint 1 |
+**Colors**
+
+| Token | Hex | Role |
+|---|---|---|
+| `--wtis-gold-400` | `#F5A623` | Primary CTA, confidence meter, highlights |
+| `--wtis-gold-600` | `#C47D0E` | Hover states, borders |
+| `--wtis-gold-50` | `#FEF3DC` | Card backgrounds, fills |
+| `--wtis-blue-500` | `#0057FF` | Links, secondary actions, sport tags |
+| `--wtis-blue-700` | `#003DBF` | Hover, dark mode primary |
+| `--wtis-blue-50` | `#E0EAFF` | Info backgrounds, tag fills |
+| `--wtis-red-500` | `#E8192C` | Urgent update badge, upset alert, loss indicator |
+| `--wtis-red-50` | `#FDE8EA` | Alert card backgrounds |
+| `--wtis-green-500` | `#00A651` | Correct prediction, win indicator, ledger positive |
+| `--wtis-green-50` | `#E0F5EB` | Win background, ledger fill |
+| `--wtis-ink` | `#111111` | Primary text, headings |
+| `--wtis-off-white` | `#F7F7F5` | Page background default |
+| `--wtis-white` | `#FFFFFF` | Card surfaces, content areas |
+| `--wtis-gray-500` | `#6B6B6B` | Secondary text, metadata |
+
+**Typography**
+
+| Token | Value | Role |
+|---|---|---|
+| Display font | Barlow Condensed Bold | Matchup titles, hero headings |
+| Headline font | Barlow SemiBold | Section headings, card titles |
+| Body font | Inter Regular | Analysis text, summaries |
+| UI font | Inter Medium | Labels, tags, metadata, nav |
+| Confidence score | Barlow Condensed Bold, 48px | Confidence meter hero number |
+
+**Usage rules**
+- Gold owns the confidence meter and every primary CTA
+- Red is reserved for URGENT UPDATE badge and upset alerts only
+- Green is reserved for correct predictions and positive ledger values
+- Barlow Condensed at large sizes for all matchup and score displays
+- Dark mode: auto via OS device setting, all tokens have dark equivalents in `_tokens.scss`
 
 ---
 
