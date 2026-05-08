@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 required = [
-    "WTIS_WP_BASE_URL", "WTIS_PIPELINE_API_KEY",
+    "WTIS_SITE_URL", "WTIS_PIPELINE_API_KEY",
     "WTIS_WP_USERNAME", "WTIS_WP_APP_PASSWORD",
 ]
 missing = [k for k in required if not os.environ.get(k)]
@@ -22,7 +22,7 @@ if missing:
     print(f"ERROR: Missing env vars: {', '.join(missing)}")
     sys.exit(1)
 
-WP_BASE_URL = os.environ["WTIS_WP_BASE_URL"].rstrip("/")
+WP_BASE_URL = os.environ["WTIS_SITE_URL"].rstrip("/")
 PIPELINE_API_KEY = os.environ["WTIS_PIPELINE_API_KEY"]
 
 print("=== test_publish.py ===\n")

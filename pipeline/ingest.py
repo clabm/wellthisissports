@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 log = logging.getLogger(__name__)
 
 APIFOOTBALL_KEY = os.environ["APIFOOTBALL_API_KEY"]
-WP_BASE_URL = os.environ["WTIS_WP_BASE_URL"].rstrip("/")
+WP_BASE_URL = os.environ["WTIS_SITE_URL"].rstrip("/")
 PIPELINE_API_KEY = os.environ["WTIS_PIPELINE_API_KEY"]
 
 # World Cup 2026

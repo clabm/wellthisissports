@@ -17,7 +17,7 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 log = logging.getLogger(__name__)
 
-WP_BASE_URL = os.environ["WTIS_WP_BASE_URL"].rstrip("/")
+WP_BASE_URL = os.environ["WTIS_SITE_URL"].rstrip("/")
 PIPELINE_API_KEY = os.environ["WTIS_PIPELINE_API_KEY"]
 WP_USERNAME = os.environ["WTIS_WP_USERNAME"]
 WP_APP_PASSWORD = os.environ["WTIS_WP_APP_PASSWORD"]

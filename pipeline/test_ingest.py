@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Minimal env check before importing ingest
-required = ["APIFOOTBALL_API_KEY", "WTIS_WP_BASE_URL", "WTIS_PIPELINE_API_KEY"]
+required = ["APIFOOTBALL_API_KEY", "WTIS_SITE_URL", "WTIS_PIPELINE_API_KEY"]
 missing = [k for k in required if not os.environ.get(k)]
 if missing:
     print(f"ERROR: Missing env vars: {', '.join(missing)}")

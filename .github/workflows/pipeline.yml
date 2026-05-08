@@ -11,7 +11,8 @@ jobs:
       APIFOOTBALL_API_KEY: ${{ secrets.APIFOOTBALL_API_KEY }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      WTIS_WP_BASE_URL: ${{ secrets.WTIS_WP_BASE_URL }}
+      WTIS_SITE_URL: ${{ secrets.WTIS_SITE_URL }}
+      WTIS_API_URL: ${{ secrets.WTIS_API_URL }}
       WTIS_PIPELINE_API_KEY: ${{ secrets.WTIS_PIPELINE_API_KEY }}
       WTIS_WP_USERNAME: ${{ secrets.WTIS_WP_USERNAME }}
       WTIS_WP_APP_PASSWORD: ${{ secrets.WTIS_WP_APP_PASSWORD }}
