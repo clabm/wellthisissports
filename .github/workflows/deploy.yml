@@ -9,9 +9,15 @@ jobs:
   deploy:
     name: Deploy to Cloudways
     runs-on: ubuntu-latest
+
+    env:
+      # Theme path is not sensitive — hardcoded to avoid empty-secret failures.
+      THEME_PATH: /home/master/applications/djxudszeqq/public_html/wp-content/themes/wellthiissports-child
+      WP_ROOT: /home/master/applications/djxudszeqq/public_html
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v4
 
       - name: Trigger Cloudways git pull
         uses: roelmagdaleno/cloudways-api-git-pull-action@v1.3.0
@@ -29,7 +35,7 @@ jobs:
           host: ${{ secrets.CLOUDWAYS_HOST }}
           username: ${{ secrets.CLOUDWAYS_USER }}
           key: ${{ secrets.CLOUDWAYS_SSH_PRIVATE_KEY }}
-          envs: THEME_PATH
+          envs: THEME_PATH,WP_ROOT
           script: |
             sleep 20
             rsync -rl --no-perms --no-times --ignore-times \
@@ -37,7 +43,6 @@ jobs:
               /home/master/applications/djxudszeqq/git_repo/ \
               "$THEME_PATH"/
             echo "Sync complete."
-            WP_ROOT=/home/master/applications/djxudszeqq/public_html
             cd "$WP_ROOT" && wp cli update --allow-root --quiet || true
             cd "$WP_ROOT" && wp eval 'opcache_reset();' --allow-root && echo "Opcache cleared." || echo "Opcache reset not available."
             cd "$WP_ROOT" && wp cache flush --allow-root && echo "Object cache flushed." || echo "Object cache flush not available."
@@ -45,5 +50,3 @@ jobs:
             rm -rf "$BREEZE_CACHE/breeze/" && echo "Breeze page cache cleared." || true
             rm -rf "$BREEZE_CACHE/breeze-minification/" && echo "Breeze minification cache cleared." || true
             echo "Cache purge complete."
-        env:
-          THEME_PATH: ${{ secrets.THEME_PATH }}
