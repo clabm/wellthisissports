@@ -68,6 +68,10 @@
   --wtis-text-card-mid: 22px; // homepage mid / wide titles
   --wtis-text-home-hero: 32px; // homepage hero title
 
+  // Homepage section rail (Director)
+  --wtis-home-max:     1400px; // max width for homepage section containers
+  --wtis-home-surface:  #111111; // dark card rails on homepage
+
   // Hero panel (fixed dark surface; does not invert in dark mode)
   --wtis-hero-surface:     #111111;
   --wtis-hero-on-surface:  #FFFFFF;
@@ -215,6 +219,9 @@ $bp-md:   768px;
 $bp-lg:   992px;
 $bp-xl:   1200px;
 $bp-xxl:  1400px;
+
+// Homepage layout (matches --wtis-home-max)
+$wtis-home-max: 1400px;
 
 // ── 5. Semantic aliases ───────────────────────────────────────
 // Backward-compatible names used by existing component partials.

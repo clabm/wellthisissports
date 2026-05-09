@@ -35,7 +35,7 @@
     grid-template-columns: 1fr;
   }
 
-  .wtis-home-mid-bleed__grid {
+  .wtis-home-mid__grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -47,9 +47,10 @@
     position: static;
   }
 
-  .wtis-home__bottom--ledger-only .wtis-home__bottom-grid {
+  .wtis-home-dark--bottom-solo .wtis-home__bottom-grid {
     max-width: none;
     margin-left: 0;
+    margin-right: 0;
   }
 }
 
@@ -108,7 +109,7 @@
   }
 
   // Homepage
-  .wtis-home-mid-bleed__grid {
+  .wtis-home-mid__grid {
     grid-template-columns: 1fr;
   }
 

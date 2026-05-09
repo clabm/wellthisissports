@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────────────────────────
 // _homepage.scss
-// Ringer-style homepage: image-forward cards, ledger sidebar.
+// Homepage: dark section rails (#111), white cards, 1400px max.
 // ─────────────────────────────────────────────────────────────
 @use 'tokens' as *;
 
@@ -24,7 +24,7 @@
   }
 
   &__inner {
-    max-width: 1200px;
+    max-width: var(--wtis-home-max, #{$wtis-home-max});
     margin: 0 auto;
     padding: 0 $space-6;
   }
@@ -43,6 +43,10 @@
     grid-template-columns: 3fr 2fr;
     gap: $space-6;
     align-items: stretch;
+  }
+
+  &__top-grid--solo {
+    grid-template-columns: 1fr;
   }
 
   &__stack {
@@ -64,10 +68,11 @@
     align-items: start;
   }
 
-  &__bottom--ledger-only &__bottom-grid {
+  .wtis-home-dark--bottom-solo .wtis-home__bottom-grid {
     grid-template-columns: 1fr;
     max-width: 28rem;
     margin-left: auto;
+    margin-right: auto;
   }
 
   &__badges {
@@ -212,6 +217,126 @@
   }
 }
 
+// ── Dark section rails (#111) ────────────────────────────────
+
+.wtis-home-dark {
+  background: var(--wtis-home-surface, #{$wtis-ink});
+  border-radius: $radius-lg;
+  padding: $space-6;
+  margin-bottom: $space-6;
+
+  &--mid {
+    margin-bottom: 0;
+  }
+}
+
+// ── Mid: label (white) + dark grid wrapper ──────────────────
+
+.wtis-home-mid {
+  margin-bottom: $space-6;
+}
+
+.wtis-home-mid__label-row {
+  background: var(--wtis-white);
+  padding: $space-6 0 $space-4;
+}
+
+.wtis-home-mid__label-inner {
+  max-width: var(--wtis-home-max, #{$wtis-home-max});
+  margin: 0 auto;
+  padding: 0 $space-6;
+}
+
+.wtis-home-mid__label {
+  font-family: $font-display;
+  font-size: $text-base;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--wtis-ink);
+  margin: 0 0 $space-2;
+  text-align: left;
+}
+
+.wtis-home-mid__gold-rule {
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: var(--wtis-gold-400);
+}
+
+.wtis-home-mid__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $space-6;
+}
+
+// White cards inside dark mid rail
+.wtis-home-mid-card {
+  border-radius: $space-4;
+  overflow: hidden;
+  background: var(--wtis-white);
+  box-shadow: 0 $space-2 $space-8 rgba($wtis-ink, 0.12);
+  transition:
+    border-color $transition-slow,
+    box-shadow $transition-slow,
+    transform $transition-slow;
+
+  &:hover {
+    box-shadow:
+      0 0 0 2px var(--wtis-gold-400),
+      0 $space-4 $space-12 rgba($wtis-ink, 0.18);
+    transform: translateY(-3px);
+  }
+
+  &__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  &__visual {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    flex-shrink: 0;
+
+    .wtis-home__media--mid-band {
+      border-radius: $space-4 $space-4 0 0;
+    }
+
+    .wtis-home__media img {
+      transition: transform $transition-slow;
+    }
+
+    &:hover .wtis-home__media img {
+      transform: scale(1.02);
+    }
+  }
+
+  &__body {
+    padding: $space-4 $space-5 $space-5;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-size: var(--wtis-text-card-mid, #{$text-22});
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--wtis-ink);
+    margin: 0 0 $space-2;
+  }
+}
+
 // ── Hero card ────────────────────────────────────────────────
 
 .wtis-home-hero {
@@ -338,125 +463,6 @@
   &__title {
     font-family: $font-display;
     font-size: $text-xl;
-    font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    color: var(--wtis-ink);
-    margin: 0 0 $space-2;
-  }
-}
-
-// ── Mid section: label + full-bleed blue band + cards ───────
-
-.wtis-home-mid-bleed {
-  width: 100%;
-  margin-bottom: $space-6;
-}
-
-.wtis-home-mid-bleed__label-row {
-  background: var(--wtis-white);
-  padding: $space-6 0 $space-4;
-}
-
-.wtis-home-mid-bleed__label-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 $space-6;
-}
-
-.wtis-home-mid-bleed__label {
-  font-family: $font-display;
-  font-size: $text-base;
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--wtis-ink);
-  margin: 0 0 $space-2;
-}
-
-.wtis-home-mid-bleed__gold-rule {
-  display: block;
-  width: 40px;
-  height: 2px;
-  background: var(--wtis-gold-400);
-}
-
-.wtis-home-mid-bleed__band {
-  width: 100%;
-  background: var(--wtis-blue-500);
-  padding: $space-8 0;
-}
-
-.wtis-home-mid-bleed__band-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 $space-6;
-}
-
-.wtis-home-mid-bleed__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: $space-6;
-}
-
-// White cards on blue band (no sport badge)
-.wtis-home-mid-card {
-  border-radius: $space-4;
-  overflow: hidden;
-  background: var(--wtis-white);
-  box-shadow: 0 $space-2 $space-8 rgba($wtis-ink, 0.12);
-  transition:
-    border-color $transition-slow,
-    box-shadow $transition-slow,
-    transform $transition-slow;
-
-  &:hover {
-    box-shadow:
-      0 0 0 2px var(--wtis-gold-400),
-      0 $space-4 $space-12 rgba($wtis-ink, 0.18);
-    transform: translateY(-3px);
-  }
-
-  &__link {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  &__visual {
-    position: relative;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    flex-shrink: 0;
-
-    .wtis-home__media--mid-band {
-      border-radius: $space-4 $space-4 0 0;
-    }
-
-    .wtis-home__media img {
-      transition: transform $transition-slow;
-    }
-
-    &:hover .wtis-home__media img {
-      transform: scale(1.02);
-    }
-  }
-
-  &__body {
-    padding: $space-4 $space-5 $space-5;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  &__title {
-    font-family: $font-display;
-    font-size: var(--wtis-text-card-mid, #{$text-22});
     font-weight: 700;
     line-height: 1.1;
     letter-spacing: 0.02em;
@@ -633,10 +639,6 @@
       font-weight: 500;
     }
   }
-}
-
-.wtis-home__top--solo .wtis-home__top-grid {
-  grid-template-columns: 1fr;
 }
 
 .wtis-no-matchups {

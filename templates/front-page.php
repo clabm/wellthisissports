@@ -1,7 +1,7 @@
 <?php
 /**
  * front-page.php
- * Ringer-style homepage: hero row, mid grid, ledger sidebar.
+ * Ringer-style homepage: dark rails, hero row, mid grid, ledger.
  *
  * @package wellthiissports-child
  */
@@ -44,8 +44,8 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 		<div class="wtis-home__inner">
 
 		<?php if ( $hero_id ) : ?>
-		<section class="wtis-home__section wtis-home__top<?php echo empty( $compact ) ? ' wtis-home__top--solo' : ''; ?>" aria-label="<?php esc_attr_e( 'Featured matchups', 'wellthiissports-child' ); ?>">
-			<div class="wtis-home__top-grid">
+		<section class="wtis-home-dark wtis-home-dark--top" aria-label="<?php esc_attr_e( 'Featured matchups', 'wellthiissports-child' ); ?>">
+			<div class="wtis-home__top-grid<?php echo empty( $compact ) ? ' wtis-home__top-grid--solo' : ''; ?>">
 				<?php
 				$h = wtis_home_matchup_payload( $hero_id );
 				?>
@@ -121,16 +121,16 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 		</div>
 
 		<?php if ( ! empty( $mid_ids ) ) : ?>
-		<section class="wtis-home-mid-bleed" aria-label="<?php esc_attr_e( 'Latest predictions', 'wellthiissports-child' ); ?>">
-			<header class="wtis-home-mid-bleed__label-row">
-				<div class="wtis-home-mid-bleed__label-inner">
-					<h2 class="wtis-home-mid-bleed__label"><?php esc_html_e( 'Latest predictions', 'wellthiissports-child' ); ?></h2>
-					<span class="wtis-home-mid-bleed__gold-rule" aria-hidden="true"></span>
+		<section class="wtis-home-mid" aria-label="<?php esc_attr_e( 'Latest predictions', 'wellthiissports-child' ); ?>">
+			<header class="wtis-home-mid__label-row">
+				<div class="wtis-home-mid__label-inner">
+					<h2 class="wtis-home-mid__label"><?php esc_html_e( 'Latest predictions', 'wellthiissports-child' ); ?></h2>
+					<span class="wtis-home-mid__gold-rule" aria-hidden="true"></span>
 				</div>
 			</header>
-			<div class="wtis-home-mid-bleed__band">
-				<div class="wtis-home-mid-bleed__band-inner">
-					<div class="wtis-home-mid-bleed__grid">
+			<div class="wtis-home__inner">
+				<div class="wtis-home-dark wtis-home-dark--mid">
+					<div class="wtis-home-mid__grid">
 						<?php foreach ( $mid_ids as $mid_id ) : ?>
 							<?php $m = wtis_home_matchup_payload( (int) $mid_id ); ?>
 						<article class="wtis-home-mid-card">
@@ -169,7 +169,7 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 		<?php endif; ?>
 
 		<div class="wtis-home__inner">
-		<section class="wtis-home__section wtis-home__bottom<?php echo empty( $wide_ids ) ? ' wtis-home__bottom--ledger-only' : ''; ?>" aria-label="<?php esc_attr_e( 'Spotlight and accuracy', 'wellthiissports-child' ); ?>">
+		<section class="wtis-home-dark wtis-home-dark--bottom<?php echo empty( $wide_ids ) ? ' wtis-home-dark--bottom-solo' : ''; ?>" aria-label="<?php esc_attr_e( 'Spotlight and accuracy', 'wellthiissports-child' ); ?>">
 			<div class="wtis-home__bottom-grid">
 				<?php if ( ! empty( $wide_ids ) ) : ?>
 				<div class="wtis-home__wide-col">
