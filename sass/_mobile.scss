@@ -35,7 +35,7 @@
     grid-template-columns: 1fr;
   }
 
-  .wtis-home__mid-grid {
+  .wtis-home-mid-bleed__grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -108,7 +108,7 @@
   }
 
   // Homepage
-  .wtis-home__mid-grid {
+  .wtis-home-mid-bleed__grid {
     grid-template-columns: 1fr;
   }
 
@@ -119,15 +119,19 @@
   .wtis-home-compact__media {
     border-right: none;
     border-bottom: 1px solid $rule;
+    min-height: 12rem;
+    height: auto;
 
     .wtis-home__media,
     .wtis-home__media--ph {
       min-height: 12rem;
-      aspect-ratio: 16 / 9;
+      height: 12rem;
+      aspect-ratio: auto;
     }
 
     .wtis-home__media img {
       min-height: 12rem;
+      height: 100%;
     }
   }
 

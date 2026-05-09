@@ -64,16 +64,18 @@ function wtis_home_print_badges( int $grade ): void {
  * Featured image or gold gradient placeholder (never broken img).
  *
  * @param string|null $url     Image URL.
- * @param string      $variant hero|square|mid|wide.
+ * @param string      $variant hero|square|compact|mid|mid_band|wide.
  * @param string      $title   Placeholder + alt text.
  * @param string      $loading img loading attribute.
  */
 function wtis_home_print_media( ?string $url, string $variant, string $title, string $loading = 'lazy' ): void {
 	$map = [
-		'hero'   => 'wtis-home__media wtis-home__media--hero',
-		'square' => 'wtis-home__media wtis-home__media--square',
-		'mid'    => 'wtis-home__media wtis-home__media--mid',
-		'wide'   => 'wtis-home__media wtis-home__media--wide',
+		'hero'     => 'wtis-home__media wtis-home__media--hero',
+		'square'   => 'wtis-home__media wtis-home__media--square',
+		'compact'  => 'wtis-home__media wtis-home__media--compact',
+		'mid'      => 'wtis-home__media wtis-home__media--mid',
+		'mid_band' => 'wtis-home__media wtis-home__media--mid-band',
+		'wide'     => 'wtis-home__media wtis-home__media--wide',
 	];
 	$base = isset( $map[ $variant ] ) ? $map[ $variant ] : $map['mid'];
 

@@ -40,7 +40,8 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 ?>
 
 <div class="wrapper wtis-home" id="page-wrapper">
-	<main id="content" class="wtis-home__inner">
+	<main id="content" class="wtis-home__main">
+		<div class="wtis-home__inner">
 
 		<?php if ( $hero_id ) : ?>
 		<section class="wtis-home__section wtis-home__top<?php echo empty( $compact ) ? ' wtis-home__top--solo' : ''; ?>" aria-label="<?php esc_attr_e( 'Featured matchups', 'wellthiissports-child' ); ?>">
@@ -93,7 +94,7 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 							<div class="wtis-home-compact__media">
 								<?php
 								$sq = $c['img_square'] ? $c['img_square'] : $c['img_card'];
-								wtis_home_print_media( $sq, 'square', $c['title_line'] );
+								wtis_home_print_media( $sq, 'compact', $c['title_line'] );
 								?>
 							</div>
 							<div class="wtis-home-compact__body">
@@ -117,47 +118,57 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 		</section>
 		<?php endif; ?>
 
+		</div>
+
 		<?php if ( ! empty( $mid_ids ) ) : ?>
-		<section class="wtis-home__section wtis-home__mid" aria-label="<?php esc_attr_e( 'More matchups', 'wellthiissports-child' ); ?>">
-			<div class="wtis-home__mid-grid">
-				<?php foreach ( $mid_ids as $mid_id ) : ?>
-					<?php $m = wtis_home_matchup_payload( (int) $mid_id ); ?>
-				<article class="wtis-home-mid">
-					<a href="<?php echo esc_url( $m['permalink'] ); ?>" class="wtis-home-mid__link">
-						<div class="wtis-home-mid__visual">
-							<?php wtis_home_print_badges( $m['grade'] ); ?>
-							<?php wtis_home_print_media( $m['img_card'], 'mid', $m['title_line'] ); ?>
-						</div>
-						<div class="wtis-home-mid__body">
-							<?php if ( $m['sport'] ) : ?>
-							<p class="wtis-home__sport"><?php echo esc_html( $m['sport'] ); ?></p>
-							<?php endif; ?>
-							<h3 class="wtis-home-mid__title"><?php echo esc_html( $m['title_line'] ); ?></h3>
-							<?php if ( $m['winner'] && $m['confidence'] ) : ?>
-							<p class="wtis-home__pick-line wtis-home__pick-line--gold">
-								<?php
-								echo esc_html(
-									sprintf(
-										/* translators: 1: team name, 2: confidence */
-										__( 'The Pick: %1$s · %2$s%%', 'wellthiissports-child' ),
-										$m['winner'],
-										(string) $m['confidence']
-									)
-								);
-								?>
-							</p>
-							<?php endif; ?>
-							<?php if ( $m['date_display'] ) : ?>
-							<p class="wtis-home__date"><?php echo esc_html( $m['date_display'] ); ?></p>
-							<?php endif; ?>
-						</div>
-					</a>
-				</article>
-				<?php endforeach; ?>
+		<section class="wtis-home-mid-bleed" aria-label="<?php esc_attr_e( 'Latest predictions', 'wellthiissports-child' ); ?>">
+			<header class="wtis-home-mid-bleed__label-row">
+				<div class="wtis-home-mid-bleed__label-inner">
+					<h2 class="wtis-home-mid-bleed__label"><?php esc_html_e( 'Latest predictions', 'wellthiissports-child' ); ?></h2>
+					<span class="wtis-home-mid-bleed__gold-rule" aria-hidden="true"></span>
+				</div>
+			</header>
+			<div class="wtis-home-mid-bleed__band">
+				<div class="wtis-home-mid-bleed__band-inner">
+					<div class="wtis-home-mid-bleed__grid">
+						<?php foreach ( $mid_ids as $mid_id ) : ?>
+							<?php $m = wtis_home_matchup_payload( (int) $mid_id ); ?>
+						<article class="wtis-home-mid-card">
+							<a href="<?php echo esc_url( $m['permalink'] ); ?>" class="wtis-home-mid-card__link">
+								<div class="wtis-home-mid-card__visual">
+									<?php wtis_home_print_badges( $m['grade'] ); ?>
+									<?php wtis_home_print_media( $m['img_card'], 'mid_band', $m['title_line'] ); ?>
+								</div>
+								<div class="wtis-home-mid-card__body">
+									<h3 class="wtis-home-mid-card__title"><?php echo esc_html( $m['title_line'] ); ?></h3>
+									<?php if ( $m['winner'] && $m['confidence'] ) : ?>
+									<p class="wtis-home__pick-line wtis-home__pick-line--gold">
+										<?php
+										echo esc_html(
+											sprintf(
+												/* translators: 1: team name, 2: confidence */
+												__( 'The Pick: %1$s · %2$s%%', 'wellthiissports-child' ),
+												$m['winner'],
+												(string) $m['confidence']
+											)
+										);
+										?>
+									</p>
+									<?php endif; ?>
+									<?php if ( $m['date_display'] ) : ?>
+									<p class="wtis-home__date"><?php echo esc_html( $m['date_display'] ); ?></p>
+									<?php endif; ?>
+								</div>
+							</a>
+						</article>
+						<?php endforeach; ?>
+					</div>
+				</div>
 			</div>
 		</section>
 		<?php endif; ?>
 
+		<div class="wtis-home__inner">
 		<section class="wtis-home__section wtis-home__bottom<?php echo empty( $wide_ids ) ? ' wtis-home__bottom--ledger-only' : ''; ?>" aria-label="<?php esc_attr_e( 'Spotlight and accuracy', 'wellthiissports-child' ); ?>">
 			<div class="wtis-home__bottom-grid">
 				<?php if ( ! empty( $wide_ids ) ) : ?>
@@ -268,6 +279,7 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 		</section>
 		<?php endif; ?>
 
+		</div>
 	</main>
 </div>
 

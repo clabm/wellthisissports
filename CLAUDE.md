@@ -145,7 +145,7 @@ repo-root/                          ← child theme root (wellthisiissports-chil
 │   ├── homepage-payload.php        ← homepage card data + media/badge helpers
 │   └── footer-content.php         ← footer include
 ├── templates/
-│   ├── front-page.php              ← Ringer-style homepage (8 slots + ledger)
+│   ├── front-page.php              ← Ringer homepage: hero + compact + blue-band mid row + wide + ledger
 │   ├── single.php                  ← prediction detail page
 │   ├── archive.php                 ← sport/league archive
 │   └── page.php                    ← generic page template
