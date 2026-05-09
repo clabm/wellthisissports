@@ -40,6 +40,8 @@ FACTORS FOR: [top 3 reasons the predicted winner wins, pipe-separated, e.g. fact
 FACTORS AGAINST: [top 3 risks for the predicted winner, pipe-separated]
 WHAT NOBODY IS SAYING: [one substantive paragraph of 3-5 sentences, the angle everyone is missing. Must be a specific, non-obvious insight, not a generic observation.]
 IMAGE BRIEF: [one sentence describing a dramatic, cinematic visual scene for this matchup's hero image. No team logos, no text overlay. Pure visual scene.]
+PERSONALITY HEADLINE: [punchy, personality-driven headline that makes people want to click. Sounds like a real sports writer wrote it. Max 10 words. No generic openers. No em dashes. Examples: "Can Germany's Machine Stop the Samba Kings?" / "The Rematch Nobody Expected" / "Neymar's Last Dance or Germany's Revenge?"]
+SEO HEADLINE: [keyword-rich subhead for search engines. Format: Team A vs Team B Tournament Year Prediction and Analysis. Example: Brazil vs Germany FIFA World Cup 2026 Prediction and Analysis]
 
 Rules:
 - ANALYSIS must be exactly 500-600 words. This is not optional.
@@ -81,6 +83,8 @@ def parse_prediction(text, candidate):
     factors_against_raw = extract("FACTORS AGAINST")
     what_nobody_saying = extract("WHAT NOBODY IS SAYING", multiline=True)
     image_brief = extract("IMAGE BRIEF")
+    headline_personality = extract("PERSONALITY HEADLINE")
+    headline_seo = extract("SEO HEADLINE")
 
     # Parse confidence as int
     try:
@@ -99,6 +103,8 @@ def parse_prediction(text, candidate):
         "wtis_factors_against": factors_against_raw,
         "wtis_what_nobody_saying": what_nobody_saying,
         "wtis_image_brief_scene": image_brief,
+        "wtis_headline_personality": headline_personality,
+        "wtis_headline_seo": headline_seo,
         "wtis_ai_generated": True,
         "wtis_article_stage": "matchup",
     }

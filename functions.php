@@ -174,6 +174,10 @@ function wtis_register_post_meta() {
     register_post_meta( 'post', 'wtis_factors_against',     $string_args );
     register_post_meta( 'post', 'wtis_what_nobody_saying',  $text_args );
 
+    // Headlines
+    register_post_meta( 'post', 'wtis_headline_personality', $string_args );
+    register_post_meta( 'post', 'wtis_headline_seo',         $string_args );
+
     // Article lifecycle
     register_post_meta( 'post', 'wtis_article_stage',     $string_args );
     register_post_meta( 'post', 'wtis_image_brief_scene', $string_args );

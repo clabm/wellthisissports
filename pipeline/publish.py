@@ -156,6 +156,8 @@ def create_matchup_post(prediction):
         "factors_against": prediction["wtis_factors_against"],
         "what_nobody_saying": prediction.get("wtis_what_nobody_saying", ""),
         "image_brief_scene": prediction.get("wtis_image_brief_scene", ""),
+        "headline_personality": prediction.get("wtis_headline_personality", ""),
+        "headline_seo": prediction.get("wtis_headline_seo", ""),
         "article_stage": prediction.get("wtis_article_stage", "matchup"),
         "ingested_at": prediction.get("matchup_date", ""),
         "post_status": "publish",

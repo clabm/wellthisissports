@@ -84,6 +84,7 @@ required_keys = [
     "matchup_date", "wtis_prediction_winner", "wtis_confidence_score",
     "wtis_analysis", "wtis_factors_for", "wtis_factors_against",
     "wtis_image_brief_scene", "wtis_ai_generated", "wtis_article_stage",
+    "wtis_headline_personality", "wtis_headline_seo",
 ]
 missing_keys = [k for k in required_keys if k not in p]
 if missing_keys:
@@ -121,5 +122,17 @@ print(f"  Factors for ({len(for_factors)}): {p['wtis_factors_for'][:80]}...")
 print(f"  Factors against ({len(against_factors)}): {p['wtis_factors_against'][:80]}...")
 
 print(f"  Image brief: {p['wtis_image_brief_scene'][:100]}...")
+
+# Headlines
+personality = p.get("wtis_headline_personality", "")
+seo = p.get("wtis_headline_seo", "")
+if not personality:
+    print(f"  FAIL: wtis_headline_personality is empty")
+    sys.exit(1)
+if not seo:
+    print(f"  FAIL: wtis_headline_seo is empty")
+    sys.exit(1)
+print(f"  Personality headline: {personality}")
+print(f"  SEO headline: {seo}")
 
 print("\n=== test_predict.py PASSED ===")

@@ -207,6 +207,16 @@ function wtis_pipeline_matchup_args() {
             'sanitize_callback' => 'sanitize_text_field',
             'default'           => '',
         ],
+        'headline_personality' => [
+            'type'              => 'string',
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
+        ],
+        'headline_seo' => [
+            'type'              => 'string',
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
+        ],
 
         // Pipeline metadata
         'ingested_at' => [
@@ -463,9 +473,11 @@ function wtis_save_matchup_meta( int $post_id, array $params ): void {
         'prediction_correct' => 'wtis_prediction_correct',
         'factors_for'        => 'wtis_factors_for',
         'factors_against'    => 'wtis_factors_against',
-        'what_nobody_saying' => 'wtis_what_nobody_saying',
-        'article_stage'      => 'wtis_article_stage',
-        'image_brief_scene'  => 'wtis_image_brief_scene',
+        'what_nobody_saying'   => 'wtis_what_nobody_saying',
+        'article_stage'        => 'wtis_article_stage',
+        'image_brief_scene'    => 'wtis_image_brief_scene',
+        'headline_personality' => 'wtis_headline_personality',
+        'headline_seo'         => 'wtis_headline_seo',
     ];
 
     foreach ( $meta_map as $param_key => $meta_key ) {
