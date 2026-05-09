@@ -141,10 +141,11 @@ repo-root/                          ← child theme root (wellthisiissports-chil
 │   ├── pipeline-api.php            ← all custom REST endpoints
 │   ├── custom-fields.php           ← editorial meta box
 │   ├── masthead.php                ← site header / nav include
-│   ├── matchup-hero.php            ← shared 50/50 matchup hero (single + home)
+│   ├── matchup-hero.php            ← shared 50/50 matchup hero (single only)
+│   ├── homepage-payload.php        ← homepage card data + media/badge helpers
 │   └── footer-content.php         ← footer include
 ├── templates/
-│   ├── front-page.php              ← matchup grid homepage
+│   ├── front-page.php              ← Ringer-style homepage (8 slots + ledger)
 │   ├── single.php                  ← prediction detail page
 │   ├── archive.php                 ← sport/league archive
 │   └── page.php                    ← generic page template
@@ -238,7 +239,7 @@ Dart Sass (not node-sass). Two paths:
 - Red is reserved for URGENT UPDATE badge and upset alerts only
 - Green is reserved for correct predictions and positive ledger values
 - Barlow Condensed at large sizes for all matchup and score displays
-- Dark mode: auto via OS device setting; page chrome uses dark equivalents in `_tokens.scss`. Matchup hero panel keeps `--wtis-hero-surface` for editorial contrast.
+- Dark mode: **disabled** (May 2026 Director); `prefers-color-scheme` / `[data-theme="dark"]` hooks are commented out in `_tokens.scss` until re-enabled. Matchup hero panel on single posts still uses fixed `--wtis-hero-surface` for editorial contrast.
 
 ---
 

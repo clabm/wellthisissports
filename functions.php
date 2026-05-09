@@ -55,9 +55,10 @@ function wtis_theme_setup() {
     ] );
     add_theme_support( 'custom-logo' );
 
-    add_image_size( 'wtis-hero',      1240, 697, true );
-    add_image_size( 'wtis-card',      640,  360, true );
-    add_image_size( 'wtis-thumbnail', 160,  140, true );
+    add_image_size( 'wtis-hero',        1240, 697, true );
+    add_image_size( 'wtis-card',        640,  360, true );
+    add_image_size( 'wtis-home-square', 480,  480, true );
+    add_image_size( 'wtis-thumbnail',   160,  140, true );
 
     register_nav_menus( [
         'primary' => __( 'Primary Navigation', 'wellthiissports-child' ),
@@ -73,7 +74,7 @@ function wtis_enqueue_assets() {
     // Google Fonts — TBD Sprint 1, placeholder until tokens approved
     wp_enqueue_style(
         'wtis-fonts',
-        'https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&family=Barlow:wght@400;600&family=Inter:wght@400;500&display=swap',
+        'https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;600&family=Inter:wght@400;500&display=swap',
         [],
         null
     );

@@ -5,10 +5,6 @@
 @use 'tokens' as *;
 
 @media (max-width: $bp-lg) {
-  .wtis-matchup-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .wtis-archive-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -32,6 +28,28 @@
 
   .wtis-matchup-article__sidebar {
     position: static;
+  }
+
+  // Homepage
+  .wtis-home__top-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wtis-home__mid-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .wtis-home__bottom-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wtis-home-ledger {
+    position: static;
+  }
+
+  .wtis-home__bottom--ledger-only .wtis-home__bottom-grid {
+    max-width: none;
+    margin-left: 0;
   }
 }
 
@@ -63,10 +81,6 @@
     }
   }
 
-  .wtis-matchup-grid {
-    grid-template-columns: 1fr;
-  }
-
   .wtis-footer-grid {
     grid-template-columns: 1fr;
     gap: $space-8;
@@ -78,17 +92,6 @@
 
   .wtis-masthead__mobile-toggle {
     display: inline-flex;
-  }
-
-  .wtis-ledger-bar__inner {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .wtis-ledger-bar__items {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: $space-3;
   }
 
   .wtis-archive-header {
@@ -103,11 +106,51 @@
   .wtis-confidence-meter--sidebar .wtis-confidence-meter__value {
     font-size: $text-5xl;
   }
+
+  // Homepage
+  .wtis-home__mid-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wtis-home-compact__link {
+    grid-template-columns: 1fr;
+  }
+
+  .wtis-home-compact__media {
+    border-right: none;
+    border-bottom: 1px solid $rule;
+
+    .wtis-home__media,
+    .wtis-home__media--ph {
+      min-height: 12rem;
+      aspect-ratio: 16 / 9;
+    }
+
+    .wtis-home__media img {
+      min-height: 12rem;
+    }
+  }
+
+  .wtis-home-wide__link {
+    grid-template-columns: 1fr;
+  }
+
+  .wtis-home-wide__media {
+    border-right: none;
+    border-bottom: 1px solid $rule;
+
+    .wtis-home__media,
+    .wtis-home__media--ph {
+      min-height: 11rem;
+      aspect-ratio: 16 / 9;
+    }
+
+    .wtis-home__media img {
+      min-height: 11rem;
+    }
+  }
 }
 
 @media (max-width: $bp-sm) {
-  .wtis-sport-section__header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+  // (reserved for fine-tuning)
 }

@@ -10,7 +10,8 @@ defined( 'ABSPATH' ) || exit;
 <header class="wtis-masthead">
 	<div class="container wtis-masthead__inner">
 		<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="wtis-masthead__wordmark">
-			<?php esc_html_e( 'Well This Is', 'wellthiissports-child' ); ?>
+			<span class="wtis-masthead__wordmark-text"><?php esc_html_e( 'Well This Is', 'wellthiissports-child' ); ?></span>
+			<span class="wtis-masthead__wordmark-dash" aria-hidden="true"> — </span>
 			<span class="wtis-masthead__wordmark-accent"><?php esc_html_e( 'Sports', 'wellthiissports-child' ); ?></span>
 		</a>
 		<button type="button"

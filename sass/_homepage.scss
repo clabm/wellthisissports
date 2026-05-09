@@ -1,79 +1,503 @@
 // ─────────────────────────────────────────────────────────────
 // _homepage.scss
-// Ledger bar, hero host, sport sections, matchup cards.
+// Ringer-style homepage: image-forward cards, ledger sidebar.
 // ─────────────────────────────────────────────────────────────
 @use 'tokens' as *;
 
-// ── Homepage body (grid sits in container) ───────────────────
+// ── Shell ───────────────────────────────────────────────────
 
-.wtis-home-body {
+.wtis-home {
   background: var(--wtis-off-white);
-  padding: $space-10 0 $space-16;
-}
-
-// ── Ledger bar (full width, below masthead) ──────────────────
-
-.wtis-ledger-bar {
-  background: var(--wtis-white);
-  border-bottom: 1px solid $rule;
-  padding: $space-4 0;
+  padding-bottom: $space-16;
 
   &__inner {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 $space-4;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: $space-4 $space-8;
+    padding: 0 $space-6;
   }
 
-  &__label {
+  &__section {
+    background: var(--wtis-white);
+    margin-bottom: $space-6;
+    padding: $space-8 $space-6;
+    border-radius: $radius-lg;
+    border: 1px solid $rule;
+    box-shadow: 0 1px 3px rgba($wtis-ink, 0.04);
+  }
+
+  &__top-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: $space-6;
+    align-items: stretch;
+  }
+
+  &__stack {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $rule;
+    border-radius: $radius-lg;
+    overflow: hidden;
+    background: var(--wtis-white);
+    box-shadow: 0 1px 3px rgba($wtis-ink, 0.04);
+  }
+
+  &__mid-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $space-6;
+  }
+
+  &__bottom-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: $space-8;
+    align-items: start;
+  }
+
+  &__bottom--ledger-only &__bottom-grid {
+    grid-template-columns: 1fr;
+    max-width: 28rem;
+    margin-left: auto;
+  }
+
+  &__badges {
+    position: absolute;
+    top: $space-3;
+    left: $space-3;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $space-2;
+    max-width: calc(100% - #{$space-6});
+    pointer-events: none;
+  }
+
+  &__badge {
     font-family: $font-ui;
-    font-size: $text-sm;
-    font-weight: 500;
-    letter-spacing: 0.12em;
+    font-size: $text-xs;
+    font-weight: 700;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--wtis-gray-500);
-    margin: 0;
-    flex-shrink: 0;
-  }
+    padding: $space-1 $space-2;
+    border-radius: $radius-sm;
+    pointer-events: none;
 
-  &__items {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: $space-4 $space-2;
-  }
+    &--prediction {
+      background: var(--wtis-blue-50);
+      color: var(--wtis-blue-500);
+      border: 1px solid rgba($blue-500, 0.35);
+    }
 
-  &__item {
-    display: flex;
-    align-items: baseline;
-    gap: $space-3;
-    white-space: nowrap;
-
-    &:not(:first-child)::before {
-      content: '·';
-      font-weight: 700;
-      color: var(--wtis-gray-500);
-      opacity: 0.45;
-      margin-right: $space-6;
-      pointer-events: none;
+    &--card-pick {
+      background: var(--wtis-gold-400);
+      color: var(--wtis-ink);
+      border: 1px solid rgba($gold-600, 0.45);
     }
   }
 
   &__sport {
     font-family: $font-display;
-    font-size: $text-xl;
+    font-size: $text-base;
     font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--wtis-ink);
+    color: var(--wtis-blue-500);
+    margin: 0 0 $space-2;
   }
 
-  &__nums {
+  &__pick-line {
+    font-family: $font-ui;
+    font-size: $text-md;
+    font-weight: 500;
+    line-height: 1.4;
+    margin: 0 0 $space-2;
+
+    &--muted {
+      color: var(--wtis-gray-500);
+    }
+
+    &--gold {
+      color: var(--wtis-gold-600);
+    }
+  }
+
+  &__pick-gold {
+    font-family: $font-ui;
+    font-size: $text-md;
+    font-weight: 500;
+    color: var(--wtis-gold-600);
+    margin: 0 0 $space-2;
+  }
+
+  &__date {
+    font-family: $font-body;
+    font-size: var(--wtis-text-date);
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--wtis-gray-500);
+    margin: 0;
+  }
+
+  &__media {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background: var(--wtis-white);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    &--hero {
+      aspect-ratio: 16 / 9;
+    }
+
+    &--mid {
+      aspect-ratio: 16 / 9;
+    }
+
+    &--square,
+    &--wide {
+      aspect-ratio: 1 / 1;
+    }
+
+    &--ph {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: $space-4;
+      background: linear-gradient(
+        135deg,
+        var(--wtis-gold-400) 0%,
+        var(--wtis-gold-600) 100%
+      );
+    }
+  }
+
+  &__ph-title {
     font-family: $font-display;
-    font-size: $text-3xl;
+    font-size: $text-xl;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--wtis-white);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    max-width: 16ch;
+  }
+}
+
+// ── Hero card ────────────────────────────────────────────────
+
+.wtis-home-hero {
+  border-radius: $radius-lg;
+  border: 1px solid $rule;
+  overflow: hidden;
+  background: var(--wtis-white);
+  box-shadow: 0 1px 4px rgba($wtis-ink, 0.06);
+  transition:
+    border-color $transition-slow,
+    box-shadow $transition-slow,
+    transform $transition-slow;
+
+  &:hover {
+    border-color: var(--wtis-gold-400);
+    box-shadow: 0 $space-4 $space-12 rgba($wtis-ink, 0.1);
+    transform: translateY(-3px);
+  }
+
+  &__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  &__visual {
+    position: relative;
+    overflow: hidden;
+
+    .wtis-home__media img {
+      transition: transform $transition-slow;
+    }
+
+    &:hover img {
+      transform: scale(1.02);
+    }
+  }
+
+  &__body {
+    padding: $space-5 $space-6 $space-6;
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-size: var(--wtis-text-home-hero, #{$text-32});
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--wtis-ink);
+    margin: 0 0 $space-3;
+  }
+}
+
+// ── Compact (top right stack) ─────────────────────────────────
+
+.wtis-home-compact {
+  flex: 1;
+  min-height: 0;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid $rule;
+  }
+
+  &__link {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 0;
+    align-items: stretch;
+    min-height: 9rem;
+    text-decoration: none;
+    color: inherit;
+    transition:
+      box-shadow $transition,
+      border-color $transition;
+
+    &:hover {
+      box-shadow: inset 4px 0 0 0 var(--wtis-gold-400);
+    }
+  }
+
+  &__media {
+    min-width: 0;
+    border-right: 1px solid $rule;
+
+    .wtis-home__media,
+    .wtis-home__media--ph {
+      height: 100%;
+      min-height: 9rem;
+      aspect-ratio: auto;
+    }
+
+    .wtis-home__media img {
+      height: 100%;
+      min-height: 9rem;
+    }
+  }
+
+  &__body {
+    padding: $space-4 $space-4 $space-4 $space-5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-size: $text-xl;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--wtis-ink);
+    margin: 0 0 $space-2;
+  }
+}
+
+// ── Mid row cards ───────────────────────────────────────────
+
+.wtis-home-mid {
+  border-radius: $radius-lg;
+  border: 1px solid $rule;
+  overflow: hidden;
+  background: var(--wtis-white);
+  box-shadow: 0 1px 4px rgba($wtis-ink, 0.06);
+  transition:
+    border-color $transition-slow,
+    box-shadow $transition-slow,
+    transform $transition-slow;
+
+  &:hover {
+    border-color: var(--wtis-gold-400);
+    box-shadow: 0 $space-4 $space-12 rgba($wtis-ink, 0.1);
+    transform: translateY(-3px);
+  }
+
+  &__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  &__visual {
+    position: relative;
+    overflow: hidden;
+
+    &:hover img {
+      transform: scale(1.02);
+    }
+
+    img {
+      transition: transform $transition-slow;
+    }
+  }
+
+  &__body {
+    padding: $space-4 $space-5 $space-5;
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-size: var(--wtis-text-card-mid, #{$text-22});
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--wtis-ink);
+    margin: 0 0 $space-2;
+  }
+}
+
+// ── Wide bottom cards ───────────────────────────────────────
+
+.wtis-home-wide {
+  border-radius: $radius-lg;
+  border: 1px solid $rule;
+  overflow: hidden;
+  background: var(--wtis-white);
+  box-shadow: 0 1px 4px rgba($wtis-ink, 0.06);
+  transition:
+    border-color $transition-slow,
+    box-shadow $transition-slow;
+
+  &:hover {
+    border-color: var(--wtis-gold-400);
+    box-shadow: 0 $space-3 $space-10 rgba($wtis-ink, 0.08);
+  }
+
+  &__link {
+    position: relative;
+    display: grid;
+    grid-template-columns: 0.35fr 0.65fr;
+    gap: 0;
+    align-items: stretch;
+    text-decoration: none;
+    color: inherit;
+    min-height: 10rem;
+  }
+
+  &__media {
+    min-width: 0;
+    border-right: 1px solid $rule;
+
+    .wtis-home__media,
+    .wtis-home__media--ph {
+      height: 100%;
+      min-height: 10rem;
+      aspect-ratio: auto;
+    }
+
+    .wtis-home__media img {
+      height: 100%;
+      min-height: 10rem;
+    }
+  }
+
+  &__body {
+    padding: $space-5 $space-6;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-size: var(--wtis-text-card-mid, #{$text-22});
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--wtis-ink);
+    margin: 0 0 $space-2;
+  }
+
+  &__teaser {
+    font-family: $font-body;
+    font-size: $text-md;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--wtis-gray-500);
+    margin: 0 0 $space-3;
+  }
+}
+
+// ── Ledger sidebar ───────────────────────────────────────────
+
+.wtis-home-ledger {
+  position: sticky;
+  top: calc(#{$space-10} + #{$space-8});
+  padding: $space-6;
+  background: var(--wtis-white);
+  border: 1px solid $rule;
+  border-radius: $radius-lg;
+  box-shadow: 0 1px 4px rgba($wtis-ink, 0.05);
+
+  &__heading {
+    font-family: $font-display;
+    font-size: $text-base;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--wtis-ink);
+    margin: 0 0 $space-3;
+    padding-bottom: $space-3;
+    border-bottom: 3px solid var(--wtis-gold-400);
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__row {
+    padding: $space-4 0;
+    border-bottom: 1px solid $rule;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__sport {
+    font-family: $font-display;
+    font-size: $text-lg;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--wtis-ink);
+    display: block;
+    margin-bottom: $space-2;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: $space-4;
+  }
+
+  &__record {
+    font-family: $font-display;
+    font-size: $text-xl;
     font-weight: 700;
     line-height: 1;
   }
@@ -92,284 +516,31 @@
     color: var(--wtis-gray-500);
     margin: 0 $space-1;
   }
-}
 
-// ── Sport section (editorial rail header) ───────────────────
-
-.wtis-sport-section {
-  margin-bottom: $space-12;
-
-  &__header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: $space-3;
-    padding: $space-4 0;
-    border-bottom: 3px solid var(--wtis-ink);
-    margin-bottom: $space-8;
-  }
-
-  &__title {
-    @include section-rail-heading;
-    margin: 0;
-  }
-
-  &__meta {
-    font-family: $font-ui;
-    font-size: $text-sm;
-    font-weight: 500;
-    color: var(--wtis-gray-500);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  &__body {
-    padding: 0;
-    background: transparent;
-  }
-}
-
-// ── Matchup grid ─────────────────────────────────────────────
-
-.wtis-matchup-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: $space-6;
-}
-
-// ── Matchup card ─────────────────────────────────────────────
-
-.wtis-matchup-card {
-  position: relative;
-  background: var(--wtis-white);
-  border: 1px solid $rule;
-  border-radius: $radius-lg;
-  overflow: hidden;
-  transition:
-    box-shadow $transition-slow,
-    border-color $transition,
-    transform $transition-slow;
-
-  &:hover {
-    border-color: var(--wtis-gold-400);
-    box-shadow: 0 $space-4 $space-12 rgba($wtis-ink, 0.12);
-    transform: translateY(-4px);
-  }
-
-  &--featured {
-    border-color: var(--wtis-gold-400);
-    box-shadow: 0 0 0 1px var(--wtis-gold-50);
-  }
-
-  &__link {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-    height: 100%;
-  }
-
-  &__badges {
-    position: absolute;
-    top: $space-3;
-    left: $space-3;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: $space-2;
-    max-width: calc(100% - #{$space-6});
-  }
-
-  &__badge {
-    font-family: $font-ui;
-    font-size: $text-xs;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: $space-1 $space-2;
-    border-radius: $radius-sm;
-
-    &--prediction {
-      background: var(--wtis-blue-50);
-      color: var(--wtis-blue-500);
-      border: 1px solid rgba($blue-500, 0.35);
-    }
-
-    &--card-pick {
-      background: var(--wtis-gold-400);
-      color: var(--wtis-ink);
-      border: 1px solid rgba($gold-600, 0.45);
-    }
-  }
-
-  &__img-wrap {
-    aspect-ratio: 16 / 9;
-    overflow: hidden;
-    background: var(--wtis-blue-50);
-  }
-
-  &__img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform $transition-slow;
-
-    .wtis-matchup-card:hover & {
-      transform: scale(1.03);
-    }
-  }
-
-  &__body {
-    padding: $space-4;
-  }
-
-  &__meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: $space-2 $space-3;
-    margin-bottom: $space-3;
-  }
-
-  &__sport {
-    display: inline-block;
-    font-family: $font-ui;
-    font-size: $text-xs;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: $space-1 $space-2;
-    border-radius: $radius-pill;
-    background: var(--wtis-blue-50);
-    color: var(--wtis-blue-500);
-  }
-
-  &__date {
-    @include meta-caps;
-  }
-
-  &__teams {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: $space-2;
-    margin-bottom: $space-3;
-  }
-
-  &__team {
-    font-family: $font-display;
-    font-size: $text-xl;
-    font-weight: 700;
-    color: var(--wtis-ink);
-    line-height: 1.1;
-    text-transform: uppercase;
-  }
-
-  &__vs {
-    font-family: $font-ui;
-    font-size: $text-sm;
-    font-weight: 600;
-    color: var(--wtis-gray-500);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  &__pick {
-    display: flex;
-    flex-direction: column;
-    gap: $space-1;
-    margin-bottom: $space-3;
-    padding: $space-3;
-    background: var(--wtis-gold-50);
-    border-radius: $radius-md;
-    border-left: 4px solid var(--wtis-gold-400);
-  }
-
-  &__pick-label {
-    @include meta-caps;
-    color: var(--wtis-gold-600);
-  }
-
-  &__pick-team {
-    font-family: $font-display;
-    font-size: $text-lg;
-    font-weight: 700;
-    color: var(--wtis-ink);
-    text-transform: uppercase;
-  }
-
-  &__confidence-preview {
-    display: flex;
-    align-items: baseline;
-    gap: $space-2;
-    margin-top: $space-2;
-  }
-
-  &__confidence-num {
-    font-family: $font-display;
-    font-size: $text-4xl;
-    font-weight: 700;
-    color: var(--wtis-gold-400);
-    line-height: 1;
-    font-variant-numeric: tabular-nums;
-  }
-
-  &__confidence-suffix {
-    font-family: $font-ui;
-    font-size: $text-sm;
-    font-weight: 500;
-    color: var(--wtis-gray-500);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-
-  &__excerpt {
+  &__pct {
     font-family: $font-body;
     font-size: $text-md;
-    line-height: 1.5;
+    font-weight: 400;
     color: var(--wtis-gray-500);
-    margin: $space-3 0 0;
-  }
+    flex-shrink: 0;
 
-  &__result {
-    font-family: $font-ui;
-    font-size: $text-sm;
-    font-weight: 600;
-    padding: $space-2 $space-3;
-    border-radius: $radius-md;
-    margin-top: $space-2;
-
-    &--correct {
-      background: var(--wtis-green-50);
-      color: var(--wtis-green-500);
-    }
-
-    &--incorrect {
-      background: var(--wtis-red-50);
-      color: var(--wtis-red-500);
+    &--empty {
+      font-weight: 500;
     }
   }
 }
 
-.wtis-matchup-card .wtis-confidence-meter--card {
-  margin-top: 0;
-
-  .wtis-confidence-meter__bar {
-    margin-top: $space-2;
-  }
+.wtis-home__top--solo .wtis-home__top-grid {
+  grid-template-columns: 1fr;
 }
 
 .wtis-no-matchups {
-  grid-column: 1 / -1;
   text-align: center;
   font-family: $font-body;
   font-size: $text-lg;
   font-weight: 400;
   line-height: 1.6;
   color: var(--wtis-gray-500);
-  padding: $space-16;
-  background: var(--wtis-white);
-  border-radius: $radius-lg;
-  border: 1px dashed $rule;
+  padding: $space-12 $space-6;
+  margin: 0;
 }

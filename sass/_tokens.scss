@@ -16,7 +16,7 @@
 // Barlow Condensed 700 — matchup titles, hero headings, confidence meter
 // Barlow 600 — section headings, card titles
 // Inter 400 / 500 — body copy, UI labels, metadata
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&family=Barlow:wght@400;600&family=Inter:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;600&family=Inter:wght@400;500&display=swap');
 
 // ── 2. CSS custom properties — light mode ────────────────────
 
@@ -64,6 +64,9 @@
   --wtis-text-4xl:    36px;   // display large
   --wtis-text-5xl:    48px;   // display hero / confidence score
   --wtis-text-6xl:    64px;   // sidebar / hero confidence hero number
+  --wtis-text-date:   12px;   // card dates (homepage)
+  --wtis-text-card-mid: 22px; // homepage mid / wide titles
+  --wtis-text-home-hero: 32px; // homepage hero title
 
   // Hero panel (fixed dark surface; does not invert in dark mode)
   --wtis-hero-surface:     #111111;
@@ -120,15 +123,9 @@
   --wtis-hero-muted:       #9B9B9B;
 }
 
-[data-theme="dark"] {
-  @include wtis-dark-mode;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    @include wtis-dark-mode;
-  }
-}
+// Dark mode — disabled per Director (May 2026). Restore:
+//   [data-theme="dark"] { @include wtis-dark-mode; }
+//   @media (prefers-color-scheme: dark) { :root { @include wtis-dark-mode; } }
 
 // ── 4. Sass variables — compile-time mirrors of :root ────────
 //
@@ -178,6 +175,9 @@ $text-3xl:    28px;
 $text-4xl:    36px;
 $text-5xl:    48px;
 $text-6xl:    64px;
+$text-12:     12px;
+$text-22:     22px;
+$text-32:     32px;
 
 // Spacing scale (base 4px — keeps $space-5 / $space-10 for
 // existing partials; canonical CSS custom props above are the

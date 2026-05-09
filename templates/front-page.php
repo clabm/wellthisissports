@@ -1,7 +1,7 @@
 <?php
 /**
  * front-page.php
- * Homepage: ledger strip, featured hero, matchup grid by sport.
+ * Ringer-style homepage: hero row, mid grid, ledger sidebar.
  *
  * @package wellthiissports-child
  */
@@ -10,12 +10,15 @@ defined( 'ABSPATH' ) || exit;
 
 get_header();
 
-$hero_query = new WP_Query(
+require_once get_stylesheet_directory() . '/inc/homepage-payload.php';
+
+$home_query = new WP_Query(
 	[
-		'posts_per_page' => 1,
+		'posts_per_page' => 8,
 		'post_status'    => 'publish',
-		'orderby'        => 'date',
-		'order'          => 'DESC',
+		'meta_key'       => 'wtis_matchup_date',
+		'orderby'        => 'meta_value',
+		'order'          => 'ASC',
 		'meta_query'     => [
 			[
 				'key'     => 'wtis_matchup_date',
@@ -24,222 +27,248 @@ $hero_query = new WP_Query(
 		],
 	]
 );
-$hero_post_id = 0;
-$hero_link    = '';
-if ( $hero_query->have_posts() ) {
-	$hero_query->the_post();
-	$hero_post_id = get_the_ID();
-	$hero_link    = get_permalink( $hero_post_id );
-	wp_reset_postdata();
-}
 
-$matchup_args = [
-	'posts_per_page' => 60,
-	'orderby'        => 'date',
-	'order'          => 'DESC',
-	'post_status'    => 'publish',
-	'meta_query'     => [
-		[
-			'key'     => 'wtis_matchup_date',
-			'compare' => 'EXISTS',
-		],
-	],
-];
-if ( $hero_post_id ) {
-	$matchup_args['post__not_in'] = [ $hero_post_id ];
-}
-$matchup_query = new WP_Query( $matchup_args );
-
-$by_sport = [];
-if ( $matchup_query->have_posts() ) {
-	while ( $matchup_query->have_posts() ) {
-		$matchup_query->the_post();
-		$sport = get_post_meta( get_the_ID(), 'wtis_sport', true );
-		$key   = $sport ? $sport : __( 'Matchups', 'wellthiissports-child' );
-		if ( ! isset( $by_sport[ $key ] ) ) {
-			$by_sport[ $key ] = [];
-		}
-		$by_sport[ $key ][] = get_the_ID();
-	}
-	wp_reset_postdata();
-}
+$post_ids = wp_list_pluck( $home_query->posts, 'ID' );
+$hero_id  = $post_ids[0] ?? 0;
+$compact  = array_slice( $post_ids, 1, 2 );
+$mid_ids  = array_slice( $post_ids, 3, 3 );
+$wide_ids = array_slice( $post_ids, 6, 2 );
 
 $ledger = get_option( 'wtis_ledger', [] );
 
 require get_stylesheet_directory() . '/inc/masthead.php';
 ?>
 
-<div class="wrapper" id="page-wrapper">
+<div class="wrapper wtis-home" id="page-wrapper">
+	<main id="content" class="wtis-home__inner">
 
-	<?php if ( ! empty( $ledger ) ) : ?>
-	<section class="wtis-ledger-bar" aria-labelledby="wtis-ledger-bar-title">
-		<div class="wtis-ledger-bar__inner">
-			<h2 id="wtis-ledger-bar-title" class="wtis-ledger-bar__label"><?php esc_html_e( 'Our record', 'wellthiissports-child' ); ?></h2>
-			<div class="wtis-ledger-bar__items" role="list">
-				<?php foreach ( $ledger as $sport_name => $data ) : ?>
-					<?php
-					$total   = isset( $data['total'] ) ? (int) $data['total'] : 0;
-					$correct = isset( $data['correct'] ) ? (int) $data['correct'] : 0;
-					$wrong   = max( 0, $total - $correct );
-					?>
-				<div class="wtis-ledger-bar__item" role="listitem">
-					<span class="wtis-ledger-bar__sport"><?php echo esc_html( $sport_name ); ?></span>
-					<span class="wtis-ledger-bar__nums" aria-label="<?php echo esc_attr( $sport_name . ' ' . $correct . ' wins ' . $wrong . ' losses' ); ?>">
-						<span class="wtis-ledger-bar__w"><?php echo esc_html( (string) $correct ); ?></span>
-						<span class="wtis-ledger-bar__sep" aria-hidden="true">-</span>
-						<span class="wtis-ledger-bar__l"><?php echo esc_html( (string) $wrong ); ?></span>
-					</span>
-				</div>
-				<?php endforeach; ?>
-			</div>
-		</div>
-	</section>
-	<?php endif; ?>
-
-	<?php
-	if ( $hero_post_id ) {
-		$wtis_hero_post_id     = $hero_post_id;
-		$wtis_hero_permalink   = $hero_link;
-		$wtis_hero_heading_tag = 'h2';
-		require get_stylesheet_directory() . '/inc/matchup-hero.php';
-		unset( $wtis_hero_post_id, $wtis_hero_permalink, $wtis_hero_heading_tag );
-	}
-	?>
-
-	<div class="wtis-home-body">
-		<div class="container">
-
-		<?php if ( ! empty( $by_sport ) ) : ?>
-		<main id="content">
-		<?php
-		foreach ( $by_sport as $sport_label => $post_ids ) :
-			?>
-		<section class="wtis-sport-section" aria-labelledby="<?php echo esc_attr( 'wtis-sport-' . sanitize_title( $sport_label ) ); ?>">
-			<header class="wtis-sport-section__header">
-				<h2 id="<?php echo esc_attr( 'wtis-sport-' . sanitize_title( $sport_label ) ); ?>" class="wtis-sport-section__title"><?php echo esc_html( $sport_label ); ?></h2>
-				<span class="wtis-sport-section__meta">
-					<?php
-					printf(
-						/* translators: %d: number of matchup cards */
-						esc_html( _n( '%d matchup', '%d matchups', count( $post_ids ), 'wellthiissports-child' ) ),
-						(int) count( $post_ids )
-					);
-					?>
-				</span>
-			</header>
-			<div class="wtis-sport-section__body">
-				<div class="wtis-matchup-grid">
-					<?php
-					foreach ( $post_ids as $post_id ) :
-						$post_id        = (int) $post_id;
-						$team_home      = get_post_meta( $post_id, 'wtis_team_home', true );
-						$team_away      = get_post_meta( $post_id, 'wtis_team_away', true );
-						$sport          = get_post_meta( $post_id, 'wtis_sport', true );
-						$winner         = get_post_meta( $post_id, 'wtis_prediction_winner', true );
-						$confidence     = (int) get_post_meta( $post_id, 'wtis_confidence_score', true );
-						$grade          = (int) get_post_meta( $post_id, 'wtis_prediction_grade', true );
-						$matchup_date   = get_post_meta( $post_id, 'wtis_matchup_date', true );
-						$pred_correct   = get_post_meta( $post_id, 'wtis_prediction_correct', true );
-						$actual_result  = get_post_meta( $post_id, 'wtis_actual_result', true );
-						$feat_img       = get_the_post_thumbnail_url( $post_id, 'wtis-card' );
-						$permalink      = get_permalink( $post_id );
-						$factors_for    = get_post_meta( $post_id, 'wtis_factors_for', true );
-						$factors_list   = $factors_for ? array_filter( array_map( 'trim', explode( '|', $factors_for ) ) ) : [];
-						$excerpt_line   = $factors_list ? $factors_list[0] : '';
-						?>
-					<article class="wtis-matchup-card <?php echo $grade >= 8 ? 'wtis-matchup-card--featured' : ''; ?>">
-						<a href="<?php echo esc_url( $permalink ); ?>" class="wtis-matchup-card__link">
-							<div class="wtis-matchup-card__badges">
-								<span class="wtis-matchup-card__badge wtis-matchup-card__badge--prediction"><?php esc_html_e( 'Prediction', 'wellthiissports-child' ); ?></span>
-								<?php if ( $grade >= 8 ) : ?>
-								<span class="wtis-matchup-card__badge wtis-matchup-card__badge--card-pick"><?php esc_html_e( 'Card pick', 'wellthiissports-child' ); ?></span>
-								<?php endif; ?>
-							</div>
-
-							<?php if ( $feat_img ) : ?>
-							<div class="wtis-matchup-card__img-wrap">
-								<img class="wtis-matchup-card__img"
-									src="<?php echo esc_url( $feat_img ); ?>"
-									alt="<?php echo esc_attr( $team_home . ' vs ' . $team_away ); ?>"
-									loading="lazy"
-									width="640"
-									height="360">
-							</div>
+		<?php if ( $hero_id ) : ?>
+		<section class="wtis-home__section wtis-home__top<?php echo empty( $compact ) ? ' wtis-home__top--solo' : ''; ?>" aria-label="<?php esc_attr_e( 'Featured matchups', 'wellthiissports-child' ); ?>">
+			<div class="wtis-home__top-grid">
+				<?php
+				$h = wtis_home_matchup_payload( $hero_id );
+				?>
+				<article class="wtis-home-hero">
+					<a href="<?php echo esc_url( $h['permalink'] ); ?>" class="wtis-home-hero__link">
+						<div class="wtis-home-hero__visual">
+							<?php wtis_home_print_badges( $h['grade'] ); ?>
+							<?php
+							$hero_img = $h['img_hero'] ? $h['img_hero'] : $h['img_card'];
+							wtis_home_print_media( $hero_img, 'hero', $h['title_line'], 'eager' );
+							?>
+						</div>
+						<div class="wtis-home-hero__body">
+							<?php if ( $h['sport'] ) : ?>
+							<p class="wtis-home__sport"><?php echo esc_html( $h['sport'] ); ?></p>
 							<?php endif; ?>
+							<h2 class="wtis-home-hero__title"><?php echo esc_html( $h['title_line'] ); ?></h2>
+							<?php if ( $h['winner'] && $h['confidence'] ) : ?>
+							<p class="wtis-home__pick-line wtis-home__pick-line--muted">
+								<?php
+								echo esc_html(
+									sprintf(
+										/* translators: 1: team name, 2: confidence integer */
+										__( 'The Pick: %1$s · %2$s%% confidence', 'wellthiissports-child' ),
+										$h['winner'],
+										(string) $h['confidence']
+									)
+								);
+								?>
+							</p>
+							<?php endif; ?>
+							<?php if ( $h['date_display'] ) : ?>
+							<p class="wtis-home__date"><?php echo esc_html( $h['date_display'] ); ?></p>
+							<?php endif; ?>
+						</div>
+					</a>
+				</article>
 
-							<div class="wtis-matchup-card__body">
-								<div class="wtis-matchup-card__meta">
-									<?php if ( $sport ) : ?>
-									<span class="wtis-matchup-card__sport"><?php echo esc_html( $sport ); ?></span>
-									<?php endif; ?>
-									<?php if ( $matchup_date ) : ?>
-									<span class="wtis-matchup-card__date">
-										<?php echo esc_html( date_i18n( 'M j', strtotime( $matchup_date ) ) ); ?>
-									</span>
-									<?php endif; ?>
-								</div>
-
-								<div class="wtis-matchup-card__teams">
-									<span class="wtis-matchup-card__team"><?php echo esc_html( $team_home ?: get_the_title( $post_id ) ); ?></span>
-									<span class="wtis-matchup-card__vs"><?php esc_html_e( 'vs', 'wellthiissports-child' ); ?></span>
-									<span class="wtis-matchup-card__team"><?php echo esc_html( $team_away ); ?></span>
-								</div>
-
-								<?php if ( $winner ) : ?>
-								<div class="wtis-matchup-card__pick">
-									<span class="wtis-matchup-card__pick-label"><?php esc_html_e( 'The Pick', 'wellthiissports-child' ); ?></span>
-									<span class="wtis-matchup-card__pick-team"><?php echo esc_html( $winner ); ?></span>
-								</div>
+				<?php if ( ! empty( $compact ) ) : ?>
+				<div class="wtis-home__stack" role="list">
+					<?php foreach ( $compact as $cid ) : ?>
+						<?php $c = wtis_home_matchup_payload( (int) $cid ); ?>
+					<div class="wtis-home-compact" role="listitem">
+						<a href="<?php echo esc_url( $c['permalink'] ); ?>" class="wtis-home-compact__link">
+							<?php wtis_home_print_badges( $c['grade'] ); ?>
+							<div class="wtis-home-compact__media">
+								<?php
+								$sq = $c['img_square'] ? $c['img_square'] : $c['img_card'];
+								wtis_home_print_media( $sq, 'square', $c['title_line'] );
+								?>
+							</div>
+							<div class="wtis-home-compact__body">
+								<?php if ( $c['sport'] ) : ?>
+								<p class="wtis-home__sport"><?php echo esc_html( $c['sport'] ); ?></p>
 								<?php endif; ?>
-
-								<?php if ( $confidence ) : ?>
-								<div class="wtis-matchup-card__confidence-preview">
-									<span class="wtis-matchup-card__confidence-num"><?php echo esc_html( (string) $confidence ); ?></span>
-									<span class="wtis-matchup-card__confidence-suffix"><?php esc_html_e( 'confidence', 'wellthiissports-child' ); ?></span>
-								</div>
-								<div class="wtis-confidence-meter wtis-confidence-meter--card" style="--confidence: <?php echo esc_attr( (string) $confidence ); ?>">
-									<div class="wtis-confidence-meter__bar" role="presentation">
-										<div class="wtis-confidence-meter__fill"></div>
-									</div>
-									<span class="wtis-confidence-meter__label"><?php echo esc_html( (string) $confidence ); ?>% <?php esc_html_e( 'model confidence', 'wellthiissports-child' ); ?></span>
-								</div>
+								<h3 class="wtis-home-compact__title"><?php echo esc_html( $c['title_line'] ); ?></h3>
+								<?php if ( $c['winner'] ) : ?>
+								<p class="wtis-home__pick-gold"><?php echo esc_html( $c['winner'] ); ?><?php echo $c['confidence'] ? esc_html( ' · ' . (string) $c['confidence'] . '%' ) : ''; ?></p>
 								<?php endif; ?>
-
-								<?php if ( $excerpt_line ) : ?>
-								<p class="wtis-matchup-card__excerpt"><?php echo esc_html( $excerpt_line ); ?></p>
-								<?php endif; ?>
-
-								<?php if ( '' !== $pred_correct && $actual_result ) : ?>
-								<div class="wtis-matchup-card__result <?php echo $pred_correct ? 'wtis-matchup-card__result--correct' : 'wtis-matchup-card__result--incorrect'; ?>">
-									<?php
-									echo $pred_correct ? esc_html__( 'Correct', 'wellthiissports-child' ) : esc_html__( 'Incorrect', 'wellthiissports-child' );
-									echo ' — ';
-									echo esc_html( $actual_result );
-									?>
-								</div>
+								<?php if ( $c['date_display'] ) : ?>
+								<p class="wtis-home__date"><?php echo esc_html( $c['date_display'] ); ?></p>
 								<?php endif; ?>
 							</div>
 						</a>
-					</article>
-						<?php endforeach; ?>
+					</div>
+					<?php endforeach; ?>
 				</div>
+				<?php endif; ?>
 			</div>
 		</section>
-			<?php
-		endforeach;
-		?>
-		</main>
-
 		<?php endif; ?>
 
-		<?php if ( empty( $by_sport ) && ! $hero_post_id ) : ?>
-		<main id="content" class="wtis-matchup-grid">
+		<?php if ( ! empty( $mid_ids ) ) : ?>
+		<section class="wtis-home__section wtis-home__mid" aria-label="<?php esc_attr_e( 'More matchups', 'wellthiissports-child' ); ?>">
+			<div class="wtis-home__mid-grid">
+				<?php foreach ( $mid_ids as $mid_id ) : ?>
+					<?php $m = wtis_home_matchup_payload( (int) $mid_id ); ?>
+				<article class="wtis-home-mid">
+					<a href="<?php echo esc_url( $m['permalink'] ); ?>" class="wtis-home-mid__link">
+						<div class="wtis-home-mid__visual">
+							<?php wtis_home_print_badges( $m['grade'] ); ?>
+							<?php wtis_home_print_media( $m['img_card'], 'mid', $m['title_line'] ); ?>
+						</div>
+						<div class="wtis-home-mid__body">
+							<?php if ( $m['sport'] ) : ?>
+							<p class="wtis-home__sport"><?php echo esc_html( $m['sport'] ); ?></p>
+							<?php endif; ?>
+							<h3 class="wtis-home-mid__title"><?php echo esc_html( $m['title_line'] ); ?></h3>
+							<?php if ( $m['winner'] && $m['confidence'] ) : ?>
+							<p class="wtis-home__pick-line wtis-home__pick-line--gold">
+								<?php
+								echo esc_html(
+									sprintf(
+										/* translators: 1: team name, 2: confidence */
+										__( 'The Pick: %1$s · %2$s%%', 'wellthiissports-child' ),
+										$m['winner'],
+										(string) $m['confidence']
+									)
+								);
+								?>
+							</p>
+							<?php endif; ?>
+							<?php if ( $m['date_display'] ) : ?>
+							<p class="wtis-home__date"><?php echo esc_html( $m['date_display'] ); ?></p>
+							<?php endif; ?>
+						</div>
+					</a>
+				</article>
+				<?php endforeach; ?>
+			</div>
+		</section>
+		<?php endif; ?>
+
+		<section class="wtis-home__section wtis-home__bottom<?php echo empty( $wide_ids ) ? ' wtis-home__bottom--ledger-only' : ''; ?>" aria-label="<?php esc_attr_e( 'Spotlight and accuracy', 'wellthiissports-child' ); ?>">
+			<div class="wtis-home__bottom-grid">
+				<?php if ( ! empty( $wide_ids ) ) : ?>
+				<div class="wtis-home__wide-col">
+					<div class="wtis-home__wide-stack" role="list">
+						<?php foreach ( $wide_ids as $wid ) : ?>
+							<?php $w = wtis_home_matchup_payload( (int) $wid ); ?>
+						<div class="wtis-home-wide" role="listitem">
+							<a href="<?php echo esc_url( $w['permalink'] ); ?>" class="wtis-home-wide__link">
+								<?php wtis_home_print_badges( $w['grade'] ); ?>
+								<div class="wtis-home-wide__media">
+									<?php
+									$wi = $w['img_square'] ? $w['img_square'] : $w['img_card'];
+									wtis_home_print_media( $wi, 'wide', $w['title_line'] );
+									?>
+								</div>
+								<div class="wtis-home-wide__body">
+									<?php if ( $w['sport'] ) : ?>
+									<p class="wtis-home__sport"><?php echo esc_html( $w['sport'] ); ?></p>
+									<?php endif; ?>
+									<h3 class="wtis-home-wide__title"><?php echo esc_html( $w['title_line'] ); ?></h3>
+									<?php if ( $w['winner'] && $w['confidence'] ) : ?>
+									<p class="wtis-home__pick-line wtis-home__pick-line--gold">
+										<?php
+										echo esc_html(
+											sprintf(
+												__( 'The Pick: %1$s · %2$s%%', 'wellthiissports-child' ),
+												$w['winner'],
+												(string) $w['confidence']
+											)
+										);
+										?>
+									</p>
+									<?php endif; ?>
+									<?php if ( $w['teaser'] ) : ?>
+									<p class="wtis-home-wide__teaser"><?php echo esc_html( $w['teaser'] ); ?></p>
+									<?php endif; ?>
+									<?php if ( $w['date_display'] ) : ?>
+									<p class="wtis-home__date"><?php echo esc_html( $w['date_display'] ); ?></p>
+									<?php endif; ?>
+								</div>
+							</a>
+						</div>
+						<?php endforeach; ?>
+					</div>
+				</div>
+				<?php endif; ?>
+
+				<aside class="wtis-home-ledger" aria-labelledby="wtis-home-ledger-heading">
+					<h2 id="wtis-home-ledger-heading" class="wtis-home-ledger__heading"><?php esc_html_e( 'Our record', 'wellthiissports-child' ); ?></h2>
+					<ul class="wtis-home-ledger__list" role="list">
+						<?php
+						if ( ! empty( $ledger ) ) :
+							foreach ( $ledger as $sport_name => $data ) :
+								$total    = isset( $data['total'] ) ? (int) $data['total'] : 0;
+								$correct  = isset( $data['correct'] ) ? (int) $data['correct'] : 0;
+								$wrong    = max( 0, $total - $correct );
+								$accuracy = isset( $data['accuracy'] ) ? (float) $data['accuracy'] : null;
+								?>
+						<li class="wtis-home-ledger__row" role="listitem">
+							<span class="wtis-home-ledger__sport"><?php echo esc_html( $sport_name ); ?></span>
+							<div class="wtis-home-ledger__meta">
+								<span class="wtis-home-ledger__record" aria-label="<?php echo esc_attr( $sport_name . ' ' . $correct . ' ' . $wrong ); ?>">
+									<span class="wtis-home-ledger__w"><?php echo esc_html( (string) $correct ); ?></span>
+									<span class="wtis-home-ledger__sep" aria-hidden="true">-</span>
+									<span class="wtis-home-ledger__l"><?php echo esc_html( (string) $wrong ); ?></span>
+								</span>
+								<?php if ( null !== $accuracy && $total > 0 ) : ?>
+								<span class="wtis-home-ledger__pct"><?php echo esc_html( number_format_i18n( $accuracy, 1 ) ); ?>%</span>
+								<?php else : ?>
+								<span class="wtis-home-ledger__pct wtis-home-ledger__pct--empty"><?php echo esc_html( '—' ); ?></span>
+								<?php endif; ?>
+							</div>
+						</li>
+								<?php
+							endforeach;
+						else :
+							$placeholders = [
+								__( 'NFL', 'wellthiissports-child' ),
+								__( 'NBA', 'wellthiissports-child' ),
+								__( 'World Cup', 'wellthiissports-child' ),
+							];
+							foreach ( $placeholders as $pl_name ) :
+								?>
+						<li class="wtis-home-ledger__row wtis-home-ledger__row--placeholder" role="listitem">
+							<span class="wtis-home-ledger__sport"><?php echo esc_html( $pl_name ); ?></span>
+							<div class="wtis-home-ledger__meta">
+								<span class="wtis-home-ledger__record">
+									<span class="wtis-home-ledger__w">0</span>
+									<span class="wtis-home-ledger__sep" aria-hidden="true">-</span>
+									<span class="wtis-home-ledger__l">0</span>
+								</span>
+								<span class="wtis-home-ledger__pct wtis-home-ledger__pct--empty"><?php echo esc_html( '—' ); ?></span>
+							</div>
+						</li>
+								<?php
+							endforeach;
+						endif;
+						?>
+					</ul>
+				</aside>
+			</div>
+		</section>
+
+		<?php if ( ! $hero_id ) : ?>
+		<section class="wtis-home__section">
 			<p class="wtis-no-matchups"><?php esc_html_e( 'No matchups yet. Check back soon.', 'wellthiissports-child' ); ?></p>
-		</main>
+		</section>
 		<?php endif; ?>
 
-		</div>
-	</div>
+	</main>
 </div>
 
 <?php get_footer(); ?>
