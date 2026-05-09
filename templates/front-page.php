@@ -149,9 +149,12 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 						?>
 					<article class="wtis-matchup-card <?php echo $grade >= 8 ? 'wtis-matchup-card--featured' : ''; ?>">
 						<a href="<?php echo esc_url( $permalink ); ?>" class="wtis-matchup-card__link">
-							<?php if ( $grade >= 8 ) : ?>
-							<span class="wtis-matchup-card__badge"><?php esc_html_e( 'Card pick', 'wellthiissports-child' ); ?></span>
-							<?php endif; ?>
+							<div class="wtis-matchup-card__badges">
+								<span class="wtis-matchup-card__badge wtis-matchup-card__badge--prediction"><?php esc_html_e( 'Prediction', 'wellthiissports-child' ); ?></span>
+								<?php if ( $grade >= 8 ) : ?>
+								<span class="wtis-matchup-card__badge wtis-matchup-card__badge--card-pick"><?php esc_html_e( 'Card pick', 'wellthiissports-child' ); ?></span>
+								<?php endif; ?>
+							</div>
 
 							<?php if ( $feat_img ) : ?>
 							<div class="wtis-matchup-card__img-wrap">
