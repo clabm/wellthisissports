@@ -1,6 +1,6 @@
 <?php
 /**
- * Shared masthead markup (wordmark, desktop + mobile nav).
+ * Shared masthead markup (logo, desktop + mobile nav).
  *
  * @package wellthiissports-child
  */
@@ -9,10 +9,13 @@ defined( 'ABSPATH' ) || exit;
 ?>
 <header class="wtis-masthead">
 	<div class="container wtis-masthead__inner">
-		<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="wtis-masthead__wordmark">
-			<span class="wtis-masthead__wordmark-text"><?php esc_html_e( 'Well This Is', 'wellthiissports-child' ); ?></span>
-			<span class="wtis-masthead__wordmark-dash" aria-hidden="true"> — </span>
-			<span class="wtis-masthead__wordmark-accent"><?php esc_html_e( 'Sports', 'wellthiissports-child' ); ?></span>
+		<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="wtis-logo">
+			<img
+				src="<?php echo esc_url( get_stylesheet_directory_uri() . '/wtis-logo.png' ); ?>"
+				alt="<?php esc_attr_e( 'Well This Is Sports', 'wellthiissports-child' ); ?>"
+				width="280"
+				height="40"
+				decoding="async">
 		</a>
 		<button type="button"
 				class="wtis-masthead__mobile-toggle"

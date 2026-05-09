@@ -72,6 +72,9 @@
   --wtis-home-max:     1400px; // max width for homepage section containers
   --wtis-home-surface:  #111111; // dark card rails on homepage
 
+  // Masthead (logo bar)
+  --wtis-masthead-bg: #1a1a1a;
+
   // Hero panel (fixed dark surface; does not invert in dark mode)
   --wtis-hero-surface:     #111111;
   --wtis-hero-on-surface:  #FFFFFF;
@@ -222,6 +225,9 @@ $bp-xxl:  1400px;
 
 // Homepage layout (matches --wtis-home-max)
 $wtis-home-max: 1400px;
+
+// Masthead bar (matches --wtis-masthead-bg)
+$wtis-masthead-bg: #1a1a1a;
 
 // ── 5. Semantic aliases ───────────────────────────────────────
 // Backward-compatible names used by existing component partials.

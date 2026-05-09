@@ -136,11 +136,12 @@ repo-root/                          ← child theme root (wellthisiissports-chil
 ├── .lando.yml                      ← local dev config
 ├── .env.lando.example              ← env var template
 ├── style.css                       ← theme declaration + design tokens
+├── wtis-logo.png                   ← masthead logo (child theme root)
 ├── functions.php                   ← enqueue, meta registration, REST API, AJAX
 ├── inc/
 │   ├── pipeline-api.php            ← all custom REST endpoints
 │   ├── custom-fields.php           ← editorial meta box
-│   ├── masthead.php                ← site header / nav include
+│   ├── masthead.php                ← site header: logo img + nav include
 │   ├── matchup-hero.php            ← shared 50/50 matchup hero (single only)
 │   ├── homepage-payload.php        ← homepage card data + media/badge helpers
 │   └── footer-content.php         ← footer include
@@ -154,7 +155,7 @@ repo-root/                          ← child theme root (wellthisiissports-chil
 ├── sass/
 │   ├── style.scss                  ← entry point, imports all partials
 │   ├── _tokens.scss                ← design tokens: colors, type, spacing
-│   ├── _masthead.scss              ← wordmark, nav
+│   ├── _masthead.scss              ← dark masthead bar, logo, nav
 │   ├── _homepage.scss              ← matchup grid, sport sections
 │   ├── _matchup.scss               ← prediction display, confidence meter, ledger
 │   ├── _takeaways.scss             ← key factors component
