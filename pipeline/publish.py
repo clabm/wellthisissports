@@ -69,8 +69,7 @@ def generate_hero_image(prediction):
             "model": "gpt-image-1",
             "prompt": prompt,
             "n": 1,
-            "size": "1792x1024",
-            "response_format": "b64_json",
+            "size": "1536x1024",
         },
         timeout=120,
     )
@@ -120,10 +119,11 @@ def upload_hero_image(local_path, filename, post_id):
     media_id = resp.json()["id"]
     log.info("Uploaded media ID: %d", media_id)
 
-    # Set as featured image via pipeline endpoint
+    # Set as featured image via standard WP REST API (Basic auth)
+    # Note: the custom /image endpoint expects a multipart file upload, not a media ID
     patch_resp = requests.post(
-        f"{WP_BASE_URL}/wp-json/wtis/v1/matchups/{post_id}/image",
-        headers=_pipeline_headers(),
+        f"{WP_BASE_URL}/wp-json/wp/v2/posts/{post_id}",
+        headers={**_basic_auth_headers(), "Content-Type": "application/json"},
         json={"featured_media": media_id},
         timeout=30,
     )
