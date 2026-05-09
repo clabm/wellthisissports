@@ -9,6 +9,7 @@ jobs:
 
     env:
       APIFOOTBALL_API_KEY: ${{ secrets.APIFOOTBALL_API_KEY }}
+      APIFOOTBALL_SEASON: ${{ secrets.APIFOOTBALL_SEASON }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       WTIS_SITE_URL: ${{ secrets.WTIS_SITE_URL }}

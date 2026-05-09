@@ -20,9 +20,11 @@ APIFOOTBALL_KEY = os.environ["APIFOOTBALL_API_KEY"]
 WP_BASE_URL = os.environ["WTIS_SITE_URL"].rstrip("/")
 PIPELINE_API_KEY = os.environ["WTIS_PIPELINE_API_KEY"]
 
-# World Cup 2026
+# League and season config.
+# APIFOOTBALL_SEASON defaults to 2024 locally (free tier supports it).
+# Set APIFOOTBALL_SEASON=2026 in the GitHub Secret for production.
 LEAGUE_ID = 1
-SEASON = 2026
+SEASON = int(os.getenv("APIFOOTBALL_SEASON", "2024"))
 
 # Maps API-Football league IDs to wtis_sport display values.
 # wtis_update_ledger slugifies these, so "World Cup" → "world-cup" in ledger
