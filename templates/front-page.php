@@ -62,21 +62,7 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 							<?php if ( $h['sport'] ) : ?>
 							<p class="wtis-home__sport"><?php echo esc_html( $h['sport'] ); ?></p>
 							<?php endif; ?>
-							<h2 class="wtis-home-hero__title"><?php echo esc_html( $h['title_line'] ); ?></h2>
-							<?php if ( $h['winner'] && $h['confidence'] ) : ?>
-							<p class="wtis-home__pick-line wtis-home__pick-line--muted">
-								<?php
-								echo esc_html(
-									sprintf(
-										/* translators: 1: team name, 2: confidence integer */
-										__( 'The Pick: %1$s · %2$s%% confidence', 'wellthiissports-child' ),
-										$h['winner'],
-										(string) $h['confidence']
-									)
-								);
-								?>
-							</p>
-							<?php endif; ?>
+							<h3 class="wtis-home-hero__title"><?php echo esc_html( $h['title_line'] ); ?></h3>
 							<?php if ( $h['date_display'] ) : ?>
 							<p class="wtis-home__date"><?php echo esc_html( $h['date_display'] ); ?></p>
 							<?php endif; ?>
@@ -102,9 +88,6 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 								<p class="wtis-home__sport"><?php echo esc_html( $c['sport'] ); ?></p>
 								<?php endif; ?>
 								<h3 class="wtis-home-compact__title"><?php echo esc_html( $c['title_line'] ); ?></h3>
-								<?php if ( $c['winner'] ) : ?>
-								<p class="wtis-home__pick-gold"><?php echo esc_html( $c['winner'] ); ?><?php echo $c['confidence'] ? esc_html( ' · ' . (string) $c['confidence'] . '%' ) : ''; ?></p>
-								<?php endif; ?>
 								<?php if ( $c['date_display'] ) : ?>
 								<p class="wtis-home__date"><?php echo esc_html( $c['date_display'] ); ?></p>
 								<?php endif; ?>
@@ -140,21 +123,10 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 									<?php wtis_home_print_media( $m['img_card'], 'mid_band', $m['title_line'] ); ?>
 								</div>
 								<div class="wtis-home-mid-card__body">
-									<h3 class="wtis-home-mid-card__title"><?php echo esc_html( $m['title_line'] ); ?></h3>
-									<?php if ( $m['winner'] && $m['confidence'] ) : ?>
-									<p class="wtis-home__pick-line wtis-home__pick-line--gold">
-										<?php
-										echo esc_html(
-											sprintf(
-												/* translators: 1: team name, 2: confidence */
-												__( 'The Pick: %1$s · %2$s%%', 'wellthiissports-child' ),
-												$m['winner'],
-												(string) $m['confidence']
-											)
-										);
-										?>
-									</p>
+									<?php if ( $m['sport'] ) : ?>
+									<p class="wtis-home__sport"><?php echo esc_html( $m['sport'] ); ?></p>
 									<?php endif; ?>
+									<h3 class="wtis-home-mid-card__title"><?php echo esc_html( $m['title_line'] ); ?></h3>
 									<?php if ( $m['date_display'] ) : ?>
 									<p class="wtis-home__date"><?php echo esc_html( $m['date_display'] ); ?></p>
 									<?php endif; ?>
@@ -190,22 +162,6 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 									<p class="wtis-home__sport"><?php echo esc_html( $w['sport'] ); ?></p>
 									<?php endif; ?>
 									<h3 class="wtis-home-wide__title"><?php echo esc_html( $w['title_line'] ); ?></h3>
-									<?php if ( $w['winner'] && $w['confidence'] ) : ?>
-									<p class="wtis-home__pick-line wtis-home__pick-line--gold">
-										<?php
-										echo esc_html(
-											sprintf(
-												__( 'The Pick: %1$s · %2$s%%', 'wellthiissports-child' ),
-												$w['winner'],
-												(string) $w['confidence']
-											)
-										);
-										?>
-									</p>
-									<?php endif; ?>
-									<?php if ( $w['teaser'] ) : ?>
-									<p class="wtis-home-wide__teaser"><?php echo esc_html( $w['teaser'] ); ?></p>
-									<?php endif; ?>
 									<?php if ( $w['date_display'] ) : ?>
 									<p class="wtis-home__date"><?php echo esc_html( $w['date_display'] ); ?></p>
 									<?php endif; ?>

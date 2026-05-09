@@ -4,8 +4,11 @@
  *
  * Expects $wtis_hero_post_id (int). Optional:
  * - $wtis_hero_permalink (string) — if set, title links here (e.g. homepage).
- * - $wtis_hero_heading_tag (string) — 'h1' or 'h2', default h1 when no permalink, else h2.
+ * - $wtis_hero_heading_tag (string) — 'h1' or 'h2', default h1 when no permalink, else h2 (linked personality line only).
  * - $wtis_hero_show_urgent (bool) — show urgent update badge in panel.
+ *
+ * On single posts, visible document headings live in single.php; duplicate
+ * title stack here is aria-hidden for sighted layout only.
  *
  * @package wellthiissports-child
  */
@@ -25,8 +28,31 @@ $matchup_date = get_post_meta( $hero_pid, 'wtis_matchup_date', true );
 $winner       = get_post_meta( $hero_pid, 'wtis_prediction_winner', true );
 $confidence   = (int) get_post_meta( $hero_pid, 'wtis_confidence_score', true );
 $feat_img     = get_the_post_thumbnail_url( $hero_pid, 'wtis-hero' );
-$title_home   = $team_home ? $team_home : get_the_title( $hero_pid );
-$title_away   = $team_away ? $team_away : '';
+$matchup_title_meta = trim( (string) get_post_meta( $hero_pid, 'wtis_matchup_title', true ) );
+$headline_personality = trim( (string) get_post_meta( $hero_pid, 'wtis_headline_personality', true ) );
+$headline_seo         = trim( (string) get_post_meta( $hero_pid, 'wtis_headline_seo', true ) );
+
+$label_home = $team_home ? $team_home : get_the_title( $hero_pid );
+$label_away = $team_away ? $team_away : '';
+$vs_line    = $label_away ? sprintf( '%s vs %s', $label_home, $label_away ) : $label_home;
+
+$personality_text = $headline_personality !== '' ? $headline_personality : ( $matchup_title_meta !== '' ? $matchup_title_meta : $vs_line );
+if ( $headline_seo !== '' ) {
+	$seo_text = $headline_seo;
+} elseif ( $label_away !== '' ) {
+	$seo_text = sprintf(
+		/* translators: 1: home team, 2: away team */
+		__( '%1$s vs %2$s Prediction', 'wellthiissports-child' ),
+		$label_home,
+		$label_away
+	);
+} else {
+	$seo_text = sprintf(
+		/* translators: %s: team or matchup label */
+		__( '%s Prediction', 'wellthiissports-child' ),
+		$label_home
+	);
+}
 
 $link_url = isset( $wtis_hero_permalink ) ? $wtis_hero_permalink : '';
 if ( isset( $wtis_hero_heading_tag ) && in_array( $wtis_hero_heading_tag, [ 'h1', 'h2' ], true ) ) {
@@ -44,7 +70,7 @@ if ( $link_url ) {
 	<div class="wtis-matchup-hero__media">
 		<?php if ( $feat_img ) : ?>
 		<img src="<?php echo esc_url( $feat_img ); ?>"
-			alt="<?php echo esc_attr( $title_home . ( $title_away ? ' vs ' . $title_away : '' ) ); ?>"
+			alt="<?php echo esc_attr( $label_home . ( $label_away ? ' vs ' . $label_away : '' ) ); ?>"
 			loading="<?php echo $link_url ? 'lazy' : 'eager'; ?>"
 			width="1240"
 			height="697">
@@ -57,32 +83,34 @@ if ( $link_url ) {
 			<?php if ( ! empty( $wtis_hero_show_urgent ) ) : ?>
 			<div class="wtis-urgent-badge wtis-urgent-badge--hero"><?php esc_html_e( 'Urgent update', 'wellthiissports-child' ); ?></div>
 			<?php endif; ?>
-			<?php if ( $sport ) : ?>
-			<p class="wtis-matchup-hero__sport"><?php echo esc_html( $sport ); ?></p>
-			<?php endif; ?>
 
+			<?php if ( $link_url ) : ?>
+			<h3 class="wtis-matchup-hero__matchup-label"><?php echo esc_html( $vs_line ); ?></h3>
 			<?php
-			printf( '<%1$s class="wtis-matchup-hero__title">', esc_attr( $heading_tag ) );
-			if ( $link_url ) {
-				echo '<a class="wtis-matchup-hero__title-link" href="' . esc_url( $link_url ) . '">';
-			}
-			?>
-			<span class="wtis-matchup-hero__team"><?php echo esc_html( $title_home ); ?></span>
-			<span class="wtis-matchup-hero__vs"> <?php esc_html_e( 'vs', 'wellthiissports-child' ); ?> </span>
-			<span class="wtis-matchup-hero__team"><?php echo esc_html( $title_away ); ?></span>
-			<?php
-			if ( $link_url ) {
-				echo '</a>';
-			}
+			printf( '<%1$s class="wtis-matchup-hero__personality-heading">', esc_attr( $heading_tag ) );
+			echo '<a class="wtis-matchup-hero__personality-link" href="' . esc_url( $link_url ) . '">';
+			echo esc_html( $personality_text );
+			echo '</a>';
 			printf( '</%1$s>', esc_attr( $heading_tag ) );
 			?>
+			<p class="wtis-matchup-hero__seo-line"><?php echo esc_html( $seo_text ); ?></p>
+			<?php else : ?>
+			<div class="wtis-matchup-hero__titles" aria-hidden="true">
+				<p class="wtis-matchup-hero__matchup-label"><?php echo esc_html( $vs_line ); ?></p>
+				<p class="wtis-matchup-hero__personality"><?php echo esc_html( $personality_text ); ?></p>
+				<p class="wtis-matchup-hero__seo-line"><?php echo esc_html( $seo_text ); ?></p>
+			</div>
+			<?php endif; ?>
 
 			<div class="wtis-matchup-hero__meta">
+				<?php if ( $sport ) : ?>
+				<span class="wtis-matchup-hero__sport-pill"><?php echo esc_html( $sport ); ?></span>
+				<?php endif; ?>
 				<?php if ( $matchup_date ) : ?>
 				<span class="wtis-matchup-hero__date"><?php echo esc_html( date_i18n( 'F j, Y', strtotime( $matchup_date ) ) ); ?></span>
 				<?php endif; ?>
 				<?php if ( $league ) : ?>
-				<?php if ( $matchup_date ) : ?>
+				<?php if ( $sport || $matchup_date ) : ?>
 				<span class="wtis-matchup-hero__meta-sep" aria-hidden="true">·</span>
 				<?php endif; ?>
 				<span class="wtis-matchup-hero__league"><?php echo esc_html( $league ); ?></span>

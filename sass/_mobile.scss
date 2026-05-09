@@ -69,7 +69,8 @@
       padding: $space-6 $space-4 $space-10;
     }
 
-    &__title {
+    &__personality,
+    &__personality-heading {
       font-size: $text-3xl;
     }
 
@@ -80,6 +81,10 @@
     &__pick-score-num {
       font-size: $text-5xl;
     }
+  }
+
+  .wtis-story-headline-stack__personality {
+    font-size: $text-4xl;
   }
 
   .wtis-footer-grid {

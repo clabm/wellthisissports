@@ -254,6 +254,8 @@ All prediction content lives in post meta, not post content.
 | `wtis_team_home` | Home team name |
 | `wtis_team_away` | Away team name |
 | `wtis_matchup_title` | Display title for the matchup |
+| `wtis_headline_personality` | Article H1 hero headline (falls back to matchup title) |
+| `wtis_headline_seo` | Article H2 SEO subhead (falls back to “Home vs Away Prediction”) |
 | `wtis_sport` | Sport (e.g., World Cup, NFL, NBA) |
 | `wtis_league` | League or tournament |
 | `wtis_matchup_date` | Scheduled game date (ISO timestamp) |
