@@ -155,6 +155,27 @@
       min-height: 11rem;
     }
   }
+
+  // Homepage mobile: remove stacked inner + dark-rail gutters (one inset layer)
+  .wtis-home__inner {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .wtis-home-dark {
+    padding: $space-4 $space-3;
+    border-radius: $radius-md;
+  }
+
+  .wtis-home-mid__label-inner {
+    padding-left: $space-4;
+    padding-right: $space-4;
+  }
+
+  .wtis-home-mid__label-row {
+    padding-left: $space-4;
+    padding-right: $space-4;
+  }
 }
 
 @media (max-width: $bp-sm) {

@@ -240,6 +240,11 @@
 
 .wtis-home-mid {
   margin-bottom: $space-6;
+
+  // Space between featured rail and “Latest predictions” (desktop / wide layout)
+  @media (min-width: #{$bp-lg + 1px}) {
+    margin-top: $space-8; // 32px — within requested 24–32px band
+  }
 }
 
 .wtis-home-mid__label-row {
