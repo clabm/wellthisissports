@@ -29,22 +29,24 @@ COMPETITION: {league}
 DATE: {date}
 ROUND: {round}
 
+CRITICAL REQUIREMENT: The ANALYSIS section MUST be 500-600 words. Count your words carefully before responding. A short analysis is a failure. Write the full 500-600 words even if it feels long.
+
 Produce your response in EXACTLY this format (use these exact section headers):
 
 WINNER: [team name]
 CONFIDENCE: [number 1-100]
-ANALYSIS: [500-600 words analyzing this matchup. Name specific stats, form, history. No em dashes. No hedging openers like "In this matchup" or "When it comes to". Get straight to the point.]
+ANALYSIS: [Your analysis MUST be 500-600 words. Count carefully before responding. Cover: recent form (last 5 matches with specific results), head-to-head history (last 3-5 meetings with scores), key players and their current form, tactical matchup, injuries or suspensions, home/away record, motivation and stakes. Name specific stats, scores, and player names. No em dashes. No hedging openers like "In this matchup" or "When it comes to". Start directly with a substantive observation about the teams.]
 FACTORS FOR: [top 3 reasons the predicted winner wins, pipe-separated, e.g. factor one|factor two|factor three]
 FACTORS AGAINST: [top 3 risks for the predicted winner, pipe-separated]
-WHAT NOBODY IS SAYING: [one paragraph, the angle everyone is missing]
+WHAT NOBODY IS SAYING: [one substantive paragraph of 3-5 sentences, the angle everyone is missing. Must be a specific, non-obvious insight, not a generic observation.]
 IMAGE BRIEF: [one sentence describing a dramatic, cinematic visual scene for this matchup's hero image. No team logos, no text overlay. Pure visual scene.]
 
 Rules:
+- ANALYSIS must be exactly 500-600 words. This is not optional.
 - Confidence score must be justified by the analysis
-- Name specific stats and facts, not vague claims
+- Name specific stats, scores, and player names — not vague claims
 - No em dashes anywhere in your response
 - No hedging language
-- Analysis must be 500-600 words
 - Pipe-separate the factors, do not number them
 """
 
@@ -64,7 +66,8 @@ def parse_prediction(text, candidate):
 
     def extract(label, multiline=False):
         if multiline:
-            pattern = rf"^{label}:\s*(.+?)(?=\n[A-Z ]+:|$)"
+            # \Z = end of string; $ in MULTILINE matches end of every line (too greedy)
+            pattern = rf"^{label}:\s*(.+?)(?=\n[A-Z ]+:|\Z)"
             m = re.search(pattern, text, re.MULTILINE | re.DOTALL)
         else:
             pattern = rf"^{label}:\s*(.+)$"
@@ -106,7 +109,7 @@ def predict_one(candidate):
 
     message = client.messages.create(
         model="claude-haiku-4-5-20251001",
-        max_tokens=2048,
+        max_tokens=3000,
         messages=[
             {"role": "user", "content": build_prompt(candidate)}
         ],
