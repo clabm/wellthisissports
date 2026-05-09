@@ -9,7 +9,7 @@ import sys
 
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env.lando"))
 
 # Minimal env check before importing ingest
 required = ["APIFOOTBALL_API_KEY", "WTIS_SITE_URL", "WTIS_PIPELINE_API_KEY"]

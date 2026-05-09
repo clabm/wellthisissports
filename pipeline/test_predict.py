@@ -9,7 +9,7 @@ import sys
 
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env.lando"))
 
 required = ["ANTHROPIC_API_KEY"]
 missing = [k for k in required if not os.environ.get(k)]

@@ -9,7 +9,7 @@ import time
 
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env.lando"))
 
 logging.basicConfig(
     level=logging.INFO,

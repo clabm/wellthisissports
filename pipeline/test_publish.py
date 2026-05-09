@@ -11,7 +11,7 @@ import sys
 import requests
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env.lando"))
 
 required = [
     "WTIS_SITE_URL", "WTIS_PIPELINE_API_KEY",
