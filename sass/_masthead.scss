@@ -52,8 +52,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: $space-6;
-    padding: $space-4 0;
+    gap: $space-6; // 24px — logo / nav / mobile toggle breathing room
+    padding: $space-1 $space-4; // 4px vertical, 16px horizontal — clear screen edges
     min-height: 56px;
   }
 
