@@ -137,26 +137,28 @@ def upload_hero_image(local_path, filename, post_id):
 
 
 def create_matchup_post(prediction):
-    """POST to /wp-json/wtis/v1/matchups to create the post."""
+    """POST to /wp-json/wtis/v1/matchups to create the post.
+
+    Param names match pipeline-api.php wtis_pipeline_matchup_args() — no wtis_ prefix.
+    Response fields are post_id and permalink (not id/link).
+    """
     payload = {
-        "title": prediction["matchup_title"],
-        "status": "publish",
-        "wtis_team_home": prediction["team_home"],
-        "wtis_team_away": prediction["team_away"],
-        "wtis_matchup_title": prediction["matchup_title"],
-        "wtis_sport": prediction.get("sport", "Soccer"),
-        "wtis_league": prediction["league"],
-        "wtis_matchup_date": prediction["matchup_date"],
-        "wtis_prediction_winner": prediction["wtis_prediction_winner"],
-        "wtis_confidence_score": prediction["wtis_confidence_score"],
-        "wtis_analysis": prediction["wtis_analysis"],
-        "wtis_factors_for": prediction["wtis_factors_for"],
-        "wtis_factors_against": prediction["wtis_factors_against"],
+        "team_home": prediction["team_home"],
+        "team_away": prediction["team_away"],
+        "matchup_title": prediction["matchup_title"],
+        "sport": prediction.get("sport", "World Cup"),
+        "league": prediction["league"],
+        "matchup_date": prediction["matchup_date"],
+        "prediction_winner": prediction["wtis_prediction_winner"],
+        "confidence_score": prediction["wtis_confidence_score"],
+        "analysis": prediction["wtis_analysis"],
+        "factors_for": prediction["wtis_factors_for"],
+        "factors_against": prediction["wtis_factors_against"],
         "what_nobody_saying": prediction.get("wtis_what_nobody_saying", ""),
-        "wtis_image_brief_scene": prediction.get("wtis_image_brief_scene", ""),
-        "wtis_ai_generated": True,
-        "wtis_article_stage": prediction.get("wtis_article_stage", "matchup"),
-        "wtis_ingested_at": prediction.get("matchup_date", ""),
+        "image_brief_scene": prediction.get("wtis_image_brief_scene", ""),
+        "article_stage": prediction.get("wtis_article_stage", "matchup"),
+        "ingested_at": prediction.get("matchup_date", ""),
+        "post_status": "publish",
     }
 
     log.info("Creating WP post: %s", prediction["matchup_title"])
@@ -169,8 +171,9 @@ def create_matchup_post(prediction):
     )
     resp.raise_for_status()
 
-    post_id = resp.json().get("id")
-    post_url = resp.json().get("link", "")
+    data = resp.json()
+    post_id = data.get("post_id")
+    post_url = data.get("permalink", "")
     log.info("Created post ID: %d — %s", post_id, post_url)
     return post_id, post_url
 

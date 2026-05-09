@@ -37,27 +37,34 @@ resp = requests.get(
 print(f"  Status: {resp.status_code}")
 if resp.status_code == 200:
     print(f"  Response: {resp.json()}")
+elif resp.status_code == 401:
+    print("  FAIL: 401 Unauthorized — API key mismatch.")
+    print("  Check: the WTIS_PIPELINE_API_KEY in pipeline/.env.lando must exactly match")
+    print("  the value stored in WordPress via:")
+    print("    wp option get wtis_pipeline_api_key --allow-root")
+    print("  If they differ, update WP with:")
+    print("    wp option update wtis_pipeline_api_key 'YOUR_KEY' --allow-root")
+    sys.exit(1)
 else:
     print(f"  WARN: Status endpoint returned {resp.status_code} — {resp.text[:200]}")
 
 # Step 2: Create a test draft post
+# Param names match pipeline-api.php wtis_pipeline_matchup_args() — no wtis_ prefix.
 print("\nStep 2: Creating test DRAFT post...")
 test_payload = {
-    "title": "[TEST] Brazil vs Argentina — DELETE ME",
-    "status": "draft",
-    "wtis_team_home": "Brazil",
-    "wtis_team_away": "Argentina",
-    "wtis_matchup_title": "Brazil vs Argentina",
-    "wtis_sport": "Soccer",
-    "wtis_league": "FIFA World Cup",
-    "wtis_matchup_date": "2026-07-14T20:00:00+00:00",
-    "wtis_prediction_winner": "Brazil",
-    "wtis_confidence_score": 72,
-    "wtis_analysis": "Test analysis content.",
-    "wtis_factors_for": "Strong home support|Superior squad depth|Recent form",
-    "wtis_factors_against": "Argentina's Messi factor|High pressure tournament|Brazil's recent draws",
-    "wtis_ai_generated": True,
-    "wtis_article_stage": "matchup",
+    "team_home": "Brazil",
+    "team_away": "Argentina",
+    "matchup_title": "Brazil vs Argentina",
+    "sport": "World Cup",
+    "league": "FIFA World Cup",
+    "matchup_date": "2026-07-14T20:00:00+00:00",
+    "prediction_winner": "Brazil",
+    "confidence_score": 72,
+    "analysis": "Test analysis content.",
+    "factors_for": "Strong home support|Superior squad depth|Recent form",
+    "factors_against": "Argentina's Messi factor|High pressure tournament|Brazil's recent draws",
+    "article_stage": "matchup",
+    "post_status": "draft",
 }
 
 create_resp = requests.post(
@@ -73,9 +80,9 @@ if create_resp.status_code not in (200, 201):
     sys.exit(1)
 
 post_data = create_resp.json()
-post_id = post_data.get("id")
+post_id = post_data.get("post_id")
 print(f"  Created post ID: {post_id}")
-print(f"  URL: {post_data.get('link', 'N/A')}")
+print(f"  URL: {post_data.get('permalink', 'N/A')}")
 
 # Step 3: Verify post exists and meta is set
 print(f"\nStep 3: Verifying post meta via WP REST API...")
