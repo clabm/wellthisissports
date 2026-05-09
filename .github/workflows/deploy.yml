@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      # Theme path is not sensitive — hardcoded to avoid empty-secret failures.
       THEME_PATH: /home/master/applications/djxudszeqq/public_html/wp-content/themes/wellthiissports-child
       WP_ROOT: /home/master/applications/djxudszeqq/public_html
 
@@ -19,34 +18,44 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Trigger Cloudways git pull
-        uses: roelmagdaleno/cloudways-api-git-pull-action@v1.3.0
-        with:
-          email: ${{ secrets.CLOUDWAYS_EMAIL }}
-          api-key: ${{ secrets.CLOUDWAYS_API_KEY }}
-          server-id: ${{ secrets.CLOUDWAYS_SERVER_ID }}
-          app-id: ${{ secrets.CLOUDWAYS_APP_ID }}
-          branch-name: main
-          deploy-path: public_html/wp-content/themes/wellthiissports-child
-
-      - name: Sync git_repo → theme directory via SSH
+      - name: Deploy theme files via SSH rsync
         uses: appleboy/ssh-action@v1.2.5
+        env:
+          # Pass token as env var so it is not expanded inline in the script body
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           host: ${{ secrets.CLOUDWAYS_HOST }}
           username: ${{ secrets.CLOUDWAYS_USER }}
           key: ${{ secrets.CLOUDWAYS_SSH_PRIVATE_KEY }}
-          envs: THEME_PATH,WP_ROOT
+          envs: THEME_PATH,WP_ROOT,GH_TOKEN
           script: |
-            sleep 20
-            rsync -rl --no-perms --no-times --ignore-times \
-              --exclude='.git' --exclude='wordpress/' \
-              /home/master/applications/djxudszeqq/git_repo/ \
-              "$THEME_PATH"/
-            echo "Sync complete."
-            cd "$WP_ROOT" && wp cli update --allow-root --quiet || true
-            cd "$WP_ROOT" && wp eval 'opcache_reset();' --allow-root && echo "Opcache cleared." || echo "Opcache reset not available."
-            cd "$WP_ROOT" && wp cache flush --allow-root && echo "Object cache flushed." || echo "Object cache flush not available."
+            set -e
+            mkdir -p "$THEME_PATH"
+
+            STAGING=/tmp/wtis-deploy
+
+            if [ -d "$STAGING/.git" ]; then
+              cd "$STAGING" && git fetch origin main && git reset --hard origin/main
+            else
+              rm -rf "$STAGING"
+              git clone --depth=1 --branch=main \
+                "https://x-access-token:${GH_TOKEN}@github.com/clabm/wellthisissports.git" \
+                "$STAGING"
+            fi
+
+            rsync -rl --delete --no-perms \
+              --exclude='.git/' \
+              --exclude='wordpress/' \
+              --exclude='pipeline/' \
+              --exclude='.lando*' \
+              --exclude='node_modules/' \
+              --exclude='.sass-cache/' \
+              --exclude='*.md' \
+              "$STAGING/" "$THEME_PATH/"
+
+            echo "Rsync complete."
+
+            cd "$WP_ROOT" && wp cache flush --allow-root && echo "Object cache flushed." || true
             BREEZE_CACHE="$WP_ROOT/wp-content/cache"
-            rm -rf "$BREEZE_CACHE/breeze/" && echo "Breeze page cache cleared." || true
-            rm -rf "$BREEZE_CACHE/breeze-minification/" && echo "Breeze minification cache cleared." || true
-            echo "Cache purge complete."
+            rm -rf "$BREEZE_CACHE/breeze/" "$BREEZE_CACHE/breeze-minification/" && echo "Breeze cache cleared." || true
+            echo "Deploy complete."
