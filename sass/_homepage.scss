@@ -223,6 +223,13 @@
   }
 }
 
+// Homepage wrapper sits flush under masthead by default — add air on desktop only
+@media (min-width: #{$bp-lg + 1px}) {
+  .wtis-masthead + .wrapper.wtis-home {
+    margin-top: $space-8; // 32px below masthead
+  }
+}
+
 // ── Dark section rails (#111) ────────────────────────────────
 
 .wtis-home-dark {
