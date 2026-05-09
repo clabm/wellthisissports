@@ -54,11 +54,22 @@ All agents report to #ai-feed in The Collective Slack workspace. The Director ap
 ```
 git push origin main
   → GitHub Actions (deploy.yml)
-  → Cloudways API (git pull)
+  → SSH into server
+  → Clone repo to /tmp/wtis-deploy
+  → Rsync theme files to theme directory
   → Live on server (~60 seconds)
 ```
 
-Uses `roelmagdaleno/cloudways-api-git-pull-action@stable`.
+Deploy uses direct SSH clone + rsync via GitHub Actions. On every push to main, the workflow:
+1. SSHs into the server using CLOUDWAYS_SSH_PRIVATE_KEY
+2. Clones the repo to /tmp/wtis-deploy on the server
+3. Rsyncs theme files to the theme directory
+4. Cleans up /tmp/wtis-deploy
+
+SSH credentials required:
+- CLOUDWAYS_HOST: 104.131.188.232
+- CLOUDWAYS_USER: master_gxcccyduvu
+- CLOUDWAYS_SSH_PRIVATE_KEY: deploy key ~/.ssh/wellthisissports_deploy
 
 **Manual emergency deploy:** Cloudways dashboard → Application → Deployment via GIT → Pull.
 
@@ -446,7 +457,7 @@ Local URLs:
 - **PHP:** WordPress coding standards, escape all output, nonce all forms, prefix everything `wtis_`
 - **Sass:** Import `_tokens` first, never hardcode values, use mixins
 - **JS:** Vanilla JS only, no jQuery, IIFE pattern
-- **Deploy:** Never rsync, always Cloudways API via GitHub Actions
+- **Deploy:** Never rsync manually. Always deploy via GitHub Actions SSH workflow. The workflow handles rsync automatically on every push to main.
 - **Secrets:** Never commit credentials, use GitHub Secrets + env block in workflow
 - **CLAUDE.md:** Update in the same commit as any structural change
 
