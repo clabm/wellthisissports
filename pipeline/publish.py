@@ -203,6 +203,20 @@ def publish_one(prediction):
     # 1. Create WP post
     post_id, post_url = create_matchup_post(prediction)
 
+    # 1b. Set post title to personality headline if available
+    personality_headline = prediction.get("wtis_headline_personality", "").strip()
+    if personality_headline:
+        try:
+            requests.post(
+                f"{WP_BASE_URL}/wp-json/wp/v2/posts/{post_id}",
+                headers={**_basic_auth_headers(), "Content-Type": "application/json"},
+                json={"title": personality_headline},
+                timeout=15,
+            ).raise_for_status()
+            log.info("Post title set to: %s", personality_headline)
+        except Exception as exc:
+            log.error("Failed to set post title for %s: %s", matchup, exc)
+
     # 2. Generate and upload hero image
     try:
         local_path, filename = generate_hero_image(prediction)
