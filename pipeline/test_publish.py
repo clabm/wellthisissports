@@ -4,6 +4,7 @@ Writes a DRAFT post (not published) and reports meta fields.
 Run: python pipeline/test_publish.py
 """
 
+import base64
 import json
 import os
 import sys
@@ -24,6 +25,11 @@ if missing:
 
 WP_BASE_URL = os.environ["WTIS_SITE_URL"].rstrip("/")
 PIPELINE_API_KEY = os.environ["WTIS_PIPELINE_API_KEY"]
+WP_USERNAME = os.environ["WTIS_WP_USERNAME"]
+WP_APP_PASSWORD = os.environ["WTIS_WP_APP_PASSWORD"]
+
+_basic_auth = "Basic " + base64.b64encode(f"{WP_USERNAME}:{WP_APP_PASSWORD}".encode()).decode()
+BASIC_AUTH_HEADERS = {"Authorization": _basic_auth}
 
 print("=== test_publish.py ===\n")
 
@@ -85,10 +91,11 @@ print(f"  Created post ID: {post_id}")
 print(f"  URL: {post_data.get('permalink', 'N/A')}")
 
 # Step 3: Verify post exists and meta is set
+# wp/v2 endpoints require Basic auth, not the pipeline X-WTIS-Key.
 print(f"\nStep 3: Verifying post meta via WP REST API...")
 verify_resp = requests.get(
     f"{WP_BASE_URL}/wp-json/wp/v2/posts/{post_id}",
-    headers={"X-WTIS-Key": PIPELINE_API_KEY},
+    headers=BASIC_AUTH_HEADERS,
     params={"_fields": "id,title,status,meta"},
     timeout=15,
 )
@@ -106,9 +113,7 @@ print(f"  wtis_factors_for: {meta.get('wtis_factors_for', '')[:80]}")
 print(f"\nStep 4: Deleting test post {post_id}...")
 del_resp = requests.delete(
     f"{WP_BASE_URL}/wp-json/wp/v2/posts/{post_id}",
-    headers={"Authorization": "Basic " + __import__("base64").b64encode(
-        f"{os.environ['WTIS_WP_USERNAME']}:{os.environ['WTIS_WP_APP_PASSWORD']}".encode()
-    ).decode()},
+    headers=BASIC_AUTH_HEADERS,
     params={"force": True},
     timeout=15,
 )
