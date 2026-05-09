@@ -220,6 +220,7 @@ Dart Sass (not node-sass). Two paths:
 | `--wtis-off-white` | `#F7F7F5` | Page background default |
 | `--wtis-white` | `#FFFFFF` | Card surfaces, content areas |
 | `--wtis-gray-500` | `#6B6B6B` | Secondary text, metadata |
+| `--wtis-masthead-bg` | `#1a1a1a` | Sticky masthead / logo bar background |
 | `--wtis-hero-surface` | `#111111` | Full-bleed matchup hero panel (fixed dark; does not follow inverted `--wtis-ink`) |
 | `--wtis-hero-on-surface` | `#FFFFFF` | Primary type on hero panel |
 | `--wtis-hero-muted` | `#9B9B9B` | Hero panel metadata |
