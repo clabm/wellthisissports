@@ -37,6 +37,7 @@
   top: 0;
   z-index: var(--wtis-z-nav);
   background: var(--wtis-masthead-bg);
+  margin-bottom: 0;
   border-bottom: 1px solid transparent;
   transition:
     border-color $transition,
@@ -186,6 +187,13 @@
     color: rgba($wtis-white, 1);
     box-shadow: inset 0 -2px 0 0 var(--wtis-gold-400);
   }
+}
+
+// Understrap / Bootstrap `.wrapper` often adds top padding for a navbar we do
+// not use — removes the off-white strip between masthead and first content.
+.wtis-masthead + .wrapper {
+  margin-top: 0;
+  padding-top: 0;
 }
 
 @media (max-width: $bp-md) {

@@ -55,7 +55,7 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 							<?php wtis_home_print_badges( $h['grade'] ); ?>
 							<?php
 							$hero_img = $h['img_hero'] ? $h['img_hero'] : $h['img_card'];
-							wtis_home_print_media( $hero_img, 'hero', $h['title_line'], 'eager' );
+							wtis_home_print_media( $hero_img, 'hero', $h['media_alt'], 'eager' );
 							?>
 						</div>
 						<div class="wtis-home-hero__body">
@@ -80,7 +80,7 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 							<div class="wtis-home-compact__media">
 								<?php
 								$sq = $c['img_square'] ? $c['img_square'] : $c['img_card'];
-								wtis_home_print_media( $sq, 'compact', $c['title_line'] );
+								wtis_home_print_media( $sq, 'compact', $c['media_alt'] );
 								?>
 							</div>
 							<div class="wtis-home-compact__body">
@@ -120,7 +120,7 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 							<a href="<?php echo esc_url( $m['permalink'] ); ?>" class="wtis-home-mid-card__link">
 								<div class="wtis-home-mid-card__visual">
 									<?php wtis_home_print_badges( $m['grade'] ); ?>
-									<?php wtis_home_print_media( $m['img_card'], 'mid_band', $m['title_line'] ); ?>
+									<?php wtis_home_print_media( $m['img_card'], 'mid_band', $m['media_alt'] ); ?>
 								</div>
 								<div class="wtis-home-mid-card__body">
 									<?php if ( $m['sport'] ) : ?>
@@ -154,7 +154,7 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 								<div class="wtis-home-wide__media">
 									<?php
 									$wi = $w['img_square'] ? $w['img_square'] : $w['img_card'];
-									wtis_home_print_media( $wi, 'wide', $w['title_line'] );
+									wtis_home_print_media( $wi, 'wide', $w['media_alt'] );
 									?>
 								</div>
 								<div class="wtis-home-wide__body">

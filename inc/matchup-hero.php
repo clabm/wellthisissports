@@ -7,8 +7,8 @@
  * - $wtis_hero_heading_tag (string) — 'h1' or 'h2', default h1 when no permalink, else h2 (linked personality line only).
  * - $wtis_hero_show_urgent (bool) — show urgent update badge in panel.
  *
- * On single posts, visible document headings live in single.php; duplicate
- * title stack here is aria-hidden for sighted layout only.
+ * On single posts (no permalink), the headline stack is the document H3/H1/H2
+ * in this panel. Article body begins with analysis (no duplicate titles).
  *
  * @package wellthiissports-child
  */
@@ -32,11 +32,12 @@ $matchup_title_meta = trim( (string) get_post_meta( $hero_pid, 'wtis_matchup_tit
 $headline_personality = trim( (string) get_post_meta( $hero_pid, 'wtis_headline_personality', true ) );
 $headline_seo         = trim( (string) get_post_meta( $hero_pid, 'wtis_headline_seo', true ) );
 
-$label_home = $team_home ? $team_home : get_the_title( $hero_pid );
+$wp_title   = trim( (string) get_the_title( $hero_pid ) );
+$label_home = $team_home ? $team_home : $wp_title;
 $label_away = $team_away ? $team_away : '';
 $vs_line    = $label_away ? sprintf( '%s vs %s', $label_home, $label_away ) : $label_home;
 
-$personality_text = $headline_personality !== '' ? $headline_personality : ( $matchup_title_meta !== '' ? $matchup_title_meta : $vs_line );
+$personality_text = $headline_personality !== '' ? $headline_personality : ( $wp_title !== '' ? $wp_title : ( $matchup_title_meta !== '' ? $matchup_title_meta : $vs_line ) );
 if ( $headline_seo !== '' ) {
 	$seo_text = $headline_seo;
 } elseif ( $label_away !== '' ) {
@@ -95,11 +96,9 @@ if ( $link_url ) {
 			?>
 			<p class="wtis-matchup-hero__seo-line"><?php echo esc_html( $seo_text ); ?></p>
 			<?php else : ?>
-			<div class="wtis-matchup-hero__titles" aria-hidden="true">
-				<p class="wtis-matchup-hero__matchup-label"><?php echo esc_html( $vs_line ); ?></p>
-				<p class="wtis-matchup-hero__personality"><?php echo esc_html( $personality_text ); ?></p>
-				<p class="wtis-matchup-hero__seo-line"><?php echo esc_html( $seo_text ); ?></p>
-			</div>
+			<h3 class="wtis-matchup-hero__matchup-label"><?php echo esc_html( $vs_line ); ?></h3>
+			<h1 class="wtis-matchup-hero__personality"><?php echo esc_html( $personality_text ); ?></h1>
+			<h2 class="wtis-matchup-hero__seo-line"><?php echo esc_html( $seo_text ); ?></h2>
 			<?php endif; ?>
 
 			<div class="wtis-matchup-hero__meta">

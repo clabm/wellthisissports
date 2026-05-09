@@ -26,12 +26,14 @@ function wtis_home_matchup_payload( int $post_id ): array {
 
 	$h          = $team_home ? $team_home : get_the_title( $post_id );
 	$a          = $team_away ? $team_away : '';
-	$title_line = $a ? ( $h . ' vs ' . $a ) : $h;
+	$media_alt  = $a ? ( $h . ' vs ' . $a ) : $h;
+	$title_line = get_the_title( $post_id );
 
 	return [
 		'id'             => $post_id,
 		'permalink'      => get_permalink( $post_id ),
 		'title_line'     => $title_line,
+		'media_alt'      => $media_alt,
 		'sport'          => $sport,
 		'winner'         => $winner,
 		'confidence'     => $confidence,

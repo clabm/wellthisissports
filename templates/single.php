@@ -15,7 +15,6 @@ the_post();
 $post_id           = get_the_ID();
 $team_home         = get_post_meta( $post_id, 'wtis_team_home', true );
 $team_away         = get_post_meta( $post_id, 'wtis_team_away', true );
-$matchup_title     = get_post_meta( $post_id, 'wtis_matchup_title', true );
 $sport             = get_post_meta( $post_id, 'wtis_sport', true );
 $league            = get_post_meta( $post_id, 'wtis_league', true );
 $matchup_date      = get_post_meta( $post_id, 'wtis_matchup_date', true );
@@ -27,34 +26,7 @@ $factors_against   = get_post_meta( $post_id, 'wtis_factors_against', true );
 $actual_result     = get_post_meta( $post_id, 'wtis_actual_result', true );
 $pred_correct      = get_post_meta( $post_id, 'wtis_prediction_correct', true );
 $article_stage     = get_post_meta( $post_id, 'wtis_article_stage', true );
-$prediction_grade  = (int) get_post_meta( $post_id, 'wtis_prediction_grade', true );
-$ai_generated      = get_post_meta( $post_id, 'wtis_ai_generated', true );
-$ingested_at       = get_post_meta( $post_id, 'wtis_ingested_at', true );
 $nobody_saying     = get_post_meta( $post_id, 'wtis_what_nobody_saying', true );
-$headline_personality = trim( (string) get_post_meta( $post_id, 'wtis_headline_personality', true ) );
-$headline_seo         = trim( (string) get_post_meta( $post_id, 'wtis_headline_seo', true ) );
-
-$label_home = $team_home ? $team_home : get_the_title( $post_id );
-$label_away = $team_away ? $team_away : '';
-$vs_line    = $label_away ? sprintf( '%s vs %s', $label_home, $label_away ) : $label_home;
-$matchup_title_trim = trim( (string) $matchup_title );
-$story_h1 = $headline_personality !== '' ? $headline_personality : ( $matchup_title_trim !== '' ? $matchup_title_trim : $vs_line );
-if ( $headline_seo !== '' ) {
-	$story_h2 = $headline_seo;
-} elseif ( $label_away !== '' ) {
-	$story_h2 = sprintf(
-		/* translators: 1: home team, 2: away team */
-		__( '%1$s vs %2$s Prediction', 'wellthiissports-child' ),
-		$label_home,
-		$label_away
-	);
-} else {
-	$story_h2 = sprintf(
-		/* translators: %s: team or matchup label */
-		__( '%s Prediction', 'wellthiissports-child' ),
-		$label_home
-	);
-}
 
 $factors_for_list     = $factors_for ? array_filter( array_map( 'trim', explode( '|', $factors_for ) ) ) : [];
 $factors_against_list = $factors_against ? array_filter( array_map( 'trim', explode( '|', $factors_against ) ) ) : [];
@@ -103,46 +75,6 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 	<div class="wtis-matchup-article">
 		<div class="wtis-matchup-article__inner">
 			<div id="content" class="wtis-matchup-article__main">
-
-				<header class="wtis-story-headline-stack">
-					<h3 class="wtis-story-headline-stack__matchup"><?php echo esc_html( $vs_line ); ?></h3>
-					<h1 class="wtis-story-headline-stack__personality"><?php echo esc_html( $story_h1 ); ?></h1>
-					<h2 class="wtis-story-headline-stack__seo"><?php echo esc_html( $story_h2 ); ?></h2>
-					<div class="wtis-story-headline-stack__meta">
-						<?php if ( $sport ) : ?>
-						<span class="wtis-story-headline-stack__sport-pill"><?php echo esc_html( $sport ); ?></span>
-						<?php endif; ?>
-						<?php if ( $matchup_date ) : ?>
-						<span class="wtis-story-headline-stack__date"><?php echo esc_html( date_i18n( 'F j, Y', strtotime( $matchup_date ) ) ); ?></span>
-						<?php endif; ?>
-						<?php if ( $league ) : ?>
-						<?php if ( $sport || $matchup_date ) : ?>
-						<span class="wtis-story-headline-stack__meta-sep" aria-hidden="true">·</span>
-						<?php endif; ?>
-						<span class="wtis-story-headline-stack__league"><?php echo esc_html( $league ); ?></span>
-						<?php endif; ?>
-					</div>
-				</header>
-
-				<?php
-				$show_meta_row = $prediction_grade > 0 || $ingested_at
-					|| ( $article_stage && 'urgent_update' !== $article_stage )
-					|| metadata_exists( 'post', $post_id, 'wtis_ai_generated' );
-				?>
-				<?php if ( $show_meta_row ) : ?>
-				<div class="wtis-story-meta-row">
-					<?php if ( $prediction_grade > 0 ) : ?>
-					<span class="wtis-story-meta-row__item"><strong><?php esc_html_e( 'Grade', 'wellthiissports-child' ); ?></strong> <?php echo esc_html( (string) $prediction_grade ); ?></span>
-					<?php endif; ?>
-					<span class="wtis-story-meta-row__item"><strong><?php esc_html_e( 'Source', 'wellthiissports-child' ); ?></strong> <?php echo $ai_generated ? esc_html__( 'AI generated', 'wellthiissports-child' ) : esc_html__( 'Editorial', 'wellthiissports-child' ); ?></span>
-					<?php if ( $ingested_at ) : ?>
-					<span class="wtis-story-meta-row__item"><strong><?php esc_html_e( 'Ingested', 'wellthiissports-child' ); ?></strong> <?php echo esc_html( $ingested_at ); ?></span>
-					<?php endif; ?>
-					<?php if ( $article_stage && 'urgent_update' !== $article_stage ) : ?>
-					<span class="wtis-story-meta-row__item"><strong><?php esc_html_e( 'Stage', 'wellthiissports-child' ); ?></strong> <?php echo esc_html( $article_stage ); ?></span>
-					<?php endif; ?>
-				</div>
-				<?php endif; ?>
 
 				<?php if ( '' !== $pred_correct && $actual_result ) : ?>
 				<div class="wtis-result-block wtis-result-block--<?php echo $pred_correct ? 'correct' : 'incorrect'; ?>">
@@ -298,12 +230,9 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 						<?php
 						while ( $related_q->have_posts() ) :
 							$related_q->the_post();
-							$r_home = get_post_meta( get_the_ID(), 'wtis_team_home', true );
-							$r_away = get_post_meta( get_the_ID(), 'wtis_team_away', true );
-							$line   = trim( ( $r_home ? $r_home : get_the_title() ) . ( $r_away ? ' vs ' . $r_away : '' ) );
 							?>
 						<li class="wtis-related-matchups__item">
-							<a class="wtis-related-matchups__link" href="<?php the_permalink(); ?>"><?php echo esc_html( $line ); ?></a>
+							<a class="wtis-related-matchups__link" href="<?php the_permalink(); ?>"><?php echo esc_html( get_the_title() ); ?></a>
 						</li>
 							<?php
 						endwhile;
