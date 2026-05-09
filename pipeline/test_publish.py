@@ -9,6 +9,8 @@ import json
 import os
 import sys
 
+KEEP_POST = "--keep" in sys.argv
+
 import requests
 from dotenv import load_dotenv
 
@@ -109,17 +111,23 @@ print(f"  wtis_prediction_winner: {meta.get('wtis_prediction_winner')}")
 print(f"  wtis_confidence_score: {meta.get('wtis_confidence_score')}")
 print(f"  wtis_factors_for: {meta.get('wtis_factors_for', '')[:80]}")
 
-# Step 4: Delete the test post
-print(f"\nStep 4: Deleting test post {post_id}...")
-del_resp = requests.delete(
-    f"{WP_BASE_URL}/wp-json/wp/v2/posts/{post_id}",
-    headers=BASIC_AUTH_HEADERS,
-    params={"force": True},
-    timeout=15,
-)
-if del_resp.status_code in (200, 410):
-    print(f"  Test post deleted: OK")
+# Step 4: Delete or keep the test post
+if KEEP_POST:
+    print(f"\nStep 4: --keep flag set — leaving draft post on server for Director review")
+    print(f"  Post ID : {post_id}")
+    print(f"  URL     : {post_data.get('permalink', 'N/A')}")
+    print(f"  To delete manually: wp post delete {post_id} --force --allow-root")
 else:
-    print(f"  WARN: Could not delete test post ({del_resp.status_code}) — delete it manually")
+    print(f"\nStep 4: Deleting test post {post_id}...")
+    del_resp = requests.delete(
+        f"{WP_BASE_URL}/wp-json/wp/v2/posts/{post_id}",
+        headers=BASIC_AUTH_HEADERS,
+        params={"force": True},
+        timeout=15,
+    )
+    if del_resp.status_code in (200, 410):
+        print(f"  Test post deleted: OK")
+    else:
+        print(f"  WARN: Could not delete test post ({del_resp.status_code}) — delete it manually")
 
 print("\n=== test_publish.py PASSED ===")
