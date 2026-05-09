@@ -113,6 +113,24 @@
     });
   }
 
+  function initMastheadScroll() {
+    var masthead = document.querySelector('.wtis-masthead');
+    if (!masthead) return;
+
+    var threshold = 8;
+
+    function update() {
+      if (window.scrollY > threshold) {
+        masthead.classList.add('is-scrolled');
+      } else {
+        masthead.classList.remove('is-scrolled');
+      }
+    }
+
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+  }
+
   function initShare() {
     var btns = Array.prototype.slice.call(
       document.querySelectorAll('.wtis-share__btn')
@@ -165,6 +183,7 @@
 
   function init() {
     initMobileNav();
+    initMastheadScroll();
     initConfidenceMeters();
     initNewsletterForm();
     initShare();

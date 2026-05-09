@@ -9,8 +9,15 @@
   top: 0;
   z-index: var(--wtis-z-nav);
   background: var(--wtis-white);
-  border-bottom: 1px solid $rule;
-  box-shadow: 0 $space-1 $space-3 rgba($wtis-ink, 0.06);
+  border-bottom: 1px solid transparent;
+  transition:
+    border-color $transition,
+    box-shadow $transition;
+
+  &.is-scrolled {
+    border-bottom-color: var(--wtis-gold-400);
+    box-shadow: 0 $space-1 $space-3 rgba($wtis-ink, 0.06);
+  }
 
   &__inner {
     display: flex;
@@ -32,14 +39,14 @@
     font-size: $text-2xl;
     font-weight: 700;
     line-height: 1.05;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
     text-decoration: none;
     color: var(--wtis-ink);
-    transition: color $transition;
+    transition: opacity $transition;
 
     &:hover {
-      color: var(--wtis-gold-600);
+      opacity: 0.85;
     }
   }
 

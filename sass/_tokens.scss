@@ -63,6 +63,12 @@
   --wtis-text-3xl:    28px;   // display medium
   --wtis-text-4xl:    36px;   // display large
   --wtis-text-5xl:    48px;   // display hero / confidence score
+  --wtis-text-6xl:    64px;   // sidebar / hero confidence hero number
+
+  // Hero panel (fixed dark surface; does not invert in dark mode)
+  --wtis-hero-surface:     #111111;
+  --wtis-hero-on-surface:  #FFFFFF;
+  --wtis-hero-muted:       #9B9B9B;
 
   // Spacing scale (base 4px)
   --wtis-space-1:     4px;
@@ -108,6 +114,10 @@
   --wtis-off-white: #1A1A1A;
   --wtis-white:     #242424;
   --wtis-gray-500:  #9B9B9B;
+  // Hero stays editorial dark + light type
+  --wtis-hero-surface:     #111111;
+  --wtis-hero-on-surface:  #FFFFFF;
+  --wtis-hero-muted:       #9B9B9B;
 }
 
 [data-theme="dark"] {
@@ -167,6 +177,7 @@ $text-2xl:    24px;
 $text-3xl:    28px;
 $text-4xl:    36px;
 $text-5xl:    48px;
+$text-6xl:    64px;
 
 // Spacing scale (base 4px — keeps $space-5 / $space-10 for
 // existing partials; canonical CSS custom props above are the
@@ -285,4 +296,35 @@ $confidence-low:  $red-500;
   font-weight: 700;
   color: var(--wtis-gold-400);
   line-height: 1;
+}
+
+// Large confidence numeral (sidebar / hero emphasis)
+@mixin confidence-score-xl {
+  font-family: $font-display;
+  font-size: $text-6xl;
+  font-weight: 700;
+  color: var(--wtis-gold-400);
+  line-height: 1;
+}
+
+// Ringer-style section rail heading
+@mixin section-rail-heading {
+  font-family: $font-display;
+  font-size: $text-3xl;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--wtis-ink);
+  margin: 0;
+}
+
+// Meta caption (HOME, AWAY, STRENGTHS)
+@mixin meta-caps {
+  font-family: $font-ui;
+  font-size: $text-sm;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--wtis-gray-500);
 }

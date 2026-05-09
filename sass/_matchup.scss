@@ -1,88 +1,313 @@
 // ─────────────────────────────────────────────────────────────
 // _matchup.scss
-// Prediction detail: hero, confidence meter, pick, analysis, result.
+// Matchup hero, article + sidebar, meters, result, analysis.
 // ─────────────────────────────────────────────────────────────
 @use 'tokens' as *;
 
-.wtis-story-img {
+// ── Full-bleed hero (single + homepage) ─────────────────────
+
+.wtis-matchup-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 60vh;
   width: 100%;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  margin-bottom: $space-8;
-  border-radius: $radius-lg;
-  background: var(--wtis-blue-50);
+  max-width: 100vw;
+  background: var(--wtis-hero-surface);
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  &__media {
+    position: relative;
+    min-height: 60vh;
+    overflow: hidden;
+    background: var(--wtis-blue-50);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      min-height: 60vh;
+    }
   }
-}
 
-.wtis-story {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: $space-6 0 $space-16;
+  &__media-placeholder {
+    width: 100%;
+    min-height: 60vh;
+    background: linear-gradient(
+      135deg,
+      var(--wtis-blue-50) 0%,
+      var(--wtis-gold-50) 100%
+    );
+  }
 
-  &__meta {
+  &__panel {
     display: flex;
-    flex-wrap: wrap;
-    gap: $space-3 $space-4;
-    align-items: center;
-    margin-bottom: $space-4;
+    align-items: stretch;
+    justify-content: center;
+    background: var(--wtis-hero-surface);
+    color: var(--wtis-hero-on-surface);
+    position: relative;
+  }
+
+  &__panel-inner {
+    width: 100%;
+    max-width: 36rem;
+    padding: $space-8 $space-8 $space-12;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: $space-4;
   }
 
   &__sport {
+    @include meta-caps;
     display: inline-block;
-    font-family: $font-ui;
-    font-size: $text-xs;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    align-self: flex-start;
+    margin: 0;
     padding: $space-1 $space-3;
     border-radius: $radius-pill;
-    background: var(--wtis-blue-50);
-    color: var(--wtis-blue-500);
+    background: var(--wtis-blue-500);
+    color: var(--wtis-white);
   }
 
-  &__league {
-    @include ui-label;
-    color: var(--wtis-gray-500);
+  &__title {
+    font-family: $font-display;
+    font-size: $text-4xl;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    margin: 0;
+    color: var(--wtis-hero-on-surface);
   }
 
-  &__date {
-    @include ui-label;
-    color: var(--wtis-gray-500);
+  &__title-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color $transition;
+
+    &:hover {
+      color: var(--wtis-gold-400);
+    }
   }
 
-  &__title-sub {
-    @include headline($text-lg);
-    margin: 0 0 $space-4;
-    color: var(--wtis-gray-500);
-  }
-
-  &__headline {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: $space-3 $space-4;
-    margin: 0 0 $space-6;
-    padding: 0;
-    font-weight: inherit;
-  }
-
-  &__team-home,
-  &__team-away {
-    @include headline-display($text-4xl);
+  &__team {
+    display: inline;
   }
 
   &__vs {
     font-family: $font-ui;
     font-size: $text-md;
     font-weight: 600;
-    color: var(--wtis-gray-500);
     text-transform: uppercase;
     letter-spacing: 0.08em;
+    color: var(--wtis-hero-muted);
+    margin: 0 $space-2;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $space-2;
+    font-family: $font-ui;
+    font-size: $text-sm;
+    font-weight: 400;
+    color: var(--wtis-hero-muted);
+    margin: 0;
+  }
+
+  &__meta-sep {
+    opacity: 0.7;
+  }
+
+  &__pick {
+    margin-top: $space-4;
+    padding-top: $space-6;
+    border-top: 1px solid rgba($wtis-white, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+
+  &__pick-label {
+    @include meta-caps;
+    color: var(--wtis-gold-400);
+    margin: 0;
+  }
+
+  &__pick-winner {
+    font-family: $font-display;
+    font-size: $text-5xl;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--wtis-hero-on-surface);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  &__pick-score {
+    display: flex;
+    align-items: baseline;
+    gap: $space-3;
+    margin-top: $space-2;
+  }
+
+  &__pick-score-num {
+    @include confidence-score-xl;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__pick-score-suffix {
+    font-family: $font-ui;
+    font-size: $text-sm;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--wtis-gold-400);
+  }
+
+  &__accent {
+    margin-top: auto;
+    padding-top: $space-6;
+    border-bottom: 3px solid var(--wtis-gold-400);
+    width: 100%;
+    max-width: 8rem;
+  }
+}
+
+// ── Article shell (centered, main + sidebar) ─────────────────
+
+.wtis-matchup-article {
+  background: var(--wtis-off-white);
+  padding: $space-12 0 $space-16;
+
+  &__inner {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 $space-4;
+    display: grid;
+    grid-template-columns: 65% 35%;
+    gap: $space-10;
+    align-items: start;
+  }
+
+  &__main {
+    min-width: 0;
+  }
+
+  &__sidebar {
+    position: sticky;
+    top: calc(#{$space-10} + #{$space-8});
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: $space-6;
+    min-width: 0;
+  }
+}
+
+.wtis-matchup-dek {
+  @include headline($text-lg);
+  margin: 0 0 $space-6;
+  color: var(--wtis-gray-500);
+}
+
+// ── Sidebar cards ────────────────────────────────────────────
+
+.wtis-sidebar-card {
+  background: var(--wtis-white);
+  border: 1px solid $rule;
+  border-radius: $radius-lg;
+  padding: $space-5;
+
+  &__heading {
+    @include section-rail-heading;
+    font-size: $text-xl;
+    margin: 0 0 $space-4;
+    padding-bottom: $space-3;
+    border-bottom: 1px solid $rule;
+  }
+
+  &__label {
+    @include meta-caps;
+    margin: 0 0 $space-2;
+    color: var(--wtis-gray-500);
+  }
+
+  &--meter {
+    border-top: 4px solid var(--wtis-gold-400);
+  }
+
+  &--ledger {
+    border-top: 4px solid var(--wtis-green-500);
+  }
+}
+
+.wtis-sidebar-ledger {
+  &__sport {
+    @include headline-display($text-xl);
+    margin: 0 0 $space-2;
+    text-transform: uppercase;
+  }
+
+  &__record {
+    font-family: $font-display;
+    font-size: $text-3xl;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  &__w {
+    color: var(--wtis-green-500);
+  }
+
+  &__l {
+    color: var(--wtis-red-500);
+  }
+
+  &__sep {
+    color: var(--wtis-gray-500);
+    margin: 0 $space-1;
+  }
+
+  &__accuracy {
+    font-family: $font-display;
+    font-size: $text-xl;
+    font-weight: 700;
+    margin: $space-2 0 0;
+    color: var(--wtis-ink);
+  }
+}
+
+.wtis-related-matchups {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  &__item {
+    border-top: 1px solid $rule;
+
+    &:first-child {
+      border-top: none;
+    }
+  }
+
+  &__link {
+    display: block;
+    padding: $space-3 0;
+    font-family: $font-display;
+    font-size: $text-lg;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--wtis-ink);
+    line-height: 1.2;
+    transition: color $transition;
+
+    &:hover {
+      color: var(--wtis-blue-500);
+    }
   }
 }
 
@@ -92,9 +317,9 @@
   display: flex;
   flex-wrap: wrap;
   gap: $space-3;
-  margin-bottom: $space-6;
+  margin-bottom: $space-8;
   padding: $space-3 $space-4;
-  background: var(--wtis-off-white);
+  background: var(--wtis-white);
   border-radius: $radius-md;
   border: 1px solid $rule;
   font-family: $font-ui;
@@ -104,10 +329,6 @@
   &__item strong {
     color: var(--wtis-ink);
     font-weight: 600;
-  }
-
-  &__item--full {
-    flex: 1 1 100%;
   }
 }
 
@@ -127,108 +348,88 @@
   padding: $space-2 $space-4;
   border-radius: $radius-sm;
   margin-bottom: $space-4;
+
+  &--hero {
+    margin-bottom: 0;
+  }
 }
 
-// ── Team breakdown (two columns) ─────────────────────────────
+// ── Team breakdown (sidebar stack) ─────────────────────────
 
 .wtis-team-breakdown {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: $space-4;
-  margin-bottom: $space-8;
+
+  &--sidebar {
+    grid-template-columns: 1fr;
+    gap: $space-4;
+  }
 
   &__col {
-    padding: $space-5;
+    padding: $space-4;
     border-radius: $radius-lg;
-    background: var(--wtis-white);
+    background: var(--wtis-off-white);
     border: 1px solid $rule;
   }
 
   &__col--home {
-    border-top: 4px solid var(--wtis-blue-500);
+    border-left: 4px solid var(--wtis-blue-500);
   }
 
   &__col--away {
-    border-top: 4px solid var(--wtis-gold-400);
+    border-left: 4px solid var(--wtis-gold-400);
   }
 
   &__heading {
-    @include ui-label;
-    color: var(--wtis-ink);
+    @include meta-caps;
     margin: 0 0 $space-2;
+    color: var(--wtis-gray-500);
   }
 
   &__name {
-    @include headline-display($text-2xl);
+    @include headline-display($text-xl);
     margin: 0 0 $space-3;
+    text-transform: uppercase;
   }
 
   &__label {
-    font-family: $font-ui;
-    font-size: $text-xs;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    @include meta-caps;
     margin: $space-3 0 $space-1;
-    color: var(--wtis-gray-500);
   }
 
   &__text {
-    @include body-copy($text-md);
+    font-family: $font-body;
+    font-size: $text-md;
+    font-weight: 400;
+    line-height: 1.6;
     margin: 0;
-    color: var(--wtis-gray-500);
-  }
-}
-
-// ── Prediction block + The Pick ──────────────────────────────
-
-.wtis-prediction-block {
-  background: var(--wtis-gold-50);
-  border: 1px solid rgba($gold-600, 0.35);
-  border-radius: $radius-lg;
-  padding: $space-6;
-  margin-bottom: $space-8;
-
-  &__pick {
-    display: flex;
-    flex-direction: column;
-    gap: $space-2;
-    margin-bottom: $space-4;
-  }
-
-  &__label {
-    @include ui-label;
-    color: var(--wtis-gold-600);
-  }
-
-  &__winner {
-    @include headline-display($text-4xl);
     color: var(--wtis-ink);
   }
-
-  &__score-range {
-    font-family: $font-display;
-    font-size: $text-2xl;
-    font-weight: 700;
-    color: var(--wtis-blue-500);
-    margin: 0;
-  }
-
-  &__score-range-note {
-    font-family: $font-ui;
-    font-size: $text-sm;
-    color: var(--wtis-gray-500);
-    margin: $space-2 0 0;
-  }
 }
 
-// ── Confidence meter (detail hero) ───────────────────────────
+// ── Confidence meter ───────────────────────────────────────
 
 .wtis-confidence-meter {
   --confidence: 0;
 
-  &--hero {
-    margin-top: $space-4;
+  &--sidebar {
+    .wtis-confidence-meter__hero-row {
+      margin-bottom: $space-3;
+    }
+
+    .wtis-confidence-meter__value {
+      @include confidence-score-xl;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .wtis-confidence-meter__unit {
+      display: none;
+    }
+  }
+
+  &--card {
+    margin-top: $space-2;
   }
 
   &__hero-row {
@@ -256,7 +457,7 @@
 
   &__bar {
     height: 10px;
-    background: var(--wtis-white);
+    background: var(--wtis-off-white);
     border: 1px solid rgba($gold-600, 0.4);
     border-radius: $radius-pill;
     overflow: hidden;
@@ -312,17 +513,25 @@
   margin-bottom: $space-10;
 
   &__heading {
-    @include headline-display($text-3xl);
-    margin: 0 0 $space-4;
+    @include section-rail-heading;
+    margin: 0 0 $space-6;
     padding-bottom: $space-3;
     border-bottom: 1px solid $rule;
   }
 
   &__body {
-    @include body-copy;
+    font-family: $font-body;
+    font-size: $text-lg;
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--wtis-ink);
 
     p {
-      margin-bottom: $space-5;
+      margin: 0 0 $space-6;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
 }

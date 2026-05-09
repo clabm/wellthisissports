@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────────────────────────
 // _takeaways.scss
-// Factors for / against, optional "what nobody is saying".
+// Factors for / against, "what nobody is saying".
 // ─────────────────────────────────────────────────────────────
 @use 'tokens' as *;
 
@@ -9,8 +9,8 @@
 }
 
 .wtis-takeaways__heading {
-  @include headline-display($text-2xl);
-  margin: 0 0 $space-4;
+  @include section-rail-heading;
+  margin: 0 0 $space-6;
   padding-bottom: $space-3;
   border-bottom: 1px solid $rule;
 }
@@ -37,11 +37,7 @@
 }
 
 .wtis-takeaways__col-title {
-  font-family: $font-ui;
-  font-size: $text-xs;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  @include meta-caps;
   margin: 0 0 $space-3;
   color: var(--wtis-ink);
 }
@@ -55,10 +51,10 @@
     position: relative;
     padding: $space-3 0 $space-3 $space-5;
     font-family: $font-body;
-    font-size: $text-md;
-    line-height: 1.5;
+    font-size: $text-lg;
+    line-height: 1.6;
     color: var(--wtis-ink);
-    border-bottom: 1px solid $rule;
+    border-bottom: 1px solid rgba($wtis-ink, 0.08);
 
     &:last-child {
       border-bottom: none;
@@ -89,17 +85,21 @@
   margin-top: $space-8;
   padding: $space-6;
   border-radius: $radius-lg;
-  background: var(--wtis-blue-50);
-  border-left: 4px solid var(--wtis-blue-500);
+  background: var(--wtis-gold-50);
+  border-left: 4px solid var(--wtis-gold-400);
 
   &__label {
-    @include ui-label;
-    color: var(--wtis-blue-500);
-    margin-bottom: $space-2;
+    @include section-rail-heading;
+    font-size: $text-xl;
+    margin: 0 0 $space-4;
+    color: var(--wtis-ink);
   }
 
   &__body {
-    @include body-copy($text-lg);
+    font-family: $font-body;
+    font-size: $text-lg;
+    font-weight: 400;
+    line-height: 1.7;
     margin: 0;
     color: var(--wtis-ink);
   }

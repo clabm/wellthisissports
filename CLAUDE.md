@@ -141,6 +141,7 @@ repo-root/                          ← child theme root (wellthisiissports-chil
 │   ├── pipeline-api.php            ← all custom REST endpoints
 │   ├── custom-fields.php           ← editorial meta box
 │   ├── masthead.php                ← site header / nav include
+│   ├── matchup-hero.php            ← shared 50/50 matchup hero (single + home)
 │   └── footer-content.php         ← footer include
 ├── templates/
 │   ├── front-page.php              ← matchup grid homepage
@@ -217,6 +218,9 @@ Dart Sass (not node-sass). Two paths:
 | `--wtis-off-white` | `#F7F7F5` | Page background default |
 | `--wtis-white` | `#FFFFFF` | Card surfaces, content areas |
 | `--wtis-gray-500` | `#6B6B6B` | Secondary text, metadata |
+| `--wtis-hero-surface` | `#111111` | Full-bleed matchup hero panel (fixed dark; does not follow inverted `--wtis-ink`) |
+| `--wtis-hero-on-surface` | `#FFFFFF` | Primary type on hero panel |
+| `--wtis-hero-muted` | `#9B9B9B` | Hero panel metadata |
 
 **Typography**
 
@@ -226,14 +230,15 @@ Dart Sass (not node-sass). Two paths:
 | Headline font | Barlow SemiBold | Section headings, card titles |
 | Body font | Inter Regular | Analysis text, summaries |
 | UI font | Inter Medium | Labels, tags, metadata, nav |
-| Confidence score | Barlow Condensed Bold, 48px | Confidence meter hero number |
+| Confidence score | Barlow Condensed Bold, 48px | Card / compact meter numerals |
+| Confidence score (large) | Barlow Condensed Bold, 64px | Sidebar meter + hero pick score numeral (`--wtis-text-6xl`) |
 
 **Usage rules**
 - Gold owns the confidence meter and every primary CTA
 - Red is reserved for URGENT UPDATE badge and upset alerts only
 - Green is reserved for correct predictions and positive ledger values
 - Barlow Condensed at large sizes for all matchup and score displays
-- Dark mode: auto via OS device setting, all tokens have dark equivalents in `_tokens.scss`
+- Dark mode: auto via OS device setting; page chrome uses dark equivalents in `_tokens.scss`. Matchup hero panel keeps `--wtis-hero-surface` for editorial contrast.
 
 ---
 

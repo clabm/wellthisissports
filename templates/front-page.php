@@ -1,7 +1,7 @@
 <?php
 /**
  * front-page.php
- * Homepage: ledger widget, matchup grid by sport section.
+ * Homepage: ledger strip, featured hero, matchup grid by sport.
  *
  * @package wellthiissports-child
  */
@@ -9,6 +9,29 @@
 defined( 'ABSPATH' ) || exit;
 
 get_header();
+
+$hero_query = new WP_Query(
+	[
+		'posts_per_page' => 1,
+		'post_status'    => 'publish',
+		'orderby'        => 'date',
+		'order'          => 'DESC',
+		'meta_query'     => [
+			[
+				'key'     => 'wtis_matchup_date',
+				'compare' => 'EXISTS',
+			],
+		],
+	]
+);
+$hero_post_id = 0;
+$hero_link    = '';
+if ( $hero_query->have_posts() ) {
+	$hero_query->the_post();
+	$hero_post_id = get_the_ID();
+	$hero_link    = get_permalink( $hero_post_id );
+	wp_reset_postdata();
+}
 
 $matchup_args = [
 	'posts_per_page' => 60,
@@ -22,6 +45,9 @@ $matchup_args = [
 		],
 	],
 ];
+if ( $hero_post_id ) {
+	$matchup_args['post__not_in'] = [ $hero_post_id ];
+}
 $matchup_query = new WP_Query( $matchup_args );
 
 $by_sport = [];
@@ -44,57 +70,51 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 ?>
 
 <div class="wrapper" id="page-wrapper">
-	<div class="container">
 
-		<?php if ( ! empty( $ledger ) ) : ?>
-		<section class="wtis-ledger-widget" aria-labelledby="wtis-ledger-widget-title">
-			<h2 id="wtis-ledger-widget-title" class="wtis-ledger-widget__title"><?php esc_html_e( 'Accuracy ledger', 'wellthiissports-child' ); ?></h2>
-			<div class="wtis-ledger-widget__grid">
+	<?php if ( ! empty( $ledger ) ) : ?>
+	<section class="wtis-ledger-bar" aria-labelledby="wtis-ledger-bar-title">
+		<div class="wtis-ledger-bar__inner">
+			<h2 id="wtis-ledger-bar-title" class="wtis-ledger-bar__label"><?php esc_html_e( 'Our record', 'wellthiissports-child' ); ?></h2>
+			<div class="wtis-ledger-bar__items" role="list">
 				<?php foreach ( $ledger as $sport_name => $data ) : ?>
 					<?php
-					$total    = isset( $data['total'] ) ? (int) $data['total'] : 0;
-					$correct  = isset( $data['correct'] ) ? (int) $data['correct'] : 0;
-					$wrong    = max( 0, $total - $correct );
-					$accuracy = isset( $data['accuracy'] ) ? (float) $data['accuracy'] : 0.0;
-					$streak   = isset( $data['streak'] ) ? (int) $data['streak'] : 0;
-					$tone     = $accuracy >= 55.0 ? 'high' : ( $accuracy >= 45.0 ? 'mid' : 'low' );
+					$total   = isset( $data['total'] ) ? (int) $data['total'] : 0;
+					$correct = isset( $data['correct'] ) ? (int) $data['correct'] : 0;
+					$wrong   = max( 0, $total - $correct );
 					?>
-				<div class="wtis-ledger-widget__item">
-					<div class="wtis-ledger-widget__sport"><?php echo esc_html( $sport_name ); ?></div>
-					<div class="wtis-ledger-widget__record" aria-label="<?php esc_attr_e( 'Wins and losses', 'wellthiissports-child' ); ?>">
-						<span class="wtis-ledger-widget__record-w"><?php echo esc_html( (string) $correct ); ?>W</span>
-						<span class="wtis-ledger-widget__record-sep" aria-hidden="true"> — </span>
-						<span class="wtis-ledger-widget__record-l"><?php echo esc_html( (string) $wrong ); ?>L</span>
-					</div>
-					<div class="wtis-ledger-widget__accuracy wtis-ledger-widget__accuracy--<?php echo esc_attr( $tone ); ?>">
-						<?php echo esc_html( number_format_i18n( $accuracy, 1 ) ); ?>%
-					</div>
-					<?php if ( $streak !== 0 ) : ?>
-					<div class="wtis-ledger-widget__streak">
-						<?php
-						printf(
-							/* translators: %d: streak count (signed) */
-							esc_html__( 'Streak: %+d', 'wellthiissports-child' ),
-							(int) $streak
-						);
-						?>
-					</div>
-					<?php endif; ?>
+				<div class="wtis-ledger-bar__item" role="listitem">
+					<span class="wtis-ledger-bar__sport"><?php echo esc_html( $sport_name ); ?></span>
+					<span class="wtis-ledger-bar__nums" aria-label="<?php echo esc_attr( $sport_name . ' ' . $correct . ' wins ' . $wrong . ' losses' ); ?>">
+						<span class="wtis-ledger-bar__w"><?php echo esc_html( (string) $correct ); ?></span>
+						<span class="wtis-ledger-bar__sep" aria-hidden="true">-</span>
+						<span class="wtis-ledger-bar__l"><?php echo esc_html( (string) $wrong ); ?></span>
+					</span>
 				</div>
 				<?php endforeach; ?>
 			</div>
-		</section>
-		<?php endif; ?>
+		</div>
+	</section>
+	<?php endif; ?>
+
+	<?php
+	if ( $hero_post_id ) {
+		$wtis_hero_post_id     = $hero_post_id;
+		$wtis_hero_permalink   = $hero_link;
+		$wtis_hero_heading_tag = 'h2';
+		require get_stylesheet_directory() . '/inc/matchup-hero.php';
+		unset( $wtis_hero_post_id, $wtis_hero_permalink, $wtis_hero_heading_tag );
+	}
+	?>
+
+	<div class="wtis-home-body">
+		<div class="container">
 
 		<?php if ( ! empty( $by_sport ) ) : ?>
 		<main id="content">
 		<?php
-		$section_i = 0;
 		foreach ( $by_sport as $sport_label => $post_ids ) :
-			$section_i++;
-			$mod_class = ( 0 === $section_i % 2 ) ? ' wtis-sport-section--alt' : '';
 			?>
-		<section class="wtis-sport-section<?php echo esc_attr( $mod_class ); ?>" aria-labelledby="<?php echo esc_attr( 'wtis-sport-' . sanitize_title( $sport_label ) ); ?>">
+		<section class="wtis-sport-section" aria-labelledby="<?php echo esc_attr( 'wtis-sport-' . sanitize_title( $sport_label ) ); ?>">
 			<header class="wtis-sport-section__header">
 				<h2 id="<?php echo esc_attr( 'wtis-sport-' . sanitize_title( $sport_label ) ); ?>" class="wtis-sport-section__title"><?php echo esc_html( $sport_label ); ?></h2>
 				<span class="wtis-sport-section__meta">
@@ -123,13 +143,14 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 						$actual_result  = get_post_meta( $post_id, 'wtis_actual_result', true );
 						$feat_img       = get_the_post_thumbnail_url( $post_id, 'wtis-card' );
 						$permalink      = get_permalink( $post_id );
+						$factors_for    = get_post_meta( $post_id, 'wtis_factors_for', true );
+						$factors_list   = $factors_for ? array_filter( array_map( 'trim', explode( '|', $factors_for ) ) ) : [];
+						$excerpt_line   = $factors_list ? $factors_list[0] : '';
 						?>
 					<article class="wtis-matchup-card <?php echo $grade >= 8 ? 'wtis-matchup-card--featured' : ''; ?>">
 						<a href="<?php echo esc_url( $permalink ); ?>" class="wtis-matchup-card__link">
 							<?php if ( $grade >= 8 ) : ?>
 							<span class="wtis-matchup-card__badge"><?php esc_html_e( 'Card pick', 'wellthiissports-child' ); ?></span>
-							<?php elseif ( $winner ) : ?>
-							<span class="wtis-matchup-card__badge"><?php esc_html_e( 'Prediction', 'wellthiissports-child' ); ?></span>
 							<?php endif; ?>
 
 							<?php if ( $feat_img ) : ?>
@@ -173,12 +194,16 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 									<span class="wtis-matchup-card__confidence-num"><?php echo esc_html( (string) $confidence ); ?></span>
 									<span class="wtis-matchup-card__confidence-suffix"><?php esc_html_e( 'confidence', 'wellthiissports-child' ); ?></span>
 								</div>
-								<div class="wtis-confidence-meter" style="--confidence: <?php echo esc_attr( (string) $confidence ); ?>">
+								<div class="wtis-confidence-meter wtis-confidence-meter--card" style="--confidence: <?php echo esc_attr( (string) $confidence ); ?>">
 									<div class="wtis-confidence-meter__bar" role="presentation">
 										<div class="wtis-confidence-meter__fill"></div>
 									</div>
 									<span class="wtis-confidence-meter__label"><?php echo esc_html( (string) $confidence ); ?>% <?php esc_html_e( 'model confidence', 'wellthiissports-child' ); ?></span>
 								</div>
+								<?php endif; ?>
+
+								<?php if ( $excerpt_line ) : ?>
+								<p class="wtis-matchup-card__excerpt"><?php echo esc_html( $excerpt_line ); ?></p>
 								<?php endif; ?>
 
 								<?php if ( '' !== $pred_correct && $actual_result ) : ?>
@@ -204,12 +229,13 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 
 		<?php endif; ?>
 
-		<?php if ( empty( $by_sport ) ) : ?>
+		<?php if ( empty( $by_sport ) && ! $hero_post_id ) : ?>
 		<main id="content" class="wtis-matchup-grid">
 			<p class="wtis-no-matchups"><?php esc_html_e( 'No matchups yet. Check back soon.', 'wellthiissports-child' ); ?></p>
 		</main>
 		<?php endif; ?>
 
+		</div>
 	</div>
 </div>
 
