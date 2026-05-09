@@ -4,6 +4,7 @@ Usage: python pipeline/run.py
 """
 
 import logging
+import os
 import sys
 import time
 
