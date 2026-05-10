@@ -178,9 +178,10 @@
     padding-right: 0;
   }
 
+  // ≤768px — flush dark rails (no outer rounding)
   .wtis-home-dark {
-    padding: $space-4 $space-3;
-    border-radius: $radius-md;
+    padding: $space-4 $space-3; // 16px 12px
+    border-radius: 0;
   }
 
   .wtis-home-mid__label-inner {
