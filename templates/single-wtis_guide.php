@@ -48,6 +48,18 @@ if ( $sp_terms && ! is_wp_error( $sp_terms ) ) {
 
 $date_display = get_the_date( get_option( 'date_format' ) );
 
+$guide_venue_address = trim( (string) get_post_meta( $post_id, 'wtis_guide_venue_address', true ) );
+$guide_venue_name    = trim( (string) get_post_meta( $post_id, 'wtis_guide_venue_name', true ) );
+$guide_maps_url = '';
+if ( $guide_venue_address !== '' ) {
+	$guide_maps_url = 'https://www.google.com/maps/search/' . rawurlencode( $guide_venue_address );
+}
+$guide_venue_label = $guide_venue_name !== '' ? $guide_venue_name : $guide_venue_address;
+
+$ig_post_url = trim( (string) get_post_meta( $post_id, 'wtis_guide_instagram_post_url', true ) );
+$ig_account  = trim( (string) get_post_meta( $post_id, 'wtis_guide_instagram_account', true ) );
+$ig_account  = ltrim( $ig_account, '@' );
+
 require get_stylesheet_directory() . '/inc/masthead.php';
 ?>
 
@@ -94,10 +106,48 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 		</div>
 	</section>
 
+	<?php if ( $guide_venue_address !== '' ) : ?>
+	<div class="wtis-guide-map-bar">
+		<span class="wtis-guide-map-bar__venue">
+			<span class="wtis-guide-map-bar__pin" aria-hidden="true">&#128205;</span>
+			<?php echo esc_html( $guide_venue_label ); ?>
+		</span>
+		<a href="<?php echo esc_url( $guide_maps_url ); ?>"
+			target="_blank"
+			rel="noopener noreferrer"
+			class="wtis-guide-map-bar__link">
+			<?php esc_html_e( 'Get Directions', 'wellthiissports-child' ); ?>
+		</a>
+	</div>
+	<?php endif; ?>
+
 	<main id="content" class="wtis-guide-body">
 		<div class="wtis-guide-body__inner">
 			<?php the_content(); ?>
 		</div>
+		<?php
+		if ( $ig_post_url !== '' ) {
+			$ig_embed = wp_oembed_get( $ig_post_url );
+			if ( $ig_embed ) {
+				echo '<div class="wtis-guide-instagram">';
+				echo $ig_embed;
+				echo '</div>';
+			}
+		} elseif ( $ig_account !== '' ) {
+			$ig_profile_url = 'https://www.instagram.com/' . rawurlencode( $ig_account ) . '/';
+			?>
+		<div class="wtis-guide-instagram-follow">
+			<p class="wtis-guide-instagram-follow__text"><?php esc_html_e( 'Follow us on Instagram for match day updates and more', 'wellthiissports-child' ); ?></p>
+			<a href="<?php echo esc_url( $ig_profile_url ); ?>"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="wtis-guide-instagram-follow__link">
+				@<?php echo esc_html( $ig_account ); ?>
+			</a>
+		</div>
+			<?php
+		}
+		?>
 	</main>
 </div>
 

@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────
-// _guide.scss — wtis_guide single: hero + narrow article body
+// _guide.scss — wtis_guide single: hero, map link bar, narrow body, Instagram
 // ─────────────────────────────────────────────────────────────
 @use 'tokens' as *;
 
@@ -134,6 +134,63 @@
   }
 }
 
+// ── Map link bar (below hero; no iframe embed) ───────────────
+
+.wtis-guide-map-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-4;
+  width: 100%;
+  max-width: 100%;
+  padding: 14px $space-8;
+  background: var(--wtis-hero-surface, #{$wtis-ink});
+  border-top: 1px solid rgba($wtis-white, 0.08);
+  border-bottom: 1px solid rgba($wtis-white, 0.08);
+}
+
+.wtis-guide-map-bar__venue {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  font-family: $font-ui;
+  font-size: $text-md;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--wtis-white);
+}
+
+.wtis-guide-map-bar__pin {
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.wtis-guide-map-bar__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $font-display;
+  font-size: $text-12;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: $space-2 $space-5;
+  border-radius: 4px;
+  background: var(--wtis-gold-400);
+  color: var(--wtis-ink);
+  transition:
+    background-color $transition,
+    color $transition;
+
+  &:hover {
+    background: var(--wtis-gold-600);
+    color: var(--wtis-ink);
+  }
+}
+
 // ── Article body: centered, max 800px, no sidebar ───────────
 
 .wtis-guide-body {
@@ -217,6 +274,52 @@
   }
 }
 
+// ── Instagram: oEmbed or follow prompt (end of guide main) ──
+
+.wtis-guide-instagram {
+  max-width: 540px;
+  margin: $space-12 auto 0;
+  text-align: center;
+
+  iframe,
+  .instagram-media {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    max-width: 100% !important;
+  }
+}
+
+.wtis-guide-instagram-follow {
+  max-width: 540px;
+  margin: $space-12 auto 0;
+  text-align: center;
+}
+
+.wtis-guide-instagram-follow__text {
+  font-family: $font-body;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--wtis-gray-500);
+  margin: 0;
+}
+
+.wtis-guide-instagram-follow__link {
+  display: block;
+  margin-top: $space-2;
+  font-family: $font-display;
+  font-size: $text-subhead;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--wtis-gold-400);
+  text-decoration: none;
+  transition: color $transition;
+
+  &:hover {
+    color: var(--wtis-gold-600);
+  }
+}
+
 @media (max-width: $bp-md) {
   .wtis-guide-hero__grid {
     grid-template-columns: 1fr;
@@ -242,5 +345,16 @@
 
   .wtis-guide-hero__title {
     font-size: $text-3xl;
+  }
+
+  .wtis-guide-map-bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: $space-4 $space-6;
+  }
+
+  .wtis-guide-map-bar__link {
+    width: 100%;
+    text-align: center;
   }
 }

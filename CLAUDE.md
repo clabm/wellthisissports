@@ -123,7 +123,6 @@ MAILCHIMP_AUDIENCE_ID
 MAILCHIMP_DC
 BLUESKY_HANDLE
 BLUESKY_APP_PASSWORD
-WTIS_MAPS_API_KEY
 ```
 
 ---
@@ -150,7 +149,7 @@ repo-root/                          ← child theme root (wellthisiissports-chil
 ├── templates/
 │   ├── front-page.php              ← Ringer homepage: full-bleed 50/50 lead, Latest predictions (masthead-bg band, wtis-home__inner--mid), wide + ledger (1400px max)
 │   ├── single.php                  ← prediction detail page
-│   ├── single-wtis_guide.php       ← guide single: 50/50 hero + 800px body (the_content)
+│   ├── single-wtis_guide.php       ← guide single: hero, map link bar (address meta), 800px body, Instagram oEmbed / follow
 │   ├── tournament.php              ← World Cup / tournament landing page
 │   ├── archive.php                 ← sport/league archive
 │   └── page.php                    ← generic page template
@@ -292,12 +291,12 @@ All prediction content lives in post meta, not post content.
 
 | Meta key | Purpose |
 |---|---|
-| `wtis_guide_venue_name` | Primary venue name, e.g. "Estadio Azteca" |
-| `wtis_guide_venue_address` | Full address for Google Maps link |
-| `wtis_guide_venue_place_id` | Google Place ID for map embed (ChIJ...) |
-| `wtis_guide_map_embed` | Boolean — true = iframe embed, false = link button only |
-| `wtis_guide_instagram_account` | Instagram handle without @, e.g. "estadioazteca" |
-| `wtis_guide_instagram_post_url` | Specific post URL to embed; overrides account-level embed |
+| `wtis_guide_venue_name` | Primary venue name, e.g. "Estadio Azteca" (map bar label) |
+| `wtis_guide_venue_address` | Full address; when set, guide shows a **Get Directions** link to Google Maps search (no embed) |
+| `wtis_guide_venue_place_id` | Reserved for a future Maps embed (not used in theme) |
+| `wtis_guide_map_embed` | Reserved for pipeline/API; theme uses link-only Maps |
+| `wtis_guide_instagram_account` | Handle without `@`; shown as follow link if no post URL |
+| `wtis_guide_instagram_post_url` | Post URL for `wp_oembed_get`; takes priority over account follow |
 
 ---
 
@@ -549,7 +548,7 @@ Local URLs:
 - **wp/v2/media needs Application Password auth:** Not the pipeline API key. Use `Authorization: Basic base64(username:app_password)`.
 - **Always append UTM URL explicitly:** `text = f"{caption}\n\n{utm_url}"`. Don't rely on the LLM to embed it.
 - **Test integrations with a test script first:** Never wait for a live pipeline run to verify a new integration.
-- **Google Maps embed requires `WTIS_MAPS_API_KEY`:** Maps Embed API must be enabled in Google Cloud Console for the key. If key is not set, the guide template falls back to a map link button only. `wtis_guide_map_embed = true` with no valid key will silently degrade to the link fallback.
+- **Google Maps embed deferred post-launch due to cost.** The guide template does not render an iframe. With `wtis_guide_venue_address` set, it shows a full-width map bar and a **Get Directions** button using the free Google Maps search URL only (`/maps/search/` + encoded address).
 
 ---
 
