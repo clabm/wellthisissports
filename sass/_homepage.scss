@@ -240,10 +240,13 @@
 
   &--mid {
     margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
   }
 }
 
-// ── Mid: label (white) + dark grid wrapper ──────────────────
+// ── Mid: “Latest predictions” rail (title + cards on one dark surface) ──
 
 .wtis-home-mid {
   margin-bottom: $space-6;
@@ -255,33 +258,29 @@
 }
 
 .wtis-home-mid__label-row {
-  background: var(--wtis-white);
-  padding: $space-6 0 $space-4;
-}
-
-.wtis-home-mid__label-inner {
-  max-width: var(--wtis-home-max, #{$wtis-home-max});
-  margin: 0 auto;
-  padding: 0 $space-6;
+  margin: 0;
+  padding: 0 0 $space-6;
+  background: transparent;
 }
 
 .wtis-home-mid__label {
   font-family: $font-display;
-  font-size: $text-base;
+  font-size: $text-lg;
   font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: 0.1em;
+  line-height: 1.15;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--wtis-ink);
-  margin: 0 0 $space-2;
+  color: var(--wtis-white);
+  margin: 0 0 $space-3;
   text-align: left;
 }
 
 .wtis-home-mid__gold-rule {
   display: block;
-  width: 40px;
-  height: 2px;
+  width: 48px;
+  height: 3px;
   background: var(--wtis-gold-400);
+  border-radius: 1px;
 }
 
 .wtis-home-mid__grid {

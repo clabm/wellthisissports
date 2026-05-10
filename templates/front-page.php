@@ -105,14 +105,12 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 
 		<?php if ( ! empty( $mid_ids ) ) : ?>
 		<section class="wtis-home-mid" aria-label="<?php esc_attr_e( 'Latest predictions', 'wellthiissports-child' ); ?>">
-			<header class="wtis-home-mid__label-row">
-				<div class="wtis-home-mid__label-inner">
-					<h2 class="wtis-home-mid__label"><?php esc_html_e( 'Latest predictions', 'wellthiissports-child' ); ?></h2>
-					<span class="wtis-home-mid__gold-rule" aria-hidden="true"></span>
-				</div>
-			</header>
 			<div class="wtis-home__inner">
 				<div class="wtis-home-dark wtis-home-dark--mid">
+					<header class="wtis-home-mid__label-row">
+						<h2 class="wtis-home-mid__label"><?php esc_html_e( 'Latest predictions', 'wellthiissports-child' ); ?></h2>
+						<span class="wtis-home-mid__gold-rule" aria-hidden="true"></span>
+					</header>
 					<div class="wtis-home-mid__grid">
 						<?php foreach ( $mid_ids as $mid_id ) : ?>
 							<?php $m = wtis_home_matchup_payload( (int) $mid_id ); ?>
