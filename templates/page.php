@@ -20,7 +20,6 @@ $disclaimer_text = "Well This Is Sports predictions are for entertainment purpos
 $about_body = [
 	'Well This Is Sports is a fully automated AI-powered sports prediction platform. Every matchup gets a full analytical breakdown, a winner prediction with a confidence score, and a public accuracy ledger that tracks whether we got it right.',
 	"The ledger is the product, not a feature. We don't hide our record. We publish it, update it after every game, and let you decide if we're worth listening to.",
-	'Well This Is Sports is part of Well This Is Media, a collection of automated editorial products built at the intersection of AI and publishing.',
 ];
 
 $how_sections = [
