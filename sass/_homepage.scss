@@ -382,15 +382,28 @@
     margin: 0 0 $space-2;
   }
 
-  &__headline {
+  &__title {
     font-family: $font-display;
-    font-size: $text-3xl;
+    font-size: 42px;
     font-weight: 700;
-    line-height: 1.05;
+    line-height: 1.1;
     letter-spacing: 0.02em;
     text-transform: uppercase;
     color: var(--wtis-white);
     margin: 0 0 $space-2;
+  }
+
+  &__subhead {
+    font-family: $font-body;
+    font-size: 15px;
+    font-weight: 400;
+    color: rgba($wtis-white, 0.75);
+    margin: 0 0 $space-2;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   &__date {

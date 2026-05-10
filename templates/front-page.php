@@ -74,7 +74,15 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 							<?php if ( $h['sport'] ) : ?>
 							<p class="wtis-home-lead__sport"><?php echo esc_html( $h['sport'] ); ?></p>
 							<?php endif; ?>
-							<h2 class="wtis-home-lead__headline"><?php echo esc_html( $h['title_line'] ); ?></h2>
+							<h2 class="wtis-home-lead__title"><?php echo esc_html( $h['title_line'] ); ?></h2>
+							<?php
+							$seo_headline = get_post_meta( $hero_id, 'wtis_headline_seo', true );
+							if ( $seo_headline ) :
+								?>
+							<p class="wtis-home-lead__subhead"><?php echo esc_html( $seo_headline ); ?></p>
+								<?php
+							endif;
+							?>
 							<?php if ( $h['date_display'] ) : ?>
 							<p class="wtis-home-lead__date"><?php echo esc_html( $h['date_display'] ); ?></p>
 							<?php endif; ?>
