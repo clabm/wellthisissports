@@ -56,9 +56,10 @@ if ( $guide_venue_address !== '' ) {
 }
 $guide_venue_label = $guide_venue_name !== '' ? $guide_venue_name : $guide_venue_address;
 
-$ig_post_url = trim( (string) get_post_meta( $post_id, 'wtis_guide_instagram_post_url', true ) );
-$ig_account  = trim( (string) get_post_meta( $post_id, 'wtis_guide_instagram_account', true ) );
-$ig_account  = ltrim( $ig_account, '@' );
+$ig_embed_code = trim( (string) get_post_meta( $post_id, 'wtis_guide_instagram_embed_code', true ) );
+$ig_post_url   = trim( (string) get_post_meta( $post_id, 'wtis_guide_instagram_post_url', true ) );
+$ig_account    = trim( (string) get_post_meta( $post_id, 'wtis_guide_instagram_account', true ) );
+$ig_account    = ltrim( $ig_account, '@' );
 
 require get_stylesheet_directory() . '/inc/masthead.php';
 ?>
@@ -126,7 +127,12 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 			<?php the_content(); ?>
 		</div>
 		<?php
-		if ( $ig_post_url !== '' ) {
+		if ( $ig_embed_code !== '' ) {
+			echo '<div class="wtis-guide-instagram">';
+			echo $ig_embed_code; // raw HTML from Director; sanitized via wp_kses_post on save
+			echo '</div>';
+			wp_enqueue_script( 'instagram-embed', 'https://www.instagram.com/embed.js', [], null, true );
+		} elseif ( $ig_post_url !== '' ) {
 			$ig_embed = wp_oembed_get( $ig_post_url );
 			if ( $ig_embed ) {
 				echo '<div class="wtis-guide-instagram">';
