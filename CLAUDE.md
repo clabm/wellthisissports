@@ -169,6 +169,16 @@ repo-root/                          ← child theme root (wellthisiissports-chil
 
 **Parent theme:** Understrap (Bootstrap 5 grid). Lives on server only, not in repo. Never modify it.
 
+### Supporting Static Pages
+
+Static WordPress pages rendered through `templates/page.php`:
+- `/about` — About Well This Is Sports
+- `/how-it-works` — How It Works
+- `/privacy-policy` — Privacy Policy
+- `/terms-of-service` — Terms of Service
+
+Footer fallback links include these pages; they remain footer-only, not in main nav.
+
 ---
 
 ## Sass Compilation

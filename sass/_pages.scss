@@ -5,25 +5,72 @@
 @use 'tokens' as *;
 
 .wtis-page-content {
-  max-width: 760px;
+  max-width: 800px;
   margin: $space-10 auto;
   padding: 0 0 $space-16;
 }
 
 .wtis-page-title {
   @include headline-display($text-4xl);
-  margin-bottom: $space-8;
-  padding-bottom: $space-4;
-  @include rule-bottom;
+  margin-bottom: $space-4;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.wtis-page-subhead {
+  font-family: $font-body;
+  font-size: $text-lg;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--wtis-gray-500);
+  margin: 0 0 $space-8;
 }
 
 .wtis-page-body {
-  @include body-copy;
+  font-family: $font-body;
+  font-size: $text-lg;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--wtis-ink);
 
-  h2 { @include headline-display($text-2xl); margin: $space-8 0 $space-4; }
-  h3 { @include headline-display($text-xl);  margin: $space-6 0 $space-3; }
-  p  { margin-bottom: $space-5; }
-  a  { color: var(--wtis-blue-500); &:hover { color: var(--wtis-blue-700); } }
+  h2 {
+    font-family: $font-display;
+    font-size: $text-2xl;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    line-height: 1.1;
+    margin: $space-8 0 $space-4;
+    color: var(--wtis-ink);
+  }
+
+  p {
+    margin-bottom: $space-5;
+  }
+
+  a {
+    color: var(--wtis-blue-500);
+
+    &:hover {
+      color: var(--wtis-blue-700);
+    }
+  }
+}
+
+.wtis-page-section {
+  margin-bottom: $space-8;
+}
+
+.wtis-disclaimer {
+  border-left: 3px solid var(--wtis-gold-400);
+  background: var(--wtis-gold-50);
+  padding: $space-4 $space-5;
+  font-family: $font-body;
+  font-size: $text-lg;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--wtis-ink);
+  margin: $space-8 0 0;
 }
 
 // ── Archive (sport / league) ─────────────────────────────────

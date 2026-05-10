@@ -33,6 +33,19 @@ defined( 'ABSPATH' ) || exit;
                 'container'      => false,
                 'fallback_cb'    => false,
             ] );
+        } else {
+            $about_page = get_page_by_path( 'about' );
+            $how_page   = get_page_by_path( 'how-it-works' );
+            $pp_page    = get_page_by_path( 'privacy-policy' );
+            $tos_page   = get_page_by_path( 'terms-of-service' );
+            ?>
+            <ul class="wtis-footer-links">
+              <li><a href="<?php echo esc_url( $about_page ? get_permalink( $about_page->ID ) : home_url( '/about/' ) ); ?>">About</a></li>
+              <li><a href="<?php echo esc_url( $how_page ? get_permalink( $how_page->ID ) : home_url( '/how-it-works/' ) ); ?>">How It Works</a></li>
+              <li><a href="<?php echo esc_url( $pp_page ? get_permalink( $pp_page->ID ) : home_url( '/privacy-policy/' ) ); ?>">Privacy Policy</a></li>
+              <li><a href="<?php echo esc_url( $tos_page ? get_permalink( $tos_page->ID ) : home_url( '/terms-of-service/' ) ); ?>">Terms of Service</a></li>
+            </ul>
+            <?php
         }
         ?>
       </div>
