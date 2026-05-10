@@ -41,25 +41,27 @@
     position: static;
   }
 
-  // Homepage
-  .wtis-home__top-grid {
+  // Homepage lead: stack 50/50 under large breakpoint
+  .wtis-home-lead__grid {
     grid-template-columns: 1fr;
+    min-height: 0;
   }
 
-  // Hero + compact stack (single column): % height + flex: 1 1 0 made compacts collapse
-  .wtis-home__stack {
-    height: auto;
-    align-self: start;
+  .wtis-home-lead__visual,
+  .wtis-home-lead__visual-link {
+    min-height: 320px;
   }
 
-  .wtis-home-compact {
+  .wtis-home-lead__rail {
+    min-height: auto;
+  }
+
+  .wtis-home-lead__list {
+    padding: $space-6 $space-4;
+  }
+
+  .wtis-home-lead__item {
     flex: 0 0 auto;
-    min-height: auto;
-  }
-
-  .wtis-home-compact__link {
-    flex: 0 1 auto;
-    min-height: auto;
   }
 
   .wtis-home-mid__grid {
@@ -139,29 +141,6 @@
   // Homepage
   .wtis-home-mid__grid {
     grid-template-columns: 1fr;
-  }
-
-  .wtis-home-compact__link {
-    grid-template-columns: 1fr;
-  }
-
-  .wtis-home-compact__media {
-    border-right: none;
-    border-bottom: 1px solid $rule;
-    min-height: 12rem;
-    height: auto;
-
-    .wtis-home__media,
-    .wtis-home__media--ph {
-      min-height: 12rem;
-      height: 12rem;
-      aspect-ratio: auto;
-    }
-
-    .wtis-home__media img {
-      min-height: 12rem;
-      height: 100%;
-    }
   }
 
   .wtis-home-wide__link {
