@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 	<div class="container wtis-masthead__inner">
 		<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="wtis-logo">
 			<img
-				src="<?php echo esc_url( get_stylesheet_directory_uri() . '/wtis-logo.png' ); ?>"
+				src="<?php echo esc_url( get_theme_file_uri( '/wtis-logo.png' ) ); ?>"
 				alt="<?php esc_attr_e( 'Well This Is Sports', 'wellthiissports-child' ); ?>"
 				width="280"
 				height="40"

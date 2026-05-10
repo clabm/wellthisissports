@@ -4,6 +4,20 @@
 // ─────────────────────────────────────────────────────────────
 @use 'tokens' as *;
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body,
+#page,
+#page-wrapper,
+.wrapper {
+  margin-top: 0;
+  padding-top: 0;
+}
+
 .wtis-logo {
   display: inline-flex;
   align-items: center;
@@ -37,7 +51,10 @@
   top: 0;
   z-index: var(--wtis-z-nav);
   background: var(--wtis-masthead-bg);
+  margin-top: 0;
   margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
   border-bottom: 1px solid transparent;
   transition:
     border-color $transition,
