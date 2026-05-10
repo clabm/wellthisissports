@@ -106,6 +106,22 @@ function wtis_register_pipeline_routes() {
         'permission_callback' => 'wtis_pipeline_auth',
     ] );
 
+    // POST — create guide
+    register_rest_route( 'wtis/v1', '/guides', [
+        'methods'             => WP_REST_Server::CREATABLE,
+        'callback'            => 'wtis_pipeline_create_guide',
+        'permission_callback' => 'wtis_pipeline_auth',
+        'args'                => wtis_pipeline_guide_args(),
+    ] );
+
+    // PATCH — update guide fields
+    register_rest_route( 'wtis/v1', '/guides/(?P<id>\d+)', [
+        'methods'             => WP_REST_Server::EDITABLE,
+        'callback'            => 'wtis_pipeline_update_guide',
+        'permission_callback' => 'wtis_pipeline_auth',
+        'args'                => wtis_pipeline_guide_args(),
+    ] );
+
     // POST — flush WP rewrite rules (pipeline auth required)
     register_rest_route( 'wtis/v1', '/flush-rewrites', [
         'methods'             => WP_REST_Server::CREATABLE,
@@ -523,6 +539,186 @@ function wtis_pipeline_status( WP_REST_Request $request ) {
         'api_version'     => 'wtis/v1',
         'site_url'        => get_site_url(),
     ], 200 );
+}
+
+// ── Guide argument schema ─────────────────────────────────────
+
+function wtis_pipeline_guide_args() {
+    return [
+        'title' => [
+            'required'          => true,
+            'type'              => 'string',
+            'sanitize_callback' => 'sanitize_text_field',
+        ],
+        'content' => [
+            'type'              => 'string',
+            'sanitize_callback' => 'wp_kses_post',
+            'default'           => '',
+        ],
+        'headline_personality' => [
+            'type'              => 'string',
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
+        ],
+        'headline_seo' => [
+            'type'              => 'string',
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
+        ],
+        'venue_name' => [
+            'type'              => 'string',
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
+        ],
+        'venue_address' => [
+            'type'              => 'string',
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
+        ],
+        'venue_place_id' => [
+            'type'              => 'string',
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
+        ],
+        'map_embed' => [
+            'type'    => 'boolean',
+            'default' => false,
+        ],
+        'instagram_account' => [
+            'type'              => 'string',
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
+        ],
+        'instagram_post_url' => [
+            'type'              => 'string',
+            'sanitize_callback' => 'esc_url_raw',
+            'format'            => 'uri',
+            'default'           => '',
+        ],
+        'tournament_slug' => [
+            'type'              => 'string',
+            'sanitize_callback' => 'sanitize_title',
+            'default'           => '',
+        ],
+        'sport_slug' => [
+            'type'              => 'string',
+            'sanitize_callback' => 'sanitize_title',
+            'default'           => '',
+        ],
+        'post_status' => [
+            'type'              => 'string',
+            'sanitize_callback' => 'sanitize_key',
+            'default'           => 'draft',
+            'enum'              => [ 'draft', 'publish' ],
+        ],
+        'post_author' => [
+            'type'              => 'integer',
+            'sanitize_callback' => 'absint',
+            'default'           => 1,
+        ],
+        'featured_attachment_id' => [
+            'type'              => 'integer',
+            'sanitize_callback' => 'absint',
+            'default'           => 0,
+        ],
+    ];
+}
+
+// ── Create guide ──────────────────────────────────────────────
+
+function wtis_pipeline_create_guide( WP_REST_Request $request ) {
+    $params = $request->get_params();
+
+    $post_id = wp_insert_post( [
+        'post_title'   => $params['title'],
+        'post_content' => $params['content'] ?? '',
+        'post_status'  => $params['post_status'] ?? 'draft',
+        'post_type'    => 'wtis_guide',
+        'post_author'  => $params['post_author'] ?? 1,
+    ], true );
+
+    if ( is_wp_error( $post_id ) ) {
+        return new WP_Error( 'rest_insert_failed', $post_id->get_error_message(), [ 'status' => 500 ] );
+    }
+
+    wtis_save_guide_meta( $post_id, $params );
+
+    if ( ! empty( $params['featured_attachment_id'] ) ) {
+        set_post_thumbnail( $post_id, (int) $params['featured_attachment_id'] );
+    }
+
+    return new WP_REST_Response( [
+        'success'   => true,
+        'post_id'   => $post_id,
+        'edit_url'  => get_edit_post_link( $post_id, 'raw' ),
+        'permalink' => get_permalink( $post_id ),
+        'status'    => get_post_status( $post_id ),
+    ], 201 );
+}
+
+// ── Update guide ──────────────────────────────────────────────
+
+function wtis_pipeline_update_guide( WP_REST_Request $request ) {
+    $post_id = (int) $request->get_param( 'id' );
+    $params  = $request->get_params();
+
+    if ( ! get_post( $post_id ) ) {
+        return new WP_Error( 'rest_not_found', 'Guide not found.', [ 'status' => 404 ] );
+    }
+
+    $update = [ 'ID' => $post_id ];
+    if ( isset( $params['title'] ) )   $update['post_title']   = $params['title'];
+    if ( isset( $params['content'] ) ) $update['post_content'] = $params['content'];
+    if ( ! empty( $update ) ) {
+        wp_update_post( $update );
+    }
+
+    wtis_save_guide_meta( $post_id, $params );
+
+    if ( ! empty( $params['featured_attachment_id'] ) ) {
+        set_post_thumbnail( $post_id, (int) $params['featured_attachment_id'] );
+    }
+
+    return new WP_REST_Response( [ 'success' => true, 'post_id' => $post_id ], 200 );
+}
+
+// ── Save guide meta ───────────────────────────────────────────
+
+function wtis_save_guide_meta( int $post_id, array $params ): void {
+    $meta_map = [
+        'headline_personality' => 'wtis_headline_personality',
+        'headline_seo'         => 'wtis_headline_seo',
+        'venue_name'           => 'wtis_guide_venue_name',
+        'venue_address'        => 'wtis_guide_venue_address',
+        'venue_place_id'       => 'wtis_guide_venue_place_id',
+        'instagram_account'    => 'wtis_guide_instagram_account',
+        'instagram_post_url'   => 'wtis_guide_instagram_post_url',
+    ];
+
+    foreach ( $meta_map as $param_key => $meta_key ) {
+        if ( isset( $params[ $param_key ] ) ) {
+            update_post_meta( $post_id, $meta_key, $params[ $param_key ] );
+        }
+    }
+
+    // Boolean: only save if explicitly passed
+    if ( array_key_exists( 'map_embed', $params ) ) {
+        update_post_meta( $post_id, 'wtis_guide_map_embed', (bool) $params['map_embed'] );
+    }
+
+    // Taxonomy terms
+    if ( ! empty( $params['tournament_slug'] ) ) {
+        $term_id = wtis_get_or_create_term( $params['tournament_slug'], 'wtis_tournament' );
+        if ( $term_id ) {
+            wp_set_post_terms( $post_id, [ $term_id ], 'wtis_tournament' );
+        }
+    }
+    if ( ! empty( $params['sport_slug'] ) ) {
+        $term_id = wtis_get_or_create_term( $params['sport_slug'], 'wtis_sport' );
+        if ( $term_id ) {
+            wp_set_post_terms( $post_id, [ $term_id ], 'wtis_sport' );
+        }
+    }
 }
 
 // ── Flush rewrite rules ───────────────────────────────────────

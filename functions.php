@@ -294,6 +294,14 @@ function wtis_register_post_meta() {
         register_post_meta( $post_type, 'rank_math_description',   $string_args );
         register_post_meta( $post_type, 'rank_math_focus_keyword', $string_args );
     }
+
+    // Guide-specific fields (wtis_guide only)
+    register_post_meta( 'wtis_guide', 'wtis_guide_venue_name',         $string_args );
+    register_post_meta( 'wtis_guide', 'wtis_guide_venue_address',      $string_args );
+    register_post_meta( 'wtis_guide', 'wtis_guide_venue_place_id',     $string_args );
+    register_post_meta( 'wtis_guide', 'wtis_guide_map_embed',          $bool_args );
+    register_post_meta( 'wtis_guide', 'wtis_guide_instagram_account',  $string_args );
+    register_post_meta( 'wtis_guide', 'wtis_guide_instagram_post_url', $string_args );
 }
 
 // ── Newsletter AJAX handler ──────────────────────────────────

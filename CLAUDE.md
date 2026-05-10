@@ -284,6 +284,17 @@ All prediction content lives in post meta, not post content.
 | `wtis_article_stage` | preview / matchup / urgent_update |
 | `wtis_image_brief_scene` | Scene description for OpenAI image generation |
 
+**Guide-only meta (wtis_guide CPT):**
+
+| Meta key | Purpose |
+|---|---|
+| `wtis_guide_venue_name` | Primary venue name, e.g. "Estadio Azteca" |
+| `wtis_guide_venue_address` | Full address for Google Maps link |
+| `wtis_guide_venue_place_id` | Google Place ID for map embed (ChIJ...) |
+| `wtis_guide_map_embed` | Boolean — true = iframe embed, false = link button only |
+| `wtis_guide_instagram_account` | Instagram handle without @, e.g. "estadioazteca" |
+| `wtis_guide_instagram_post_url` | Specific post URL to embed; overrides account-level embed |
+
 ---
 
 ## WordPress REST API
@@ -294,8 +305,11 @@ All prediction content lives in post meta, not post content.
 - `POST /wp-json/wtis/v1/matchups/{id}/image` — upload featured image
 - `PATCH /wp-json/wtis/v1/matchups/{id}/status` — set draft/publish
 - `PATCH /wp-json/wtis/v1/matchups/{id}/result` — post-game result update
+- `POST /wp-json/wtis/v1/guides` — create guide post (wtis_guide CPT)
+- `PATCH /wp-json/wtis/v1/guides/{id}` — update guide fields and meta
 - `GET /wp-json/wtis/v1/status` — pipeline health check
 - `GET /wp-json/wtis/v1/ledger` — accuracy ledger per sport
+- `POST /wp-json/wtis/v1/flush-rewrites` — flush WP rewrite rules
 - Auth: `X-WTIS-Key` header, key stored in WP option `wtis_pipeline_api_key`
 
 **Standard WP endpoints used:**
