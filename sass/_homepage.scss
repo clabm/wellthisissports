@@ -224,7 +224,11 @@
     padding: 0 $space-2;
   }
 
+  // Full-bleed lead: do not inherit 1400px max-width (that centered the hero and
+  // showed off-white gutters). Mid/bottom sections keep .wtis-home__inner max-width.
   &__inner--lead {
+    max-width: none;
+    width: 100%;
     padding: 0;
     margin: 0;
     background: transparent;
@@ -243,10 +247,16 @@
   background: var(--wtis-off-white);
 }
 
+// Understrap `#page` can add horizontal inset; full-bleed lead should not float inside gutters
+#page:has(#page-wrapper.wtis-home) {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 // ── Lead: 50/50 article-hero pattern (no card wrapper) ──────
 
 .wtis-home-lead {
-  margin: 0 0 $space-6;
+  margin: 0;
   padding: 0;
   border-radius: 0;
   border: none;
@@ -483,9 +493,10 @@
   margin-bottom: $space-6;
 
   @media (min-width: #{$bp-lg + 1px}) {
-    margin-top: $space-8; // 32px
+    margin-top: 0;
     background: var(--wtis-home-surface, #{$wtis-ink});
-    padding: $space-4 0; // 16px 0
+    // Spacing after lead lives inside the dark band (no off-white strip)
+    padding: $space-6 0 $space-4;
   }
 }
 
