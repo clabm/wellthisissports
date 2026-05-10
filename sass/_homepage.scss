@@ -251,9 +251,10 @@
 .wtis-home-mid {
   margin-bottom: $space-6;
 
-  // Space between featured rail and “Latest predictions” (desktop / wide layout)
   @media (min-width: #{$bp-lg + 1px}) {
-    margin-top: $space-8; // 32px — within requested 24–32px band
+    margin-top: $space-8; // 32px
+    background: var(--wtis-home-surface, #{$wtis-ink});
+    padding: $space-4 0; // 16px 0
   }
 }
 
@@ -265,13 +266,13 @@
 
 .wtis-home-mid__label {
   font-family: $font-display;
-  font-size: $text-lg;
+  font-size: 2rem;
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--wtis-white);
-  margin: 0 0 $space-3;
+  margin: 0 0 $space-3; // 12px
   text-align: left;
 }
 
