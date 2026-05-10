@@ -103,6 +103,7 @@ CLOUDWAYS_EMAIL
 CLOUDWAYS_API_KEY
 CLOUDWAYS_SERVER_ID
 CLOUDWAYS_APP_ID
+APIFOOTBALL_API_KEY
 APIFOOTBALL_SEASON
 WTIS_SITE_URL
 WTIS_API_URL
@@ -122,6 +123,7 @@ MAILCHIMP_AUDIENCE_ID
 MAILCHIMP_DC
 BLUESKY_HANDLE
 BLUESKY_APP_PASSWORD
+WTIS_MAPS_API_KEY
 ```
 
 ---
@@ -149,6 +151,7 @@ repo-root/                          ← child theme root (wellthisiissports-chil
 │   ├── front-page.php              ← Ringer homepage: full-bleed 50/50 lead, Latest predictions (masthead-bg band, wtis-home__inner--mid), wide + ledger (1400px max)
 │   ├── single.php                  ← prediction detail page
 │   ├── single-wtis_guide.php       ← guide single: 50/50 hero + 800px body (the_content)
+│   ├── tournament.php              ← World Cup / tournament landing page
 │   ├── archive.php                 ← sport/league archive
 │   └── page.php                    ← generic page template
 ├── js/
@@ -164,6 +167,7 @@ repo-root/                          ← child theme root (wellthisiissports-chil
 │   ├── _ads.scss                   ← ad unit positions
 │   ├── _footer.scss                ← footer styles
 │   ├── _pages.scss                 ← generic page styles
+│   ├── _tournament.scss            ← tournament landing page styles
 │   └── _mobile.scss                ← responsive breakpoints
 └── css/
     └── style.min.css               ← compiled output (NEVER edit directly)
@@ -320,6 +324,27 @@ All prediction content lives in post meta, not post content.
 
 ---
 
+## Custom Post Types
+
+| CPT | Slug | Purpose |
+|---|---|---|
+| `wtis_matchup` | `/matchups/` | AI predictions, pipeline output |
+| `wtis_guide` | `/guides/` | Game day guides, editorial content |
+
+---
+
+## Custom Taxonomies
+
+Applied to both `wtis_matchup` and `wtis_guide`:
+
+| Taxonomy | Slug | Example Terms |
+|---|---|---|
+| `wtis_tournament` | `/tournament/` | world-cup-2026, nfl-2026 |
+| `wtis_sport` | `/sport/` | soccer, american-football |
+| `wtis_content_type` | `/type/` | prediction, guide, preview |
+
+---
+
 ## The Accuracy Ledger
 
 Core differentiating feature. No equivalent in WTIN.
@@ -395,6 +420,8 @@ Post-game: ingest result → update ledger
 **Pipeline schedule:** TBD. Driven by World Cup match schedule at launch. Not a fixed 6x daily cadence like WTIN.
 
 **Runner:** ubuntu-latest, Python 3.11
+
+**wtis_guide content:** Game day guides are not created by the main pipeline. Use the `pipeline/seed_guides.py` pattern — runs manually, calls Claude Haiku for content, OpenAI gpt-image-1 for hero image, posts via `POST /wp-json/wtis/v1/guides`. Do not commit seed scripts with hardcoded guide content.
 
 ---
 
@@ -488,6 +515,18 @@ Local URLs:
 
 ---
 
+## Key URLs
+
+| URL | Purpose |
+|---|---|
+| `wellthisiissports.com` | Homepage — latest predictions |
+| `wellthisiissports.com/world-cup` | World Cup landing page |
+| `wellthisiissports.com/matchups` | Matchups archive |
+| `wellthisiissports.com/guides` | Guides archive |
+| `wellthisiissports.com/predictions` | Legacy prediction archive |
+
+---
+
 ## Coding Conventions
 
 - **PHP:** WordPress coding standards, escape all output, nonce all forms, prefix everything `wtis_`
@@ -510,6 +549,7 @@ Local URLs:
 - **wp/v2/media needs Application Password auth:** Not the pipeline API key. Use `Authorization: Basic base64(username:app_password)`.
 - **Always append UTM URL explicitly:** `text = f"{caption}\n\n{utm_url}"`. Don't rely on the LLM to embed it.
 - **Test integrations with a test script first:** Never wait for a live pipeline run to verify a new integration.
+- **Google Maps embed requires `WTIS_MAPS_API_KEY`:** Maps Embed API must be enabled in Google Cloud Console for the key. If key is not set, the guide template falls back to a map link button only. `wtis_guide_map_embed = true` with no valid key will silently degrade to the link fallback.
 
 ---
 
