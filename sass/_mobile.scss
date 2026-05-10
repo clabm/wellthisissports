@@ -35,6 +35,22 @@
     grid-template-columns: 1fr;
   }
 
+  // Hero + compact stack (single column): % height + flex: 1 1 0 made compacts collapse
+  .wtis-home__stack {
+    height: auto;
+    align-self: start;
+  }
+
+  .wtis-home-compact {
+    flex: 0 0 auto;
+    min-height: auto;
+  }
+
+  .wtis-home-compact__link {
+    flex: 0 1 auto;
+    min-height: auto;
+  }
+
   .wtis-home-mid__grid {
     grid-template-columns: repeat(2, 1fr);
   }
