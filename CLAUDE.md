@@ -148,6 +148,7 @@ repo-root/                          ← child theme root (wellthisiissports-chil
 ├── templates/
 │   ├── front-page.php              ← Ringer homepage: full-bleed 50/50 lead, Latest predictions (masthead-bg band, wtis-home__inner--mid), wide + ledger (1400px max)
 │   ├── single.php                  ← prediction detail page
+│   ├── single-wtis_guide.php       ← guide single: 50/50 hero + 800px body (the_content)
 │   ├── archive.php                 ← sport/league archive
 │   └── page.php                    ← generic page template
 ├── js/
@@ -158,6 +159,7 @@ repo-root/                          ← child theme root (wellthisiissports-chil
 │   ├── _masthead.scss              ← dark masthead bar, logo, nav
 │   ├── _homepage.scss              ← matchup grid, sport sections
 │   ├── _matchup.scss               ← prediction display, confidence meter, ledger
+│   ├── _guide.scss                 ← wtis_guide hero + article body
 │   ├── _takeaways.scss             ← The Edge component (key factors for/against)
 │   ├── _ads.scss                   ← ad unit positions
 │   ├── _footer.scss                ← footer styles

@@ -1,0 +1,246 @@
+// ─────────────────────────────────────────────────────────────
+// _guide.scss — wtis_guide single: hero + narrow article body
+// ─────────────────────────────────────────────────────────────
+@use 'tokens' as *;
+
+.wtis-guide {
+  background: var(--wtis-off-white);
+}
+
+// ── Hero: 50/50 image + #111 panel (matches article / homepage lead) ──
+
+.wtis-guide-hero {
+  width: 100%;
+  max-width: 100%;
+  background: var(--wtis-hero-surface, #{$wtis-ink});
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 500px;
+    align-items: stretch;
+  }
+
+  &__media {
+    position: relative;
+    min-height: 500px;
+    overflow: hidden;
+    background: var(--wtis-blue-50);
+  }
+
+  &__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  &__media-placeholder {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      var(--wtis-gold-400) 0%,
+      var(--wtis-gold-600) 100%
+    );
+  }
+
+  &__panel {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    background: var(--wtis-hero-surface, #{$wtis-ink});
+    color: var(--wtis-hero-on-surface, #{$wtis-white});
+  }
+
+  &__panel-inner {
+    width: 100%;
+    max-width: 36rem;
+    padding: $space-8 $space-8 $space-10;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: $space-3;
+  }
+
+  &__badge {
+    margin: 0;
+    font-family: $font-display;
+    font-size: $text-base;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+
+    &--type {
+      color: var(--wtis-gold-400);
+    }
+
+    &--tournament {
+      color: var(--wtis-blue-500);
+    }
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-size: $text-4xl;
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    color: var(--wtis-white);
+    margin: 0;
+  }
+
+  &__subhead {
+    font-family: $font-body;
+    font-size: $text-subhead;
+    font-weight: 400;
+    line-height: 1.45;
+    color: rgba($wtis-white, 0.78);
+    margin: 0;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $space-2 $space-3;
+    font-family: $font-body;
+    font-size: $text-base;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--wtis-hero-muted, #9b9b9b);
+    margin-top: $space-2;
+  }
+
+  &__meta-sep {
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba($wtis-white, 0.35);
+  }
+
+  &__date {
+    color: inherit;
+  }
+
+  &__sport {
+    color: var(--wtis-blue-50);
+  }
+}
+
+// ── Article body: centered, max 800px, no sidebar ───────────
+
+.wtis-guide-body {
+  display: block;
+  padding: $space-10 $space-6 $space-16;
+
+  &__inner {
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: $font-body;
+    font-size: $text-lg;
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--wtis-ink);
+
+    > *:first-child {
+      margin-top: 0;
+    }
+
+    > *:last-child {
+      margin-bottom: 0;
+    }
+
+    p {
+      margin: 0 0 $space-6;
+    }
+
+    h2,
+    h3,
+    h4 {
+      font-family: $font-display;
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--wtis-ink);
+      margin: $space-10 0 $space-4;
+    }
+
+    h2 {
+      font-size: $text-3xl;
+      letter-spacing: 0.02em;
+    }
+
+    h3 {
+      font-size: $text-2xl;
+      letter-spacing: 0.02em;
+    }
+
+    h4 {
+      font-size: $text-xl;
+    }
+
+    a {
+      color: var(--wtis-blue-500);
+
+      &:hover {
+        color: var(--wtis-blue-700);
+      }
+    }
+
+    ul,
+    ol {
+      margin: 0 0 $space-6;
+      padding-left: 1.35em;
+    }
+
+    li {
+      margin-bottom: $space-2;
+    }
+
+    img {
+      height: auto;
+    }
+
+    blockquote {
+      margin: $space-8 0;
+      padding: $space-4 $space-6;
+      border-left: 4px solid var(--wtis-gold-400);
+      background: var(--wtis-gold-50);
+      font-style: normal;
+    }
+  }
+}
+
+@media (max-width: $bp-md) {
+  .wtis-guide-hero__grid {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .wtis-guide-hero__media {
+    min-height: 280px;
+  }
+
+  .wtis-guide-hero__img {
+    position: absolute;
+    min-height: 280px;
+  }
+
+  .wtis-guide-hero__media-placeholder {
+    min-height: 280px;
+  }
+
+  .wtis-guide-hero__panel-inner {
+    padding: $space-8 $space-6 $space-10;
+  }
+
+  .wtis-guide-hero__title {
+    font-size: $text-3xl;
+  }
+}

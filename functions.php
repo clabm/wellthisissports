@@ -32,9 +32,16 @@ function wtis_template_loader( $template ) {
         if ( $found ) return $found;
     }
     if ( is_singular( 'wtis_guide' ) ) {
-        $found = locate_template( 'templates/guide.php' );
-        if ( ! $found ) $found = locate_template( 'templates/page.php' );
-        if ( $found ) return $found;
+        $found = locate_template( 'templates/single-wtis_guide.php' );
+        if ( ! $found ) {
+            $found = locate_template( 'templates/guide.php' );
+        }
+        if ( ! $found ) {
+            $found = locate_template( 'templates/page.php' );
+        }
+        if ( $found ) {
+            return $found;
+        }
     }
     if ( is_single() ) {
         $found = locate_template( 'templates/single.php' );
