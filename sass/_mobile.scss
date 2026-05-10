@@ -5,6 +5,17 @@
 @use 'tokens' as *;
 
 @media (max-width: $bp-lg) {
+  html,
+  body,
+  #page,
+  #page-wrapper,
+  .wrapper,
+  .wtis-home,
+  .wtis-home__main {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
   .wtis-archive-grid {
     grid-template-columns: repeat(2, 1fr);
   }
