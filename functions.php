@@ -316,7 +316,10 @@ function wtis_register_post_meta() {
 
 add_filter( 'the_content', 'wtis_process_instagram_embeds', 20 );
 function wtis_process_instagram_embeds( string $content ): string {
-    $pattern = '/^(https?:\/\/(?:www\.)?instagram\.com\/(?:p|reel)\/[^\s\/]+\/?)\s*$/m';
+    // By priority 20, make_clickable() has already converted bare Instagram URLs
+    // into <a href="URL">URL</a>. Match that auto-linked pattern where href == text.
+    $ig_url  = 'https?:\/\/(?:www\.)?instagram\.com\/(?:p|reel)\/[a-zA-Z0-9_-]+\/?';
+    $pattern = '/<a\s+href="(' . $ig_url . ')"[^>]*>\s*' . $ig_url . '\s*<\/a>/i';
     if ( ! preg_match( $pattern, $content ) ) {
         return $content;
     }
