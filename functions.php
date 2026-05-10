@@ -309,6 +309,26 @@ function wtis_register_post_meta() {
     ] );
 }
 
+// ── Instagram embed conversion ───────────────────────────────
+// Facebook Graph API oEmbed requires an app token, so we convert
+// bare Instagram URLs on their own line into embed blockquotes
+// that instagram's embed.js renders client-side (no auth needed).
+
+add_filter( 'the_content', 'wtis_process_instagram_embeds', 20 );
+function wtis_process_instagram_embeds( string $content ): string {
+    $pattern = '/^(https?:\/\/(?:www\.)?instagram\.com\/(?:p|reel)\/[^\s\/]+\/?)\s*$/m';
+    if ( ! preg_match( $pattern, $content ) ) {
+        return $content;
+    }
+    wp_enqueue_script( 'instagram-embed', 'https://www.instagram.com/embed.js', [], null, true );
+    return preg_replace_callback( $pattern, function( $matches ) {
+        $url = esc_url( $matches[1] );
+        return '<blockquote class="instagram-media" data-instgrm-permalink="' . $url . '" data-instgrm-version="14" style="max-width:540px;margin:1rem auto;">'
+            . '<a href="' . $url . '">View on Instagram</a>'
+            . '</blockquote>';
+    }, $content );
+}
+
 // ── Newsletter AJAX handler ──────────────────────────────────
 
 add_action( 'wp_ajax_wtis_newsletter_subscribe',        'wtis_newsletter_subscribe' );
