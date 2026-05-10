@@ -31,6 +31,11 @@ function wtis_template_loader( $template ) {
         $found = locate_template( 'templates/front-page.php' );
         if ( $found ) return $found;
     }
+    if ( is_singular( 'wtis_guide' ) ) {
+        $found = locate_template( 'templates/guide.php' );
+        if ( ! $found ) $found = locate_template( 'templates/page.php' );
+        if ( $found ) return $found;
+    }
     if ( is_single() ) {
         $found = locate_template( 'templates/single.php' );
         if ( $found ) return $found;
@@ -101,12 +106,16 @@ function wtis_register_post_types() {
         'labels'       => [
             'name'          => __( 'Guides', 'wellthiissports-child' ),
             'singular_name' => __( 'Guide', 'wellthiissports-child' ),
+            'add_new_item'  => __( 'Add New Guide', 'wellthiissports-child' ),
+            'edit_item'     => __( 'Edit Guide', 'wellthiissports-child' ),
         ],
-        'public'       => false,
-        'show_ui'      => true,
-        'supports'     => [ 'title', 'thumbnail', 'excerpt', 'editor', 'custom-fields' ],
-        'show_in_rest' => true,
-        'menu_icon'    => 'dashicons-book',
+        'public'             => true,
+        'publicly_queryable' => true,
+        'has_archive'        => false,
+        'rewrite'            => [ 'slug' => 'guides', 'with_front' => false ],
+        'supports'           => [ 'title', 'thumbnail', 'excerpt', 'editor', 'custom-fields' ],
+        'show_in_rest'       => true,
+        'menu_icon'          => 'dashicons-book',
     ] );
 }
 
@@ -237,7 +246,7 @@ function wtis_register_post_meta() {
         'type'         => 'boolean',
     ];
 
-    foreach ( [ 'post', 'wtis_matchup' ] as $post_type ) {
+    foreach ( [ 'post', 'wtis_matchup', 'wtis_guide' ] as $post_type ) {
         // Matchup identifiers
         register_post_meta( $post_type, 'wtis_team_home',      $string_args );
         register_post_meta( $post_type, 'wtis_team_away',      $string_args );
