@@ -21,6 +21,8 @@
 
   &__main {
     display: block;
+    padding: 0;
+    margin: 0;
   }
 
   &__inner {
@@ -223,16 +225,33 @@
   }
 
   &__inner--lead {
-    padding-left: 0;
-    padding-right: 0;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
   }
+}
+
+// Lead sits flush in the homepage column: no Bootstrap wrapper inset or “card” chrome
+#page-wrapper.wtis-home,
+.wrapper.wtis-home {
+  padding-left: 0;
+  padding-right: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: var(--wtis-off-white);
 }
 
 // ── Lead: 50/50 article-hero pattern (no card wrapper) ──────
 
 .wtis-home-lead {
-  margin-bottom: $space-6;
+  margin: 0 0 $space-6;
+  padding: 0;
   border-radius: 0;
+  border: none;
+  box-shadow: none;
+  background: transparent;
   overflow: hidden;
 
   &__grid {
@@ -240,6 +259,11 @@
     grid-template-columns: 1fr 1fr;
     min-height: 500px;
     align-items: stretch;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
   }
 
   &--solo &__grid {
@@ -251,6 +275,9 @@
     min-height: 500px;
     overflow: hidden;
     background: var(--wtis-blue-50);
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
   }
 
   &__visual-link {
@@ -261,6 +288,7 @@
     text-decoration: none;
     color: inherit;
     overflow: hidden;
+    border-radius: 0;
 
     &:hover .wtis-home-lead__img {
       filter: brightness(1.06);
@@ -275,6 +303,7 @@
     object-fit: cover;
     object-position: center;
     display: block;
+    border-radius: 0;
     transition: filter $transition-slow;
   }
 
@@ -362,6 +391,9 @@
     display: flex;
     flex-direction: column;
     min-height: 500px;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
   }
 
   &__list {
@@ -426,13 +458,6 @@
     font-weight: 400;
     line-height: 1.4;
     color: var(--wtis-gray-500);
-  }
-}
-
-// Restore desktop breathing room between masthead and lead stories homepage rail.
-@media (min-width: #{$bp-lg + 1px}) {
-  .wtis-masthead + .wrapper.wtis-home {
-    margin-top: $space-8; // 32px
   }
 }
 
