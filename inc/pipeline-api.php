@@ -106,6 +106,13 @@ function wtis_register_pipeline_routes() {
         'permission_callback' => 'wtis_pipeline_auth',
     ] );
 
+    // POST — flush WP rewrite rules (pipeline auth required)
+    register_rest_route( 'wtis/v1', '/flush-rewrites', [
+        'methods'             => WP_REST_Server::CREATABLE,
+        'callback'            => 'wtis_pipeline_flush_rewrites',
+        'permission_callback' => 'wtis_pipeline_auth',
+    ] );
+
     // GET — accuracy ledger per sport
     register_rest_route( 'wtis/v1', '/ledger', [
         'methods'             => WP_REST_Server::READABLE,
@@ -516,6 +523,13 @@ function wtis_pipeline_status( WP_REST_Request $request ) {
         'api_version'     => 'wtis/v1',
         'site_url'        => get_site_url(),
     ], 200 );
+}
+
+// ── Flush rewrite rules ───────────────────────────────────────
+
+function wtis_pipeline_flush_rewrites( WP_REST_Request $request ) {
+    flush_rewrite_rules();
+    return new WP_REST_Response( [ 'success' => true, 'message' => 'Rewrite rules flushed.' ], 200 );
 }
 
 // ── Accuracy ledger ───────────────────────────────────────────
