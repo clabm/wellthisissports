@@ -146,7 +146,7 @@ repo-root/                          ← child theme root (wellthisiissports-chil
 │   ├── homepage-payload.php        ← homepage card data + media/badge helpers
 │   └── footer-content.php         ← footer include
 ├── templates/
-│   ├── front-page.php              ← Ringer homepage: 50/50 lead (article-hero pattern), Latest predictions mid row, wide + ledger (1400px max)
+│   ├── front-page.php              ← Ringer homepage: full-bleed 50/50 lead, Latest predictions (masthead-bg band, wtis-home__inner--mid), wide + ledger (1400px max)
 │   ├── single.php                  ← prediction detail page
 │   ├── archive.php                 ← sport/league archive
 │   └── page.php                    ← generic page template

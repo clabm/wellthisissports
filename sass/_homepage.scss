@@ -235,6 +235,12 @@
     border-radius: 0;
     box-shadow: none;
   }
+
+  // Latest predictions: tighter side padding than default inner so cards read wider
+  &__inner--mid {
+    padding-left: $space-3;
+    padding-right: $space-3;
+  }
 }
 
 // Lead sits flush in the homepage column: no Bootstrap wrapper inset or “card” chrome
@@ -484,6 +490,14 @@
     display: flex;
     flex-direction: column;
     gap: 0;
+    // Section uses masthead #1a1a1a; avoid nested #111 “card” inset
+    background: transparent;
+    border-radius: 0;
+    padding: $space-4 $space-3 $space-6;
+
+    @media (min-width: #{$bp-lg + 1px}) {
+      padding: 0 $space-3 $space-6;
+    }
   }
 }
 
@@ -491,10 +505,12 @@
 
 .wtis-home-mid {
   margin-bottom: $space-6;
+  // Match masthead (#1a1a1a, ~88% black); full-width band behind Latest predictions
+  background: var(--wtis-masthead-bg, #{$wtis-masthead-bg});
+  padding: $space-4 0;
 
   @media (min-width: #{$bp-lg + 1px}) {
     margin-top: 0;
-    background: var(--wtis-home-surface, #{$wtis-ink});
     // Spacing after lead lives inside the dark band (no off-white strip)
     padding: $space-6 0 $space-4;
   }

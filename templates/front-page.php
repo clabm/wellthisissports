@@ -111,7 +111,7 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 
 		<?php if ( ! empty( $mid_ids ) ) : ?>
 		<section class="wtis-home-mid" aria-label="<?php esc_attr_e( 'Latest predictions', 'wellthiissports-child' ); ?>">
-			<div class="wtis-home__inner">
+			<div class="wtis-home__inner wtis-home__inner--mid">
 				<div class="wtis-home-dark wtis-home-dark--mid">
 					<header class="wtis-home-mid__label-row">
 						<h2 class="wtis-home-mid__label"><?php esc_html_e( 'Latest predictions', 'wellthiissports-child' ); ?></h2>
