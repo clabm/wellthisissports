@@ -108,11 +108,8 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 			<div class="wtis-home__inner">
 				<div class="wtis-home-dark wtis-home-dark--mid">
 					<header class="wtis-home-mid__label-row">
-						<h2 class="wtis-home-mid__label">
-							<span class="wtis-home-mid__label-line"><?php esc_html_e( 'Latest', 'wellthiissports-child' ); ?></span>
-							<span class="wtis-home-mid__gold-rule" aria-hidden="true"></span>
-							<span class="wtis-home-mid__label-line wtis-home-mid__label-line--rest"><?php esc_html_e( 'Predictions', 'wellthiissports-child' ); ?></span>
-						</h2>
+						<h2 class="wtis-home-mid__label"><?php esc_html_e( 'Latest predictions', 'wellthiissports-child' ); ?></h2>
+						<span class="wtis-home-mid__gold-rule" aria-hidden="true"></span>
 					</header>
 					<div class="wtis-home-mid__grid">
 						<?php foreach ( $mid_ids as $mid_id ) : ?>
