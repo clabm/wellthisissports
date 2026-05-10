@@ -695,7 +695,6 @@ function wtis_save_guide_meta( int $post_id, array $params ): void {
         'venue_name'           => 'wtis_guide_venue_name',
         'venue_address'        => 'wtis_guide_venue_address',
         'venue_place_id'       => 'wtis_guide_venue_place_id',
-        'instagram_account'    => 'wtis_guide_instagram_account',
         'instagram_post_url'   => 'wtis_guide_instagram_post_url',
     ];
 

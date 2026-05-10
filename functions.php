@@ -300,7 +300,6 @@ function wtis_register_post_meta() {
     register_post_meta( 'wtis_guide', 'wtis_guide_venue_address',      $string_args );
     register_post_meta( 'wtis_guide', 'wtis_guide_venue_place_id',     $string_args );
     register_post_meta( 'wtis_guide', 'wtis_guide_map_embed',          $bool_args );
-    register_post_meta( 'wtis_guide', 'wtis_guide_instagram_account',    $string_args );
     register_post_meta( 'wtis_guide', 'wtis_guide_instagram_post_url',  $string_args );
     register_post_meta( 'wtis_guide', 'wtis_guide_instagram_embed_code', [
         'type'         => 'string',

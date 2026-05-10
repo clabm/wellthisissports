@@ -295,9 +295,8 @@ All prediction content lives in post meta, not post content.
 | `wtis_guide_venue_address` | Full address; when set, guide shows a **Get Directions** link to Google Maps search (no embed) |
 | `wtis_guide_venue_place_id` | Reserved for a future Maps embed (not used in theme) |
 | `wtis_guide_map_embed` | Reserved for pipeline/API; theme uses link-only Maps |
-| `wtis_guide_instagram_account` | Handle without `@`; shown as follow link if no post URL or embed code |
 | `wtis_guide_instagram_post_url` | Post URL for `wp_oembed_get`; used if no embed code |
-| `wtis_guide_instagram_embed_code` | Raw blockquote+script HTML from Instagram; highest priority; `show_in_rest: false`, sanitized via `wp_kses_post` |
+| `wtis_guide_instagram_embed_code` | Raw Instagram embed code pasted directly by the editor. Template renders it inline. `show_in_rest: false`, sanitized via `wp_kses_post` |
 
 ---
 
