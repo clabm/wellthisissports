@@ -264,14 +264,31 @@
       height: auto;
     }
 
-    blockquote {
+    blockquote:not(.instagram-media) {
       margin: $space-8 0;
       padding: $space-4 $space-6;
       border-left: 4px solid var(--wtis-gold-400);
       background: var(--wtis-gold-50);
       font-style: normal;
     }
+
+    .instagram-media,
+    blockquote.instagram-media {
+      margin-left: auto !important;
+      margin-right: auto !important;
+      display: block !important;
+      max-width: 540px !important;
+      width: 100% !important;
+    }
   }
+}
+
+.wtis-instagram-embed {
+  display: flex;
+  justify-content: center;
+  margin: $space-8 auto;
+  max-width: 540px;
+  width: 100%;
 }
 
 // ── Instagram: oEmbed or follow prompt (end of guide main) ──

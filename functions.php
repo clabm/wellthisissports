@@ -325,10 +325,12 @@ function wtis_process_instagram_embeds( string $content ): string {
     }
     wp_enqueue_script( 'instagram-embed', 'https://www.instagram.com/embed.js', [], null, true );
     return preg_replace_callback( $pattern, function( $matches ) {
-        $url = esc_url( $matches[1] );
-        return '<blockquote class="instagram-media" data-instgrm-permalink="' . $url . '" data-instgrm-version="14" style="max-width:540px;margin:1rem auto;">'
-            . '<a href="' . $url . '">View on Instagram</a>'
-            . '</blockquote>';
+        $href = esc_url( $matches[1] );
+        return '<div class="wtis-instagram-embed">'
+            . '<blockquote class="instagram-media" data-instgrm-permalink="' . esc_attr( $href ) . '" data-instgrm-version="14">'
+            . '<a href="' . esc_url( $href ) . '">View on Instagram</a>'
+            . '</blockquote>'
+            . '</div>';
     }, $content );
 }
 
