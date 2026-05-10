@@ -546,9 +546,9 @@ function wtis_pipeline_status( WP_REST_Request $request ) {
 function wtis_pipeline_guide_args() {
     return [
         'title' => [
-            'required'          => true,
             'type'              => 'string',
             'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
         ],
         'content' => [
             'type'              => 'string',
@@ -628,6 +628,10 @@ function wtis_pipeline_guide_args() {
 
 function wtis_pipeline_create_guide( WP_REST_Request $request ) {
     $params = $request->get_params();
+
+    if ( empty( $params['title'] ) ) {
+        return new WP_Error( 'rest_missing_title', 'title is required to create a guide.', [ 'status' => 400 ] );
+    }
 
     $post_id = wp_insert_post( [
         'post_title'   => $params['title'],
