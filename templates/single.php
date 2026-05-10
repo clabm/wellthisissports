@@ -85,7 +85,7 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 
 				<?php if ( $analysis ) : ?>
 				<div class="wtis-analysis">
-					<h2 class="wtis-analysis__heading"><?php esc_html_e( 'The Analysis', 'wellthiissports-child' ); ?></h2>
+					<h2 class="wtis-analysis__heading"><?php esc_html_e( 'The Breakdown', 'wellthiissports-child' ); ?></h2>
 					<div class="wtis-analysis__body">
 						<?php echo wp_kses_post( wpautop( $analysis ) ); ?>
 					</div>
@@ -94,7 +94,7 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 
 				<?php if ( $factors_for_list || $factors_against_list ) : ?>
 				<section class="wtis-takeaways" aria-labelledby="wtis-takeaways-heading">
-					<h2 id="wtis-takeaways-heading" class="wtis-takeaways__heading"><?php esc_html_e( 'Key Factors', 'wellthiissports-child' ); ?></h2>
+					<h2 id="wtis-takeaways-heading" class="wtis-takeaways__heading"><?php esc_html_e( 'The Edge', 'wellthiissports-child' ); ?></h2>
 					<div class="wtis-takeaways__grid">
 						<?php if ( $factors_for_list ) : ?>
 						<div class="wtis-takeaways__col wtis-takeaways__col--for">
@@ -122,7 +122,7 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 
 				<?php if ( $nobody_saying ) : ?>
 				<section class="wtis-nobody-saying" aria-labelledby="wtis-nobody-heading">
-					<h2 id="wtis-nobody-heading" class="wtis-nobody-saying__label"><?php esc_html_e( 'What Nobody Is Saying', 'wellthiissports-child' ); ?></h2>
+					<h2 id="wtis-nobody-heading" class="wtis-nobody-saying__label"><?php esc_html_e( 'The Blind Side', 'wellthiissports-child' ); ?></h2>
 					<p class="wtis-nobody-saying__body"><?php echo esc_html( $nobody_saying ); ?></p>
 				</section>
 				<?php endif; ?>

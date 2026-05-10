@@ -158,7 +158,7 @@ repo-root/                          ← child theme root (wellthisiissports-chil
 │   ├── _masthead.scss              ← dark masthead bar, logo, nav
 │   ├── _homepage.scss              ← matchup grid, sport sections
 │   ├── _matchup.scss               ← prediction display, confidence meter, ledger
-│   ├── _takeaways.scss             ← key factors component
+│   ├── _takeaways.scss             ← The Edge component (key factors for/against)
 │   ├── _ads.scss                   ← ad unit positions
 │   ├── _footer.scss                ← footer styles
 │   ├── _pages.scss                 ← generic page styles
@@ -352,7 +352,7 @@ Sports data APIs → upcoming matchup extraction → dedup → candidates.json
 STAGE 2: PREDICT (predict.py)
 Claude Haiku → predictive analysis per matchup
 → Winner prediction + confidence score
-→ Key factors → What the data says vs the narrative
+→ The Breakdown → The Edge → The Blind Side → Image brief → framed.json
 → Image brief → framed.json
 
 STAGE 3: PUBLISH (publish.py)
@@ -429,10 +429,10 @@ You are a neutral AI sports analyst.
 Given the following matchup data, generate a prediction:
 
 PREDICTION: [winner + confidence score 1-100]
-ANALYSIS: [key factors, what the data says vs the narrative]
-FACTORS FOR: [top 3 reasons this team wins]
-FACTORS AGAINST: [top 3 risks for this team]
-WHAT NOBODY'S SAYING: [the angle everyone is missing]
+THE BREAKDOWN: [500-600 word analysis, what the data says vs the narrative]
+THE EDGE — FACTORS FOR: [top 3 reasons this team wins]
+THE EDGE — FACTORS AGAINST: [top 3 risks for this team]
+THE BLIND SIDE: [the angle everyone is missing]
 
 Rules:
 - Confidence score must be justified with specific data
