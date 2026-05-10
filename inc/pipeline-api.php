@@ -3,16 +3,15 @@
  * pipeline-api.php
  * Well This Is Sports — AI pipeline REST API endpoints.
  *
- * Registers custom WP REST API routes for the WTIS prediction pipeline.
- *
  * Endpoints:
- *   POST   /wp-json/wtis/v1/matchups           — create matchup
- *   PATCH  /wp-json/wtis/v1/matchups/{id}      — update matchup fields
- *   POST   /wp-json/wtis/v1/matchups/{id}/image — upload featured image
- *   PATCH  /wp-json/wtis/v1/matchups/{id}/status — set draft/publish
- *   PATCH  /wp-json/wtis/v1/matchups/{id}/result — post-game result update
- *   GET    /wp-json/wtis/v1/status             — pipeline health check
- *   GET    /wp-json/wtis/v1/ledger             — accuracy ledger per sport
+ *   POST   /wp-json/wtis/v1/matchups                    — create matchup
+ *   PATCH  /wp-json/wtis/v1/matchups/{id}               — update matchup fields
+ *   PATCH  /wp-json/wtis/v1/matchups/{id}/taxonomies    — assign taxonomy terms
+ *   POST   /wp-json/wtis/v1/matchups/{id}/image         — upload featured image
+ *   PATCH  /wp-json/wtis/v1/matchups/{id}/status        — set draft/publish
+ *   PATCH  /wp-json/wtis/v1/matchups/{id}/result        — post-game result update
+ *   GET    /wp-json/wtis/v1/status                      — pipeline health check
+ *   GET    /wp-json/wtis/v1/ledger                      — accuracy ledger per sport
  *
  * Auth: X-WTIS-Key header, key stored in WP option wtis_pipeline_api_key
  */
@@ -39,6 +38,25 @@ function wtis_register_pipeline_routes() {
         'callback'            => 'wtis_pipeline_update_matchup',
         'permission_callback' => 'wtis_pipeline_auth',
         'args'                => wtis_pipeline_matchup_args(),
+    ] );
+
+    // PATCH — assign taxonomy terms
+    register_rest_route( 'wtis/v1', '/matchups/(?P<id>\d+)/taxonomies', [
+        'methods'             => WP_REST_Server::EDITABLE,
+        'callback'            => 'wtis_pipeline_set_taxonomies',
+        'permission_callback' => 'wtis_pipeline_auth',
+        'args'                => [
+            'tournament_slug' => [
+                'type'              => 'string',
+                'sanitize_callback' => 'sanitize_title',
+                'default'           => '',
+            ],
+            'sport_slug' => [
+                'type'              => 'string',
+                'sanitize_callback' => 'sanitize_title',
+                'default'           => '',
+            ],
+        ],
     ] );
 
     // POST — upload featured image
@@ -218,6 +236,18 @@ function wtis_pipeline_matchup_args() {
             'default'           => '',
         ],
 
+        // Taxonomy slugs
+        'tournament_slug' => [
+            'type'              => 'string',
+            'sanitize_callback' => 'sanitize_title',
+            'default'           => '',
+        ],
+        'sport_slug' => [
+            'type'              => 'string',
+            'sanitize_callback' => 'sanitize_title',
+            'default'           => '',
+        ],
+
         // Pipeline metadata
         'ingested_at' => [
             'type'              => 'string',
@@ -259,7 +289,7 @@ function wtis_pipeline_create_matchup( WP_REST_Request $request ) {
     $post_id = wp_insert_post( [
         'post_title'   => $params['matchup_title'],
         'post_status'  => $params['post_status'] ?? 'draft',
-        'post_type'    => 'post',
+        'post_type'    => 'wtis_matchup',
         'post_author'  => $params['post_author'] ?? 1,
         'post_content' => '',
         'post_excerpt' => sanitize_text_field(
@@ -327,6 +357,42 @@ function wtis_pipeline_update_matchup( WP_REST_Request $request ) {
     ], 200 );
 }
 
+// ── Assign taxonomy terms ─────────────────────────────────────
+
+function wtis_pipeline_set_taxonomies( WP_REST_Request $request ) {
+    $post_id         = (int) $request->get_param( 'id' );
+    $tournament_slug = $request->get_param( 'tournament_slug' );
+    $sport_slug      = $request->get_param( 'sport_slug' );
+
+    if ( ! get_post( $post_id ) ) {
+        return new WP_Error( 'rest_not_found', 'Matchup not found.', [ 'status' => 404 ] );
+    }
+
+    $assigned = [];
+
+    if ( $tournament_slug ) {
+        $term_id = wtis_get_or_create_term( $tournament_slug, 'wtis_tournament' );
+        if ( $term_id ) {
+            wp_set_post_terms( $post_id, [ $term_id ], 'wtis_tournament' );
+            $assigned['tournament'] = $tournament_slug;
+        }
+    }
+
+    if ( $sport_slug ) {
+        $term_id = wtis_get_or_create_term( $sport_slug, 'wtis_sport' );
+        if ( $term_id ) {
+            wp_set_post_terms( $post_id, [ $term_id ], 'wtis_sport' );
+            $assigned['sport'] = $sport_slug;
+        }
+    }
+
+    return new WP_REST_Response( [
+        'success'  => true,
+        'post_id'  => $post_id,
+        'assigned' => $assigned,
+    ], 200 );
+}
+
 // ── Set post status ──────────────────────────────────────────
 
 function wtis_pipeline_set_status( WP_REST_Request $request ) {
@@ -353,8 +419,8 @@ function wtis_pipeline_set_status( WP_REST_Request $request ) {
 // ── Post-game result update ───────────────────────────────────
 
 function wtis_pipeline_update_result( WP_REST_Request $request ) {
-    $post_id           = (int) $request->get_param( 'id' );
-    $actual_result     = $request->get_param( 'actual_result' );
+    $post_id            = (int) $request->get_param( 'id' );
+    $actual_result      = $request->get_param( 'actual_result' );
     $prediction_correct = (bool) $request->get_param( 'prediction_correct' );
 
     if ( ! get_post( $post_id ) ) {
@@ -429,14 +495,23 @@ function wtis_pipeline_upload_image( WP_REST_Request $request ) {
 // ── Pipeline status ───────────────────────────────────────────
 
 function wtis_pipeline_status( WP_REST_Request $request ) {
-    $draft_count   = wp_count_posts()->draft;
-    $publish_count = wp_count_posts()->publish;
-    $last_pub      = get_posts( [ 'posts_per_page' => 1, 'post_status' => 'publish' ] );
+    $post_counts    = wp_count_posts( 'wtis_matchup' );
+    $legacy_counts  = wp_count_posts( 'post' );
+    $draft_count    = (int) $post_counts->draft + (int) $legacy_counts->draft;
+    $publish_count  = (int) $post_counts->publish + (int) $legacy_counts->publish;
+
+    $last_pub = get_posts( [
+        'post_type'      => [ 'wtis_matchup', 'post' ],
+        'posts_per_page' => 1,
+        'post_status'    => 'publish',
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+    ] );
 
     return new WP_REST_Response( [
         'status'          => 'ok',
-        'drafts_pending'  => (int) $draft_count,
-        'published_total' => (int) $publish_count,
+        'drafts_pending'  => $draft_count,
+        'published_total' => $publish_count,
         'last_published'  => $last_pub ? $last_pub[0]->post_date : null,
         'api_version'     => 'wtis/v1',
         'site_url'        => get_site_url(),
@@ -458,21 +533,21 @@ function wtis_pipeline_ledger( WP_REST_Request $request ) {
 
 function wtis_save_matchup_meta( int $post_id, array $params ): void {
     $meta_map = [
-        'team_home'          => 'wtis_team_home',
-        'team_away'          => 'wtis_team_away',
-        'matchup_title'      => 'wtis_matchup_title',
-        'sport'              => 'wtis_sport',
-        'league'             => 'wtis_league',
-        'matchup_date'       => 'wtis_matchup_date',
-        'prediction_winner'  => 'wtis_prediction_winner',
-        'confidence_score'   => 'wtis_confidence_score',
-        'analysis'           => 'wtis_analysis',
-        'prediction_grade'   => 'wtis_prediction_grade',
-        'ingested_at'        => 'wtis_ingested_at',
-        'actual_result'      => 'wtis_actual_result',
-        'prediction_correct' => 'wtis_prediction_correct',
-        'factors_for'        => 'wtis_factors_for',
-        'factors_against'    => 'wtis_factors_against',
+        'team_home'            => 'wtis_team_home',
+        'team_away'            => 'wtis_team_away',
+        'matchup_title'        => 'wtis_matchup_title',
+        'sport'                => 'wtis_sport',
+        'league'               => 'wtis_league',
+        'matchup_date'         => 'wtis_matchup_date',
+        'prediction_winner'    => 'wtis_prediction_winner',
+        'confidence_score'     => 'wtis_confidence_score',
+        'analysis'             => 'wtis_analysis',
+        'prediction_grade'     => 'wtis_prediction_grade',
+        'ingested_at'          => 'wtis_ingested_at',
+        'actual_result'        => 'wtis_actual_result',
+        'prediction_correct'   => 'wtis_prediction_correct',
+        'factors_for'          => 'wtis_factors_for',
+        'factors_against'      => 'wtis_factors_against',
         'what_nobody_saying'   => 'wtis_what_nobody_saying',
         'article_stage'        => 'wtis_article_stage',
         'image_brief_scene'    => 'wtis_image_brief_scene',
@@ -487,6 +562,33 @@ function wtis_save_matchup_meta( int $post_id, array $params ): void {
     }
 
     update_post_meta( $post_id, 'wtis_ai_generated', true );
+
+    // Assign taxonomy terms if slugs provided
+    if ( ! empty( $params['tournament_slug'] ) ) {
+        $term_id = wtis_get_or_create_term( $params['tournament_slug'], 'wtis_tournament' );
+        if ( $term_id ) {
+            wp_set_post_terms( $post_id, [ $term_id ], 'wtis_tournament' );
+        }
+    }
+    if ( ! empty( $params['sport_slug'] ) ) {
+        $term_id = wtis_get_or_create_term( $params['sport_slug'], 'wtis_sport' );
+        if ( $term_id ) {
+            wp_set_post_terms( $post_id, [ $term_id ], 'wtis_sport' );
+        }
+    }
+}
+
+function wtis_get_or_create_term( string $slug, string $taxonomy ): int {
+    $existing = get_term_by( 'slug', $slug, $taxonomy );
+    if ( $existing ) {
+        return (int) $existing->term_id;
+    }
+    $label  = ucwords( str_replace( '-', ' ', $slug ) );
+    $result = wp_insert_term( $label, $taxonomy, [ 'slug' => $slug ] );
+    if ( is_wp_error( $result ) ) {
+        return 0;
+    }
+    return (int) $result['term_id'];
 }
 
 function wtis_sideload_featured_image( int $post_id, string $url, string $title ): void {

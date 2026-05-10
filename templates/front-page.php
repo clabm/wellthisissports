@@ -14,6 +14,7 @@ require_once get_stylesheet_directory() . '/inc/homepage-payload.php';
 
 $home_query = new WP_Query(
 	[
+		'post_type'      => [ 'post', 'wtis_matchup' ],
 		'posts_per_page' => 16,
 		'post_status'    => 'publish',
 		'meta_key'       => 'wtis_matchup_date',

@@ -30,6 +30,14 @@ os.makedirs(TEMP_IMAGES_DIR, exist_ok=True)
 
 OPENAI_IMAGE_ENDPOINT = "https://api.openai.com/v1/images/generations"
 
+# Maps wtis_sport display value (lowercase) to taxonomy slugs.
+SPORT_TOURNAMENT_SLUG = {
+    "world cup": "world-cup",
+}
+SPORT_SLUG_MAP = {
+    "world cup": "soccer",
+}
+
 
 def _pipeline_headers():
     return {"X-WTIS-Key": PIPELINE_API_KEY}
@@ -160,6 +168,8 @@ def create_matchup_post(prediction):
         "headline_seo": prediction.get("wtis_headline_seo", ""),
         "article_stage": prediction.get("wtis_article_stage", "matchup"),
         "ingested_at": prediction.get("matchup_date", ""),
+        "tournament_slug": SPORT_TOURNAMENT_SLUG.get(prediction.get("sport", "").lower(), ""),
+        "sport_slug": SPORT_SLUG_MAP.get(prediction.get("sport", "").lower(), ""),
         "post_status": "publish",
     }
 

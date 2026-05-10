@@ -41,6 +41,7 @@ defined( 'ABSPATH' ) || exit;
 				?>
 				<ul class="wtis-masthead__nav">
 					<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Predictions', 'wellthiissports-child' ); ?></a></li>
+					<li><a href="<?php echo esc_url( home_url( '/world-cup/' ) ); ?>"><?php esc_html_e( 'World Cup', 'wellthiissports-child' ); ?></a></li>
 				</ul>
 				<?php
 			}
@@ -62,6 +63,7 @@ defined( 'ABSPATH' ) || exit;
 		?>
 		<ul id="wtis-mobile-nav" class="wtis-mobile-nav">
 			<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Predictions', 'wellthiissports-child' ); ?></a></li>
+			<li><a href="<?php echo esc_url( home_url( '/world-cup/' ) ); ?>"><?php esc_html_e( 'World Cup', 'wellthiissports-child' ); ?></a></li>
 		</ul>
 		<?php
 	}

@@ -5,6 +5,8 @@
  *
  * Handles:
  *   - Child theme styles and scripts
+ *   - Custom post types: wtis_matchup, wtis_guide
+ *   - Custom taxonomies: wtis_tournament, wtis_sport, wtis_content_type
  *   - Custom post meta registration (prediction fields)
  *   - WP REST API endpoint for AI pipeline
  *   - Newsletter AJAX handler
@@ -33,8 +35,16 @@ function wtis_template_loader( $template ) {
         $found = locate_template( 'templates/single.php' );
         if ( $found ) return $found;
     }
+    if ( is_tax( 'wtis_tournament' ) || is_tax( 'wtis_sport' ) ) {
+        $found = locate_template( 'templates/tournament.php' );
+        if ( $found ) return $found;
+    }
     if ( is_archive() || is_category() ) {
         $found = locate_template( 'templates/archive.php' );
+        if ( $found ) return $found;
+    }
+    if ( is_page( 'world-cup' ) ) {
+        $found = locate_template( 'templates/tournament.php' );
         if ( $found ) return $found;
     }
     if ( is_page() && ! is_front_page() ) {
@@ -63,6 +73,84 @@ function wtis_theme_setup() {
     register_nav_menus( [
         'primary' => __( 'Primary Navigation', 'wellthiissports-child' ),
         'footer'  => __( 'Footer Menu', 'wellthiissports-child' ),
+    ] );
+}
+
+// ── Custom post types ────────────────────────────────────────
+
+add_action( 'init', 'wtis_register_post_types' );
+function wtis_register_post_types() {
+    register_post_type( 'wtis_matchup', [
+        'labels'       => [
+            'name'          => __( 'Matchups', 'wellthiissports-child' ),
+            'singular_name' => __( 'Matchup', 'wellthiissports-child' ),
+            'add_new_item'  => __( 'Add New Matchup', 'wellthiissports-child' ),
+            'edit_item'     => __( 'Edit Matchup', 'wellthiissports-child' ),
+            'search_items'  => __( 'Search Matchups', 'wellthiissports-child' ),
+            'not_found'     => __( 'No matchups found.', 'wellthiissports-child' ),
+        ],
+        'public'       => true,
+        'has_archive'  => 'predictions',
+        'rewrite'      => [ 'slug' => 'predictions', 'with_front' => false ],
+        'supports'     => [ 'title', 'thumbnail', 'excerpt', 'custom-fields' ],
+        'show_in_rest' => true,
+        'menu_icon'    => 'dashicons-superhero-alt',
+    ] );
+
+    register_post_type( 'wtis_guide', [
+        'labels'       => [
+            'name'          => __( 'Guides', 'wellthiissports-child' ),
+            'singular_name' => __( 'Guide', 'wellthiissports-child' ),
+        ],
+        'public'       => false,
+        'show_ui'      => true,
+        'supports'     => [ 'title', 'thumbnail', 'excerpt', 'editor', 'custom-fields' ],
+        'show_in_rest' => true,
+        'menu_icon'    => 'dashicons-book',
+    ] );
+}
+
+// ── Custom taxonomies ────────────────────────────────────────
+
+add_action( 'init', 'wtis_register_taxonomies' );
+function wtis_register_taxonomies() {
+    $post_types = [ 'wtis_matchup', 'wtis_guide' ];
+
+    register_taxonomy( 'wtis_tournament', $post_types, [
+        'labels'        => [
+            'name'          => __( 'Tournaments', 'wellthiissports-child' ),
+            'singular_name' => __( 'Tournament', 'wellthiissports-child' ),
+            'all_items'     => __( 'All Tournaments', 'wellthiissports-child' ),
+            'add_new_item'  => __( 'Add New Tournament', 'wellthiissports-child' ),
+        ],
+        'hierarchical'  => true,
+        'public'        => true,
+        'show_in_rest'  => true,
+        'rewrite'       => [ 'slug' => 'tournament', 'with_front' => false ],
+    ] );
+
+    register_taxonomy( 'wtis_sport', $post_types, [
+        'labels'        => [
+            'name'          => __( 'Sports', 'wellthiissports-child' ),
+            'singular_name' => __( 'Sport', 'wellthiissports-child' ),
+            'all_items'     => __( 'All Sports', 'wellthiissports-child' ),
+        ],
+        'hierarchical'  => false,
+        'public'        => true,
+        'show_in_rest'  => true,
+        'rewrite'       => [ 'slug' => 'sport', 'with_front' => false ],
+    ] );
+
+    register_taxonomy( 'wtis_content_type', $post_types, [
+        'labels'        => [
+            'name'          => __( 'Content Types', 'wellthiissports-child' ),
+            'singular_name' => __( 'Content Type', 'wellthiissports-child' ),
+        ],
+        'hierarchical'  => false,
+        'public'        => false,
+        'show_ui'       => true,
+        'show_in_rest'  => true,
+        'rewrite'       => false,
     ] );
 }
 
@@ -138,54 +226,58 @@ function wtis_register_post_meta() {
         'type'              => 'string',
         'sanitize_callback' => 'wp_kses_post',
     ];
+    $int_args = [
+        'show_in_rest' => true,
+        'single'       => true,
+        'type'         => 'integer',
+    ];
+    $bool_args = [
+        'show_in_rest' => true,
+        'single'       => true,
+        'type'         => 'boolean',
+    ];
 
-    // Matchup identifiers
-    register_post_meta( 'post', 'wtis_team_home',      $string_args );
-    register_post_meta( 'post', 'wtis_team_away',      $string_args );
-    register_post_meta( 'post', 'wtis_matchup_title',  $string_args );
-    register_post_meta( 'post', 'wtis_sport',          $string_args );
-    register_post_meta( 'post', 'wtis_league',         $string_args );
-    register_post_meta( 'post', 'wtis_matchup_date',   $string_args );
+    foreach ( [ 'post', 'wtis_matchup' ] as $post_type ) {
+        // Matchup identifiers
+        register_post_meta( $post_type, 'wtis_team_home',      $string_args );
+        register_post_meta( $post_type, 'wtis_team_away',      $string_args );
+        register_post_meta( $post_type, 'wtis_matchup_title',  $string_args );
+        register_post_meta( $post_type, 'wtis_sport',          $string_args );
+        register_post_meta( $post_type, 'wtis_league',         $string_args );
+        register_post_meta( $post_type, 'wtis_matchup_date',   $string_args );
 
-    // Prediction
-    register_post_meta( 'post', 'wtis_prediction_winner', $string_args );
-    register_post_meta( 'post', 'wtis_confidence_score', [
-        'show_in_rest' => true, 'single' => true, 'type' => 'integer',
-    ] );
-    register_post_meta( 'post', 'wtis_analysis', $text_args );
-    register_post_meta( 'post', 'wtis_prediction_grade', [
-        'show_in_rest' => true, 'single' => true, 'type' => 'integer',
-    ] );
+        // Prediction
+        register_post_meta( $post_type, 'wtis_prediction_winner', $string_args );
+        register_post_meta( $post_type, 'wtis_confidence_score',  $int_args );
+        register_post_meta( $post_type, 'wtis_analysis',          $text_args );
+        register_post_meta( $post_type, 'wtis_prediction_grade',  $int_args );
 
-    // Pipeline metadata
-    register_post_meta( 'post', 'wtis_ai_generated', [
-        'show_in_rest' => true, 'single' => true, 'type' => 'boolean',
-    ] );
-    register_post_meta( 'post', 'wtis_ingested_at', $string_args );
+        // Pipeline metadata
+        register_post_meta( $post_type, 'wtis_ai_generated', $bool_args );
+        register_post_meta( $post_type, 'wtis_ingested_at',  $string_args );
 
-    // Post-game
-    register_post_meta( 'post', 'wtis_actual_result', $string_args );
-    register_post_meta( 'post', 'wtis_prediction_correct', [
-        'show_in_rest' => true, 'single' => true, 'type' => 'boolean',
-    ] );
+        // Post-game
+        register_post_meta( $post_type, 'wtis_actual_result',      $string_args );
+        register_post_meta( $post_type, 'wtis_prediction_correct', $bool_args );
 
-    // Factors and narrative
-    register_post_meta( 'post', 'wtis_factors_for',         $string_args );
-    register_post_meta( 'post', 'wtis_factors_against',     $string_args );
-    register_post_meta( 'post', 'wtis_what_nobody_saying',  $text_args );
+        // Factors and narrative
+        register_post_meta( $post_type, 'wtis_factors_for',        $string_args );
+        register_post_meta( $post_type, 'wtis_factors_against',    $string_args );
+        register_post_meta( $post_type, 'wtis_what_nobody_saying', $text_args );
 
-    // Headlines
-    register_post_meta( 'post', 'wtis_headline_personality', $string_args );
-    register_post_meta( 'post', 'wtis_headline_seo',         $string_args );
+        // Headlines
+        register_post_meta( $post_type, 'wtis_headline_personality', $string_args );
+        register_post_meta( $post_type, 'wtis_headline_seo',         $string_args );
 
-    // Article lifecycle
-    register_post_meta( 'post', 'wtis_article_stage',     $string_args );
-    register_post_meta( 'post', 'wtis_image_brief_scene', $string_args );
+        // Article lifecycle
+        register_post_meta( $post_type, 'wtis_article_stage',     $string_args );
+        register_post_meta( $post_type, 'wtis_image_brief_scene', $string_args );
 
-    // SEO — writable via REST so pipeline can set them
-    register_post_meta( 'post', 'rank_math_title',         $string_args );
-    register_post_meta( 'post', 'rank_math_description',   $string_args );
-    register_post_meta( 'post', 'rank_math_focus_keyword', $string_args );
+        // SEO — writable via REST so pipeline can set them
+        register_post_meta( $post_type, 'rank_math_title',         $string_args );
+        register_post_meta( $post_type, 'rank_math_description',   $string_args );
+        register_post_meta( $post_type, 'rank_math_focus_keyword', $string_args );
+    }
 }
 
 // ── Newsletter AJAX handler ──────────────────────────────────
@@ -250,7 +342,8 @@ function wtis_purge_cache_on_publish( $post_id ) {
         do_action( 'breeze_clear_all_cache' );
     }
 }
-add_action( 'publish_post', 'wtis_purge_cache_on_publish' );
+add_action( 'publish_post',         'wtis_purge_cache_on_publish' );
+add_action( 'publish_wtis_matchup', 'wtis_purge_cache_on_publish' );
 
 // ── Disable per-post RSS feed endpoints ──────────────────────
 

@@ -33,6 +33,16 @@ LEAGUE_SPORT_MAP = {
     1: "World Cup",
 }
 
+# Maps API-Football league IDs to wtis_tournament taxonomy term slugs.
+LEAGUE_TOURNAMENT_SLUG = {
+    1: "world-cup",
+}
+
+# Maps API-Football league IDs to wtis_sport taxonomy term slugs.
+LEAGUE_SPORT_SLUG = {
+    1: "soccer",
+}
+
 # How far ahead to look for fixtures
 LOOKAHEAD_DAYS = 14
 
@@ -156,6 +166,8 @@ def extract_candidate(fixture):
         "home_logo": teams.get("home", {}).get("logo", ""),
         "away_logo": teams.get("away", {}).get("logo", ""),
         "round": league.get("round", ""),
+        "tournament_slug": LEAGUE_TOURNAMENT_SLUG.get(league_id, ""),
+        "sport_slug": LEAGUE_SPORT_SLUG.get(league_id, ""),
     }
 
 

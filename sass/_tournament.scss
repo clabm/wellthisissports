@@ -1,0 +1,48 @@
+// _tournament.scss — Tournament landing page styles
+@use 'tokens' as *;
+
+// ── Page wrapper ─────────────────────────────────────────────
+
+.wtis-tournament {
+    background: var(--wtis-off-white);
+    min-height: 100vh;
+}
+
+.wtis-tournament__main {
+    padding-bottom: $space-16;
+}
+
+// ── Header ───────────────────────────────────────────────────
+
+.wtis-tournament__header {
+    background: var(--wtis-ink);
+    padding: $space-12 0 $space-8;
+    margin-bottom: $space-10;
+
+    .container {
+        max-width: $wtis-home-max;
+        margin: 0 auto;
+        padding: 0 $space-6;
+    }
+}
+
+.wtis-tournament__label {
+    font-family: $font-ui;
+    font-size: $text-xs;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--wtis-gold-400);
+    margin: 0 0 $space-2;
+}
+
+.wtis-tournament__title {
+    font-family: $font-display;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    color: var(--wtis-white);
+    margin: 0;
+    line-height: 1.05;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+}
