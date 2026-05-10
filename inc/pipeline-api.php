@@ -597,12 +597,12 @@ function wtis_pipeline_guide_args() {
         ],
         'tournament_slug' => [
             'type'              => 'string',
-            'sanitize_callback' => 'sanitize_title',
+            'sanitize_callback' => 'sanitize_text_field',
             'default'           => '',
         ],
         'sport_slug' => [
             'type'              => 'string',
-            'sanitize_callback' => 'sanitize_title',
+            'sanitize_callback' => 'sanitize_text_field',
             'default'           => '',
         ],
         'post_status' => [
