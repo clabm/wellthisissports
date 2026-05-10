@@ -223,6 +223,13 @@
   }
 }
 
+// Restore desktop breathing room between masthead and lead stories homepage rail.
+@media (min-width: #{$bp-lg + 1px}) {
+  .wtis-masthead + .wrapper.wtis-home {
+    margin-top: $space-8; // 32px
+  }
+}
+
 // ── Dark section rails (#111) ────────────────────────────────
 
 .wtis-home-dark {
