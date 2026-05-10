@@ -58,8 +58,6 @@ $guide_venue_label = $guide_venue_name !== '' ? $guide_venue_name : $guide_venue
 
 $ig_embed_code = trim( (string) get_post_meta( $post_id, 'wtis_guide_instagram_embed_code', true ) );
 $ig_post_url   = trim( (string) get_post_meta( $post_id, 'wtis_guide_instagram_post_url', true ) );
-$ig_account    = trim( (string) get_post_meta( $post_id, 'wtis_guide_instagram_account', true ) );
-$ig_account    = ltrim( $ig_account, '@' );
 
 require get_stylesheet_directory() . '/inc/masthead.php';
 ?>
@@ -139,19 +137,6 @@ require get_stylesheet_directory() . '/inc/masthead.php';
 				echo $ig_embed;
 				echo '</div>';
 			}
-		} elseif ( $ig_account !== '' ) {
-			$ig_profile_url = 'https://www.instagram.com/' . rawurlencode( $ig_account ) . '/';
-			?>
-		<div class="wtis-guide-instagram-follow">
-			<p class="wtis-guide-instagram-follow__text"><?php esc_html_e( 'Follow us on Instagram for match day updates and more', 'wellthiissports-child' ); ?></p>
-			<a href="<?php echo esc_url( $ig_profile_url ); ?>"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="wtis-guide-instagram-follow__link">
-				@<?php echo esc_html( $ig_account ); ?>
-			</a>
-		</div>
-			<?php
 		}
 		?>
 	</main>

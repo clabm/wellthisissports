@@ -289,37 +289,6 @@
   }
 }
 
-.wtis-guide-instagram-follow {
-  max-width: 540px;
-  margin: $space-12 auto 0;
-  text-align: center;
-}
-
-.wtis-guide-instagram-follow__text {
-  font-family: $font-body;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 1.5;
-  color: var(--wtis-gray-500);
-  margin: 0;
-}
-
-.wtis-guide-instagram-follow__link {
-  display: block;
-  margin-top: $space-2;
-  font-family: $font-display;
-  font-size: $text-subhead;
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--wtis-gold-400);
-  text-decoration: none;
-  transition: color $transition;
-
-  &:hover {
-    color: var(--wtis-gold-600);
-  }
-}
-
 @media (max-width: $bp-md) {
   .wtis-guide-hero__grid {
     grid-template-columns: 1fr;
